@@ -302,6 +302,11 @@
     align-items: center;
     gap: 8px 16px;
     padding: 12px 16px !important;
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin-top: 0 !important; /* Reset any previous negative margins we added */
 }
 
 /* Force Flex Order to Group Elements */
@@ -961,6 +966,27 @@ h1.reader-page-title {
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
     white-space: pre-wrap !important; /* Force long strings to wrap */
+}
+
+/* Remove unwanted focus rings when clicking links in Read-Only view */
+.reader-page-content .quill {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.reader-page-content .quill:focus-within,
+.reader-page-content .quill:focus,
+.reader-page-content .ql-container:focus,
+.reader-page-content .ql-container:focus-visible,
+.reader-page-content .ql-editor:focus,
+.reader-page-content .ql-editor:focus-visible,
+.reader-page-content:focus,
+.reader-page-content:focus-visible {
+    border-color: transparent !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    outline: none !important;
 }
 
 /* Force Point C - Bottom Spacing */
@@ -1726,7 +1752,7 @@ h1.reader-page-title {
     .ql-snow .ql-tooltip:not(.ql-hidden) {
         max-width: 85vw !important;
         justify-content: center;
-        margin-top: -40px !important;
+        margin-top: 0 !important; /* Reset margin since we use absolute centering */
         gap: 8px 10px; /* Slightly tighter gap for mobile to prevent button wrap */
     }
     
@@ -1757,5 +1783,66 @@ h1.reader-page-title {
 .modal-header,
 .modal-body > .form-group:first-child {
     position: relative;
-    z-index: 10;
+    z-index: 20;
+}
+
+/* Theme Palette Styles */
+.theme-selector-group {
+    margin-top: 20px;
+}
+
+.theme-palette {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.theme-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
+    color: rgba(255,255,255,0.8);
+    font-size: 14px;
+}
+
+.theme-circle:hover {
+    transform: scale(1.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.theme-circle.selected {
+    border-color: #00d4aa;
+    box-shadow: 0 0 0 2px rgba(0, 212, 170, 0.3);
+    color: #fff;
+}
+
+.theme-pastel-red.selected,
+.theme-pastel-blue.selected,
+.theme-pastel-green.selected,
+.theme-pastel-yellow.selected {
+    color: #1e293b;
+}
+
+/* Define the specific colors for the circles */
+.theme-default {
+    background: #1e293b; /* Matches standard modal background */
+}
+.theme-pastel-red {
+    background: #ffb3ba;
+}
+.theme-pastel-blue {
+    background: #bae1ff;
+}
+.theme-pastel-green {
+    background: #baffc9;
+}
+.theme-pastel-yellow {
+    background: #ffffba;
 }

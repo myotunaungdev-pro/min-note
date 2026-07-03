@@ -55,6 +55,10 @@ const noteSchema = new mongoose.Schema({
     isDeleted: {
         type: Boolean,
         default: false
+    },
+    theme: {
+        type: String,
+        default: 'default'
     }
 }, {
     // Automatically creates 'createdAt' and 'updatedAt' fields

@@ -415,6 +415,9 @@
     "systemSettings": "System Settings",
     "keyboardShortcuts": "Keyboard Shortcuts",
     "viewCheatSheet": "View Cheat Sheet",
+    "defaultNoteTheme": "Default Note Theme",
+    "defaultNoteThemeUpdated": "Default note theme updated!",
+    "updateThemeFailed": "Failed to update theme",
     "aPictureHelpsPeopleR": "A picture helps people recognize you and lets you know when you\\'re signed in to your account."
   },
   "help": {

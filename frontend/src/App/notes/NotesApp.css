@@ -149,15 +149,36 @@ body,
 
 .category-chips-scroll {
     display: flex;
-    gap: 12px;
+    flex-wrap: nowrap;
     overflow-x: auto;
+    width: 100%;
+    gap: 12px;
     padding-top: 10px;
-    padding-bottom: 16px;
-    scrollbar-width: none; /* Firefox */
+    padding-bottom: 8px; /* Add some space for the scrollbar */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent; /* Firefox */
 }
 
 .category-chips-scroll::-webkit-scrollbar {
-    display: none; /* Chrome/Safari/Edge */
+    height: 8px; /* Give it space for transparent borders */
+    width: 8px;
+}
+.category-chips-scroll::-webkit-scrollbar-track {
+    background: transparent; /* Totally invisible track */
+}
+.category-chips-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.15); /* Very subtle, sleek semi-transparent white */
+    border-radius: 10px;
+    border: 2px solid transparent; /* Creates floating padding */
+    background-clip: padding-box; /* Crucial for the floating effect */
+}
+.category-chips-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* Slightly brighter on hover */
+}
+.category-chips-scroll::-webkit-scrollbar-button {
+    display: none; /* Completely hide the left/right arrow buttons */
+    width: 0;
+    height: 0;
 }
 
 .category-chip {
@@ -175,6 +196,7 @@ body,
     align-items: center;
     gap: 6px;
     outline: none;
+    flex-shrink: 0;
 }
 
 .category-chip:hover {
@@ -293,4 +315,63 @@ body,
     to {
         opacity: 1;
     }
+}
+
+/* --- Note Theming Classes --- */
+.note-card, article.reader-page {
+    transition: background 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Base Overrides for Light Pastel Themes on Note Card */
+.note-card.bg-theme-pastel-red,
+.note-card.bg-theme-pastel-blue,
+.note-card.bg-theme-pastel-green,
+.note-card.bg-theme-pastel-yellow {
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.note-card.bg-theme-pastel-red .note-title,
+.note-card.bg-theme-pastel-blue .note-title,
+.note-card.bg-theme-pastel-green .note-title,
+.note-card.bg-theme-pastel-yellow .note-title {
+    color: #0f172a !important;
+}
+
+.note-card.bg-theme-pastel-red .note-content,
+.note-card.bg-theme-pastel-blue .note-content,
+.note-card.bg-theme-pastel-green .note-content,
+.note-card.bg-theme-pastel-yellow .note-content,
+.note-card.bg-theme-pastel-red .note-date,
+.note-card.bg-theme-pastel-blue .note-date,
+.note-card.bg-theme-pastel-green .note-date,
+.note-card.bg-theme-pastel-yellow .note-date,
+.note-card.bg-theme-pastel-red .status-btn span,
+.note-card.bg-theme-pastel-blue .status-btn span,
+.note-card.bg-theme-pastel-green .status-btn span,
+.note-card.bg-theme-pastel-yellow .status-btn span {
+    color: #334155 !important;
+}
+
+/* Background Definitions */
+.bg-theme-pastel-red {
+    background: #ffecf0 !important;
+}
+.bg-theme-pastel-blue {
+    background: #e6f2ff !important;
+}
+.bg-theme-pastel-green {
+    background: #e6ffed !important;
+}
+.bg-theme-pastel-yellow {
+    background: #fffbe6 !important;
+}
+
+/* Default Theme - Reader Page */
+article.reader-page.bg-theme-default {
+    background: linear-gradient(180deg, #faf6f0 0%, #f5efe6 100%) !important;
+}
+
+/* Default Theme - Note Card */
+.note-card.bg-theme-default {
+    background: rgba(30, 41, 59, 0.5) !important;
 }

@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
     },
     otpExpires: {
         type: Date
+    },
+    defaultNoteTheme: {
+        type: String,
+        default: 'default'
     }
 }, {
     timestamps: true

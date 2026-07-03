@@ -731,7 +731,7 @@ const NoteReadView = ({ note, onClose }) => {
                 </div>
 
                 <div className="reader-body">
-                    <article className="reader-page">
+                    <article className={`reader-page bg-theme-${note.theme || 'default'}`}>
                         <h1 className={`reader-page-title ${note.titleFontFamily ? `ql-font-${note.titleFontFamily}` : ''}`}>{note.title}</h1>
                         <div 
                             ref={contentRef}
@@ -843,6 +843,7 @@ const NoteEditModal = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const { editingNote } = useSelector((state) => state.notes);
+    const { user } = useSelector((state) => state.auth);
 
     const [isComposing, setIsComposing] = useState(false);
     const quillWrapperRef = useRef(null);
@@ -850,6 +851,7 @@ const NoteEditModal = () => {
     const [title, setTitle] = useState(editingNote?.title || '');
     const [titleFontFamily, setTitleFontFamily] = useState(editingNote?.titleFontFamily || '');
     const [content, setContent] = useState(editingNote?.content || '');
+    const [theme, setTheme] = useState(editingNote?.theme || user?.defaultNoteTheme || 'default');
     const [isTitleFontDropdownOpen, setIsTitleFontDropdownOpen] = useState(false);
     const fontDropdownRef = useRef(null);
 
@@ -1049,7 +1051,8 @@ const NoteEditModal = () => {
         title.trim() === (editingNote?.title || '').trim() &&
         titleFontFamily === (editingNote?.titleFontFamily || '') &&
         content.trim() === (editingNote?.content || '').trim() &&
-        selectedTag.label === (editingNote?.tag || '');
+        selectedTag.label === (editingNote?.tag || '') &&
+        theme === (editingNote?.theme || user?.defaultNoteTheme || 'default');
 
     const isCreateDisabled = !title.trim() || !content.trim();
     
@@ -1133,6 +1136,7 @@ const NoteEditModal = () => {
             content: content.trim(),
             tag: selectedTag.label,
             tagColor: selectedTag.color,
+            theme,
             createdAt: new Date().toISOString()
         };
 
@@ -1142,6 +1146,7 @@ const NoteEditModal = () => {
             content: content.trim(),
             tag: selectedTag.label,
             tagColor: selectedTag.color,
+            theme,
             createdAt: new Date().toISOString(),
             isDone: false,
             isArchived: false,
@@ -1280,6 +1285,22 @@ const NoteEditModal = () => {
                             placeholder={t("notes.modal.contentPlaceholder")}
                             bounds=".quill-group"
                         />
+                    </div>
+
+                    <div className="form-group theme-selector-group">
+                        <label className="form-label">{t("notes.modal.themeLabel", "Theme")}</label>
+                        <div className="theme-palette">
+                            {['default', 'pastel-red', 'pastel-blue', 'pastel-green', 'pastel-yellow'].map(tOption => (
+                                <div 
+                                    key={tOption}
+                                    className={`theme-circle theme-${tOption} ${theme === tOption ? 'selected' : ''}`}
+                                    onClick={() => setTheme(tOption)}
+                                    title={tOption}
+                                >
+                                    {theme === tOption && <i className="bi bi-check"></i>}
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     <div className="form-group">

@@ -91,7 +91,7 @@ const NoteCard = ({ note, onDeleteRequest, onSelectToggle }) => {
 
     return (
         <div 
-            className={`note-card ${note.isDone ? 'done' : '' && note.isSelected ? 'selected' : ''}  `}
+            className={`note-card ${note.isDone ? 'done' : ''} ${isSelected ? 'selected' : ''} bg-theme-${note.theme || 'default'}`}
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => {
                 if (e.shiftKey) e.preventDefault();
@@ -115,7 +115,7 @@ const NoteCard = ({ note, onDeleteRequest, onSelectToggle }) => {
 
             <div className="note-card-header">
                 <span className="note-tag" style={{ backgroundColor: `${note.tagColor}20`, color: note.tagColor }}>
-                    {t(note.tag)}
+                    {t(`tags.${note.tag?.toLowerCase()}`, note.tag)}
                 </span>
                 <span className="note-date">
                     <i className="bi bi-calendar3"></i>

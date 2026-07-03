@@ -105,7 +105,7 @@ export const verifyOTP = async (req, res) => {
         res.status(200).json({
             message: "Email verified successfully",
             token,
-            user: { id: user._id, name: user.name, email: user.email, birthdate: user.birthdate, avatarUrl: user.avatarUrl }
+            user: { id: user._id, name: user.name, email: user.email, birthdate: user.birthdate, avatarUrl: user.avatarUrl, defaultNoteTheme: user.defaultNoteTheme }
         });
 
     } catch (error) {
@@ -144,7 +144,7 @@ export const login = async (req, res) => {
         res.status(200).json({
             message: "Login successful",
             token,
-            user: { id: user._id, name: user.name, email: user.email, birthdate: user.birthdate, avatarUrl: user.avatarUrl }
+            user: { id: user._id, name: user.name, email: user.email, birthdate: user.birthdate, avatarUrl: user.avatarUrl, defaultNoteTheme: user.defaultNoteTheme }
         });
     } catch (error) {
         res.status(500).json({ message: "Login failed", error: error.message });
@@ -153,7 +153,7 @@ export const login = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
     try {
-        const { name, email, birthdate, avatarUrl } = req.body;
+        const { name, email, birthdate, avatarUrl, defaultNoteTheme } = req.body;
         
         // Ensure user is authenticated (via authMiddleware)
         const userId = req.user.id;
@@ -176,6 +176,7 @@ export const updateProfile = async (req, res) => {
         // Update fields
         if (name) user.name = name;
         if (birthdate) user.birthdate = birthdate;
+        if (defaultNoteTheme) user.defaultNoteTheme = defaultNoteTheme;
         
         if (avatarUrl !== undefined && avatarUrl !== user.avatarUrl) {
             // If the user already had an avatar, delete it from Cloudinary to prevent storage bloat
@@ -214,7 +215,8 @@ export const updateProfile = async (req, res) => {
                 name: updatedUser.name, 
                 email: updatedUser.email,
                 birthdate: updatedUser.birthdate,
-                avatarUrl: updatedUser.avatarUrl
+                avatarUrl: updatedUser.avatarUrl,
+                defaultNoteTheme: updatedUser.defaultNoteTheme
             }
         });
     } catch (error) {

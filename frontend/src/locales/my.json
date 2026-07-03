@@ -420,6 +420,9 @@
     "systemSettings": "စနစ်ဆက်တင်များ",
     "keyboardShortcuts": "ကီးဘုတ် ဖြတ်လမ်းများ",
     "viewCheatSheet": "ကီးဘုတ် ဖြတ်လမ်းများ ကြည့်မည်",
+    "defaultNoteTheme": "ပုံသေ မှတ်စု နောက်ခံအရောင်",
+    "defaultNoteThemeUpdated": "ပုံသေ နောက်ခံအရောင် ပြင်ဆင်ပြီးပါပြီ!",
+    "updateThemeFailed": "Failed to update theme",
     "aPictureHelpsPeopleR": "ရုပ်ပုံတစ်ပုံက လူတွေကို သင့်ကို မှတ်မိစေဖို့ ကူညီပေးပြီး သင့်အကောင့်ကို ဝင်ရောက်တဲ့အခါ သင့်ကို အသိပေးပါတယ်။"
   },
   "help": {

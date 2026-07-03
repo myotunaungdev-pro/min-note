@@ -248,7 +248,7 @@ const Header = ({ onSelectAll }) => {
                             <button
                                 type="button"
                                 className={`dropdown-item ${sortBy === 'latest' ? 'active' : ''}`}
-                                onClick={() => handleSortSelect("notes.latest")}
+                                onClick={() => handleSortSelect('latest')}
                             >
                                 <i className="bi bi-clock"></i> {t("notes.sidebar.sortLatestFirst")}
                             </button>
@@ -257,7 +257,7 @@ const Header = ({ onSelectAll }) => {
                             <button
                                 type="button"
                                 className={`dropdown-item ${sortBy === 'a-z' ? 'active' : ''}`}
-                                onClick={() => handleSortSelect("notes.aZ")}
+                                onClick={() => handleSortSelect('a-z')}
                             >
                                 <i className="bi bi-sort-alpha-down"></i> {t("notes.sidebar.sortAZ")}
                             </button>
@@ -269,7 +269,7 @@ const Header = ({ onSelectAll }) => {
                             <button
                                 type="button"
                                 className={`dropdown-item ${sortBy === 'done' ? 'active' : ''}`}
-                                onClick={() => handleSortSelect("notes.done")}
+                                onClick={() => handleSortSelect('done')}
                             >
                                 <i className="bi bi-check-circle"></i> {t("notes.card.done")}
                             </button>
@@ -278,7 +278,7 @@ const Header = ({ onSelectAll }) => {
                             <button
                                 type="button"
                                 className={`dropdown-item ${sortBy === 'not-done' ? 'active' : ''}`}
-                                onClick={() => handleSortSelect("notes.notDone")}
+                                onClick={() => handleSortSelect('not-done')}
                             >
                                 <i className="bi bi-circle"></i> {t("notes.card.notDone")}
                             </button>
