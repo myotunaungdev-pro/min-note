@@ -17,6 +17,8 @@
     "Please_enter_a_password_": "Please enter a password.",
     "OTP_sent_to_your_email__Please_verify_": "OTP sent to your email. Please verify.",
     "Signup_failed": "Signup failed",
+    "login_failed": "Login failed",
+    "signup_failed": "Signup failed",
     "Please_enter_the_verification_code_": "Please enter the verification code.",
     "Verification_code_must_be_6_digits_": "Verification code must be 6 digits.",
     "Email_verified_successfully_": "Email verified successfully!",
@@ -126,6 +128,8 @@
       "done": "Done",
       "notDone": "Not Done",
       "pending": "Pending",
+      "doneFirst": "Done First",
+      "pendingFirst": "Pending First",
       "unarchive": "Unarchive",
       "restore": "Restore",
       "deleteForever": "Delete Forever",
@@ -237,6 +241,17 @@
     "lyrics": "Lyrics"
   },
   "auth": {
+    "errors": {
+      "user_exists": "User already exists with this email",
+      "user_not_found": "User not found",
+      "user_already_verified": "User is already verified",
+      "otp_expired": "OTP has expired. Please request a new one.",
+      "invalid_otp": "Invalid OTP",
+      "invalid_credentials": "Invalid email or password",
+      "please_verify_email": "Please verify your email address to login.",
+      "email_taken": "Email is already taken",
+      "forgot_password_failed": "Failed to process forgot password request"
+    },
     "123456": "123456",
     "login": {
       "title": "Login",

@@ -19,6 +19,8 @@
     "Please_enter_a_password_": "กรุณาใส่รหัสผ่าน",
     "OTP_sent_to_your_email__Please_verify_": "ส่ง OTP ไปยังอีเมลของคุณแล้ว กรุณายืนยัน",
     "Signup_failed": "การสมัครสมาชิกล้มเหลว",
+    "login_failed": "เข้าสู่ระบบล้มเหลว",
+    "signup_failed": "สมัครสมาชิกล้มเหลว",
     "Please_enter_the_verification_code_": "กรุณาใส่รหัสยืนยัน",
     "Verification_code_must_be_6_digits_": "รหัสยืนยันต้องมี 6 หลัก",
     "Email_verified_successfully_": "ยืนันอีเมลสำเร็จแล้ว!",
@@ -123,6 +125,8 @@
       "done": "เสร็จสิ้น",
       "notDone": "ยังไม่เสร็จ",
       "pending": "รอดำเนินการ",
+      "doneFirst": "เสร็จสิ้นก่อน",
+      "pendingFirst": "รอดำเนินการก่อน",
       "unarchive": "ยกเลิกการเก็บถาวร",
       "restore": "คืนค่า",
       "deleteForever": "ลบถาวร",
@@ -239,6 +243,17 @@
     "lyrics": "เนื้อเพลง"
   },
   "auth": {
+    "errors": {
+      "user_exists": "มีผู้ใช้นี้อยู่ในระบบแล้ว",
+      "user_not_found": "ไม่พบผู้ใช้",
+      "user_already_verified": "ผู้ใช้ได้รับการยืนยันแล้ว",
+      "otp_expired": "OTP หมดอายุแล้ว กรุณาขอใหม่",
+      "invalid_otp": "OTP ไม่ถูกต้อง",
+      "invalid_credentials": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+      "please_verify_email": "กรุณายืนยันอีเมลของคุณเพื่อเข้าสู่ระบบ",
+      "email_taken": "อีเมลนี้ถูกใช้งานแล้ว",
+      "forgot_password_failed": "ไม่สามารถดำเนินการลืมรหัสผ่านได้"
+    },
     "123456": "123456",
     "login": {
       "title": "เข้าสู่ระบบ",

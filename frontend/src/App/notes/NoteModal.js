@@ -22,6 +22,15 @@ import 'react-image-crop/dist/ReactCrop.css';
 import { ReactSketchCanvas } from 'react-sketch-canvas';
 import { Pencil, PenTool, Highlighter, Eraser, Undo2, Trash2, X } from 'lucide-react';
 
+const preserveSpacesInHtml = (html) => {
+    if (!html) return '';
+    return html.replace(/(>|^)([^<]+)(<|$)/g, (match, p1, p2, p3) => {
+        let text = p2.replace(/^ /g, '&nbsp;');
+        text = text.replace(/  /g, ' &nbsp;');
+        return p1 + text + p3;
+    });
+};
+
 async function getCroppedImg(image, crop) {
   const canvas = document.createElement("canvas")
   const scaleX = image.naturalWidth / image.width;
@@ -738,11 +747,7 @@ const NoteReadView = ({ note, onClose }) => {
                             className={`reader-page-content ${isImageGrid ? 'editor-image-grid' : 'editor-image-stack'}`}
                             onClick={handleContentClick}
                         >
-                            <ReactQuill 
-                                value={note.content} 
-                                readOnly={true} 
-                                theme="bubble" 
-                            />
+                            <div className="ql-editor" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: note.content }}></div>
                         </div>
                     </article>
                 </div>
@@ -900,6 +905,9 @@ const NoteEditModal = () => {
     setShowImageMenuRef.current = setShowImageMenu;
 
     const quillModules = useMemo(() => ({
+        clipboard: {
+            matchVisual: false
+        },
         toolbar: {
             container: [
                 [{ 'font': ['', 'lora', 'padauk', 'dancing-script', 'playfair-display'] }],
@@ -1050,11 +1058,11 @@ const NoteEditModal = () => {
     const isUnchanged =
         title.trim() === (editingNote?.title || '').trim() &&
         titleFontFamily === (editingNote?.titleFontFamily || '') &&
-        content.trim() === (editingNote?.content || '').trim() &&
+        content === (editingNote?.content || '') &&
         selectedTag.label === (editingNote?.tag || '') &&
         theme === (editingNote?.theme || user?.defaultNoteTheme || 'default');
 
-    const isCreateDisabled = !title.trim() || !content.trim();
+    const isCreateDisabled = !title.trim() || !content;
     
     const isButtonDisabled = editingNote ? isUnchanged : isCreateDisabled;
 
@@ -1062,7 +1070,7 @@ const NoteEditModal = () => {
         if (editingNote) {
             setTitle(editingNote.title || '');
             setTitleFontFamily(editingNote.titleFontFamily || '');
-            setContent(editingNote.content || '');
+            setContent(preserveSpacesInHtml(editingNote.content || ''));
             const tag = tagOptions.find((t) => t.label === editingNote.tag) || tagOptions[0];
             setSelectedTag(tag);
         } else {
@@ -1127,13 +1135,13 @@ const NoteEditModal = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!title.trim() || !content.trim()) return;
+        if (!title.trim() || !content) return;
 
         const updatedNoteData = {
             ...editingNote,
             title: title.trim(),
             titleFontFamily,
-            content: content.trim(),
+            content: content,
             tag: selectedTag.label,
             tagColor: selectedTag.color,
             theme,
@@ -1143,7 +1151,7 @@ const NoteEditModal = () => {
         const noteData = {
             title: title.trim(),
             titleFontFamily,
-            content: content.trim(),
+            content: content,
             tag: selectedTag.label,
             tagColor: selectedTag.color,
             theme,
@@ -1210,6 +1218,12 @@ const NoteEditModal = () => {
                         <i className="bi bi-x-lg"></i>
                     </button>
                 </div>
+                <style>{`
+                    .quill-group .ql-editor {
+                        white-space: pre-wrap !important;
+                        word-break: break-word !important;
+                    }
+                `}</style>
 
                 <div className="modal-body">
                     <div className="form-group">

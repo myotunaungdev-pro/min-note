@@ -6,6 +6,12 @@
 .ql-font-dancing-script { font-family: 'Dancing Script', cursive !important; }
 .ql-font-playfair-display { font-family: 'Playfair Display', serif !important; }
 
+/* Force exact whitespace preservation inside editor */
+.ql-editor {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+}
+
 /* Font Picker Styles */
 .ql-snow .ql-picker.ql-font {
     width: 140px;

@@ -17,6 +17,7 @@ const notesSlice = createSlice({
         activeView: 'all',
         searchQuery: '',
         sortBy: 'latest',
+        statusFilter: 'all',
         sidebarCollapsed: typeof window !== 'undefined' ? window.innerWidth <= 904 : false,
         editingNote: null,
         isModalOpen: false,
@@ -29,6 +30,7 @@ const notesSlice = createSlice({
         setActiveView: (state, action) => { state.activeView = action.payload; },
         setSearchQuery: (state, action) => { state.searchQuery = action.payload; },
         setSortBy: (state, action) => { state.sortBy = action.payload; },
+        setStatusFilter: (state, action) => { state.statusFilter = action.payload; },
         toggleCategoryFilter: (state, action) => {
             const category = action.payload;
             if (!Array.isArray(state.categoryFilter)) {
@@ -117,6 +119,7 @@ export const {
     setActiveView,
     setSearchQuery,
     setSortBy,
+    setStatusFilter,
     toggleCategoryFilter,
     toggleSidebar,
     setEditingNote,

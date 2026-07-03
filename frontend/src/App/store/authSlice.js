@@ -1,6 +1,24 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../api/axiosConfig';
 
+const getAuthErrorKey = (msg, defaultKey) => {
+    const map = {
+        "User already exists with this email": "auth.errors.user_exists",
+        "User not found": "auth.errors.user_not_found",
+        "User not found.": "auth.errors.user_not_found",
+        "No account found with that email address.": "auth.errors.user_not_found",
+        "User is already verified": "auth.errors.user_already_verified",
+        "OTP has expired. Please request a new one.": "auth.errors.otp_expired",
+        "Invalid OTP": "auth.errors.invalid_otp",
+        "Invalid OTP.": "auth.errors.invalid_otp",
+        "Invalid email or password": "auth.errors.invalid_credentials",
+        "Please verify your email address to login.": "auth.errors.please_verify_email",
+        "Email is already taken": "auth.errors.email_taken",
+        "Failed to process forgot password request": "auth.errors.forgot_password_failed",
+    };
+    return map[msg] || msg || defaultKey;
+};
+
 // Async thunk for Signup
 export const signupUser = createAsyncThunk(
     'auth/signupUser',
@@ -10,7 +28,7 @@ export const signupUser = createAsyncThunk(
             // We do NOT save token here anymore, we wait for OTP verification
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Signup failed');
+            return rejectWithValue(getAuthErrorKey(error.response?.data?.message, 'signup_failed'));
         }
     }
 );
@@ -26,7 +44,7 @@ export const verifyOTP = createAsyncThunk(
             localStorage.setItem('user', JSON.stringify(response.data.user));
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Verification failed');
+            return rejectWithValue(getAuthErrorKey(error.response?.data?.message, 'Verification failed'));
         }
     }
 );
@@ -39,7 +57,7 @@ export const forgotPassword = createAsyncThunk(
             const response = await axiosInstance.post('/auth/forgot-password', emailData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Failed to send OTP');
+            return rejectWithValue(getAuthErrorKey(error.response?.data?.message, 'Failed to send OTP'));
         }
     }
 );
@@ -52,7 +70,7 @@ export const resetPassword = createAsyncThunk(
             const response = await axiosInstance.post('/auth/reset-password', resetData);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Failed to reset password');
+            return rejectWithValue(getAuthErrorKey(error.response?.data?.message, 'Failed to reset password'));
         }
     }
 );
@@ -68,7 +86,7 @@ export const loginUser = createAsyncThunk(
             localStorage.setItem('user', JSON.stringify(response.data.user));
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Login failed');
+            return rejectWithValue(getAuthErrorKey(error.response?.data?.message, 'login_failed'));
         }
     }
 );
@@ -83,7 +101,7 @@ export const updateUserProfile = createAsyncThunk(
             localStorage.setItem('user', JSON.stringify(response.data.user));
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Profile update failed');
+            return rejectWithValue(getAuthErrorKey(error.response?.data?.message, 'Profile update failed'));
         }
     }
 );

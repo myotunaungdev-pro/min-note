@@ -51,7 +51,7 @@ const Signup = () => {
             toast.success(t("auth.oTPSentToYourEmailPl"));
             setStep(2);
         } catch (error) {
-            toast.error(t(error || "Signup failed"));
+            toast.error(t(error || 'signup_failed'));
         }
     };
 

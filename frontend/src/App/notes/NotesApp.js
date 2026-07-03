@@ -28,7 +28,7 @@ const NotesApp = () => {
         dispatch(fetchNotes());
     }, [dispatch]);
 
-    const { notes, activeView, searchQuery, sortBy, sidebarCollapsed, categoryFilter, selectedNoteIds, isModalOpen, isReaderOpen } = useSelector(
+    const { notes, activeView, searchQuery, sortBy, statusFilter, sidebarCollapsed, categoryFilter, selectedNoteIds, isModalOpen, isReaderOpen } = useSelector(
         (state) => state.notes
     );
 
@@ -63,6 +63,12 @@ const NotesApp = () => {
             filtered = filtered.filter((note) => safeCategoryFilter.includes(note.tag));
         }
 
+        if (statusFilter === 'done') {
+            filtered = filtered.filter((note) => note.isDone);
+        } else if (statusFilter === 'pending') {
+            filtered = filtered.filter((note) => !note.isDone);
+        }
+
         const sorted = [...filtered];
         switch (sortBy) {
             case 'a-z':
@@ -79,7 +85,7 @@ const NotesApp = () => {
         }
 
         return sorted;
-    }, [notes, activeView, searchQuery, sortBy, safeCategoryFilter]);
+    }, [notes, activeView, searchQuery, sortBy, statusFilter, safeCategoryFilter]);
 
     const getEmptyMessage = () => {
         if (searchQuery) {
@@ -202,7 +208,7 @@ const NotesApp = () => {
                 if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || document.activeElement?.isContentEditable) {
                     return;
                 }
-                
+
                 // Priority Check: Confirmation Modal (Delete / Logout)
                 const confirmBtn = document.querySelector('.btn-modal-confirm') || document.querySelector('.btn-logout-confirm');
                 if (confirmBtn) {
@@ -210,7 +216,7 @@ const NotesApp = () => {
                     confirmBtn.click();
                     return;
                 }
-                
+
                 // Secondary Action: Open Single Selected Note
                 if (selectedNoteIds && selectedNoteIds.length === 1 && !isModalOpen && !isReaderOpen) {
                     e.preventDefault();
@@ -242,17 +248,17 @@ const NotesApp = () => {
         if (e.shiftKey && lastSelectedNoteIndexRef.current !== null && currentIndex !== -1) {
             const start = Math.min(lastSelectedNoteIndexRef.current, currentIndex);
             const end = Math.max(lastSelectedNoteIndexRef.current, currentIndex);
-            
+
             const noteIdsInRange = flatNotes.slice(start, end + 1).map(n => n._id);
             const newSelection = new Set(selectedNoteIds);
             noteIdsInRange.forEach(id => newSelection.add(id));
-            
+
             dispatch(selectAllNotes(Array.from(newSelection)));
             window.getSelection()?.removeAllRanges();
         } else {
             dispatch(toggleSelectNote(noteId));
         }
-        
+
         lastSelectedNoteIndexRef.current = currentIndex;
     }, [filteredAndSortedNotes, selectedNoteIds, dispatch]);
 
@@ -318,14 +324,14 @@ const NotesApp = () => {
     return (
         <div className={`notes-app ${isSidebarOpen ? 'sidebar-open' : ''}`}>
             {isSidebarOpen && (
-                <div 
-                    className="sidebar-mobile-overlay" 
+                <div
+                    className="sidebar-mobile-overlay"
                     onClick={closeSidebar}
                 ></div>
             )}
             <Sidebar />
 
-            <main 
+            <main
                 className={`main-content ${sidebarCollapsed ? 'expanded' : ''}`}
             >
                 <Header onSelectAll={() => dispatch(selectAllNotes(filteredAndSortedNotes.map(n => n._id)))} />
@@ -361,6 +367,7 @@ const NotesApp = () => {
                             );
                         })}
                     </div>
+
                 </div>
 
                 <div className="notes-container">

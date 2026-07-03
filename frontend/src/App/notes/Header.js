@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     setSearchQuery,
     setSortBy,
+    setStatusFilter,
     setModalOpen,
     setEditingNote,
     toggleSidebar,
@@ -18,17 +19,19 @@ const Header = ({ onSelectAll }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
-    const { searchQuery, sortBy, activeView } = useSelector((state) => state.notes);
+    const { searchQuery, sortBy, statusFilter, activeView } = useSelector((state) => state.notes);
 
     const selectedNoteIds = useSelector(state => state.notes.selectedNoteIds);
 
     const isSelectionMode = selectedNoteIds.length > 0;
 
-    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [isSortOpen, setIsSortOpen] = useState(false);
+    const [isStatusOpen, setIsStatusOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
 
-    const filterDropdownRef = useRef(null);
+    const sortDropdownRef = useRef(null);
+    const statusDropdownRef = useRef(null);
 
     useEffect(() => {
         const handleScroll = (event) => {
@@ -48,17 +51,20 @@ const Header = ({ onSelectAll }) => {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (filterDropdownRef.current && !filterDropdownRef.current.contains(event.target)) {
-                setIsFilterOpen(false);
+            if (sortDropdownRef.current && !sortDropdownRef.current.contains(event.target)) {
+                setIsSortOpen(false);
+            }
+            if (statusDropdownRef.current && !statusDropdownRef.current.contains(event.target)) {
+                setIsStatusOpen(false);
             }
         };
 
-        if (isFilterOpen) {
+        if (isSortOpen || isStatusOpen) {
             document.addEventListener('mousedown', handleClickOutside);
         }
 
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isFilterOpen]);
+    }, [isSortOpen, isStatusOpen]);
 
     const handleTrashOrDelete = React.useCallback(() => {
         if (activeView === 'trash') {
@@ -86,7 +92,12 @@ const Header = ({ onSelectAll }) => {
 
     const handleSortSelect = (value) => {
         dispatch(setSortBy(value));
-        setIsFilterOpen(false);
+        setIsSortOpen(false);
+    };
+
+    const handleStatusSelect = (value) => {
+        dispatch(setStatusFilter(value));
+        setIsStatusOpen(false);
     };
 
     const handleNewNote = () => {
@@ -226,24 +237,78 @@ const Header = ({ onSelectAll }) => {
                     <i className="bi bi-check2-all"></i>
                 </button>
                 <div
-                    className={`dropdown ${isFilterOpen ? 'show' : ''}`}
-                    ref={filterDropdownRef}
+                    className={`dropdown ${isStatusOpen ? 'show' : ''}`}
+                    ref={statusDropdownRef}
                 >
                     <button
-                        className={`sort-dropdown dropdown-toggle ${isFilterOpen ? 'show' : ''}`}
+                        className={`sort-dropdown dropdown-toggle ${isStatusOpen ? 'show' : ''}`}
                         type="button"
-                        aria-expanded={isFilterOpen}
-                        onClick={() => setIsFilterOpen((open) => !open)}
+                        aria-expanded={isStatusOpen}
+                        onClick={() => {
+                            setIsStatusOpen((open) => !open);
+                            setIsSortOpen(false);
+                        }}
                     >
-                        <i className="bi bi-funnel"></i>
+                        <i className="bi bi-filter"></i>
+                        <span>
+                            {statusFilter === 'all' && t("notes.all")}
+                            {statusFilter === 'pending' && t("notes.card.pending")}
+                            {statusFilter === 'done' && t("notes.card.done")}
+                        </span>
+                    </button>
+                    <ul className={`dropdown-menu dropdown-menu-dark ${isStatusOpen ? 'show' : ''}`}>
+                        <li>
+                            <button
+                                type="button"
+                                className={`dropdown-item ${statusFilter === 'all' ? 'active' : ''}`}
+                                onClick={() => handleStatusSelect('all')}
+                            >
+                                <i className="bi bi-infinity"></i> {t("notes.all")}
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                type="button"
+                                className={`dropdown-item ${statusFilter === 'pending' ? 'active' : ''}`}
+                                onClick={() => handleStatusSelect('pending')}
+                            >
+                                <i className="bi bi-circle"></i> {t("notes.card.pending")}
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                type="button"
+                                className={`dropdown-item ${statusFilter === 'done' ? 'active' : ''}`}
+                                onClick={() => handleStatusSelect('done')}
+                            >
+                                <i className="bi bi-check-circle"></i> {t("notes.card.done")}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div
+                    className={`dropdown ${isSortOpen ? 'show' : ''}`}
+                    ref={sortDropdownRef}
+                >
+                    <button
+                        className={`sort-dropdown dropdown-toggle ${isSortOpen ? 'show' : ''}`}
+                        type="button"
+                        aria-expanded={isSortOpen}
+                        onClick={() => {
+                            setIsSortOpen((open) => !open);
+                            setIsStatusOpen(false);
+                        }}
+                    >
+                        <i className="bi bi-sort-down"></i>
                         <span>
                             {sortBy === 'latest' && t("notes.sidebar.sortLatest")}
                             {sortBy === 'a-z' && t("notes.sidebar.sortAZ")}
-                            {sortBy === 'done' && t("notes.card.done")}
-                            {sortBy === 'not-done' && t("notes.card.notDone")}
+                            {sortBy === 'done' && t("notes.card.doneFirst")}
+                            {sortBy === 'not-done' && t("notes.card.pendingFirst")}
                         </span>
                     </button>
-                    <ul className={`dropdown-menu dropdown-menu-dark ${isFilterOpen ? 'show' : ''}`}>
+                    <ul className={`dropdown-menu dropdown-menu-dark ${isSortOpen ? 'show' : ''}`}>
                         <li>
                             <button
                                 type="button"
@@ -271,7 +336,7 @@ const Header = ({ onSelectAll }) => {
                                 className={`dropdown-item ${sortBy === 'done' ? 'active' : ''}`}
                                 onClick={() => handleSortSelect('done')}
                             >
-                                <i className="bi bi-check-circle"></i> {t("notes.card.done")}
+                                <i className="bi bi-check-circle"></i> {t("notes.card.doneFirst")}
                             </button>
                         </li>
                         <li>
@@ -280,7 +345,7 @@ const Header = ({ onSelectAll }) => {
                                 className={`dropdown-item ${sortBy === 'not-done' ? 'active' : ''}`}
                                 onClick={() => handleSortSelect('not-done')}
                             >
-                                <i className="bi bi-circle"></i> {t("notes.card.notDone")}
+                                <i className="bi bi-circle"></i> {t("notes.card.pendingFirst")}
                             </button>
                         </li>
                     </ul>

@@ -45,7 +45,7 @@ const Login = () => {
             toast.success(t("auth.login.success"));
             navigate('/notes');
         } catch (error) {
-            toast.error(t(error || "Login failed"));
+            toast.error(t(error || 'login_failed'));
         }
     };
 
