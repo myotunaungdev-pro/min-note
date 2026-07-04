@@ -12,6 +12,7 @@ import {
 import { updateNoteOnServer } from '../store/notesThunks';
 import './NoteCard.css';
 import { useTranslation } from 'react-i18next';
+import DOMPurify from 'dompurify';
 
 const NoteCard = ({ note, onDeleteRequest, onSelectToggle }) => {
     const { t } = useTranslation();
@@ -90,7 +91,7 @@ const NoteCard = ({ note, onDeleteRequest, onSelectToggle }) => {
     };
 
     return (
-        <div 
+        <div
             className={`note-card ${note.isDone ? 'done' : ''} ${isSelected ? 'selected' : ''} bg-theme-${note.theme || 'default'}`}
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => {
@@ -137,7 +138,7 @@ const NoteCard = ({ note, onDeleteRequest, onSelectToggle }) => {
                 aria-label={`Read note: ${note.title}`}
             >
                 <h3 className={`note-title ${note.titleFontFamily ? `ql-font-${note.titleFontFamily}` : ''}`}>{note.title}</h3>
-                <div className="note-content" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: note.content }}></div>
+                <div className="note-content" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(note.content) }}></div>
             </div>
 
             <div className="note-card-footer" onClick={(e) => e.stopPropagation()}>

@@ -1,10 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Padauk:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
 
 /* Quill Custom Fonts */
-.ql-font-lora { font-family: 'Lora', serif !important; }
-.ql-font-padauk { font-family: 'Padauk', sans-serif !important; }
-.ql-font-dancing-script { font-family: 'Dancing Script', cursive !important; }
-.ql-font-playfair-display { font-family: 'Playfair Display', serif !important; }
+.ql-font-lora {
+    font-family: 'Lora', serif !important;
+}
+
+.ql-font-padauk {
+    font-family: 'Padauk', sans-serif !important;
+}
+
+.ql-font-dancing-script {
+    font-family: 'Dancing Script', cursive !important;
+}
+
+.ql-font-playfair-display {
+    font-family: 'Playfair Display', serif !important;
+}
 
 /* Force exact whitespace preservation inside editor */
 .ql-editor {
@@ -12,30 +23,40 @@
     word-break: break-word !important;
 }
 
+/* Guarantee empty lines (Enter) take up space */
+.ql-editor p {
+    min-height: 1.5em;
+}
+
 /* Font Picker Styles */
 .ql-snow .ql-picker.ql-font {
     width: 140px;
 }
+
 .ql-snow .ql-picker.ql-font .ql-picker-label::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item::before {
     content: 'Sans Serif';
     font-family: inherit;
 }
+
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="lora"]::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="lora"]::before {
     content: 'Lora';
     font-family: 'Lora', serif;
 }
+
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="padauk"]::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="padauk"]::before {
     content: 'Padauk (Myanmar)';
     font-family: 'Padauk', sans-serif;
 }
+
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="dancing-script"]::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="dancing-script"]::before {
     content: 'Dancing Script';
     font-family: 'Dancing Script', cursive;
 }
+
 .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="playfair-display"]::before,
 .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="playfair-display"]::before {
     content: 'Playfair Display';
@@ -282,11 +303,25 @@
 }
 
 /* React Quill Tooltip (Link Input) Overrides */
-.ql-snow .ql-tooltip::before { content: var(--quill-visit-text) !important; }
-.ql-snow .ql-tooltip a.ql-action::after { content: var(--quill-action-text) !important; }
-.ql-snow .ql-tooltip a.ql-remove::before { content: var(--quill-remove-text) !important; }
-.ql-snow .ql-tooltip[data-mode="link"]::before { content: var(--quill-enter-text) !important; }
-.ql-snow .ql-tooltip[data-mode="link"] a.ql-action::after { content: var(--quill-save-text) !important; }
+.ql-snow .ql-tooltip::before {
+    content: var(--quill-visit-text) !important;
+}
+
+.ql-snow .ql-tooltip a.ql-action::after {
+    content: var(--quill-action-text) !important;
+}
+
+.ql-snow .ql-tooltip a.ql-remove::before {
+    content: var(--quill-remove-text) !important;
+}
+
+.ql-snow .ql-tooltip[data-mode="link"]::before {
+    content: var(--quill-enter-text) !important;
+}
+
+.ql-snow .ql-tooltip[data-mode="link"] a.ql-action::after {
+    content: var(--quill-save-text) !important;
+}
 
 .ql-snow .ql-tooltip {
     background: rgba(17, 24, 39, 0.98) !important;
@@ -312,7 +347,8 @@
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
-    margin-top: 0 !important; /* Reset any previous negative margins we added */
+    margin-top: 0 !important;
+    /* Reset any previous negative margins we added */
 }
 
 /* Force Flex Order to Group Elements */
@@ -342,7 +378,8 @@
 
 .ql-snow .ql-tooltip a.ql-action {
     order: 4;
-    margin-left: auto !important; /* Push buttons to the right */
+    margin-left: auto !important;
+    /* Push buttons to the right */
 }
 
 .ql-snow .ql-tooltip a.ql-remove {
@@ -357,13 +394,16 @@
     border-radius: 4px !important;
     padding: 6px 10px !important;
 }
+
 .ql-snow .ql-tooltip input[type=text]:focus {
     border-color: #00d4aa !important;
     outline: none !important;
 }
+
 .ql-snow .ql-tooltip a.ql-action::after {
     color: #00d4aa !important;
 }
+
 .ql-snow .ql-tooltip a.ql-remove::before {
     color: #ef4444 !important;
 }
@@ -376,13 +416,17 @@
     margin-left: 0 !important;
     font-weight: 500;
 }
+
 .ql-snow .ql-tooltip .ql-cancel-btn::before {
     content: var(--quill-cancel-text) !important;
-    color: #94a3b8 !important; /* Neutral Slate */
+    color: #94a3b8 !important;
+    /* Neutral Slate */
     transition: color 0.2s ease;
 }
+
 .ql-snow .ql-tooltip .ql-cancel-btn:hover::before {
-    color: #cbd5e1 !important; /* Lighter on hover */
+    color: #cbd5e1 !important;
+    /* Lighter on hover */
 }
 
 /* Editor Image Constraints */
@@ -891,7 +935,8 @@ article.reader-page {
     background: linear-gradient(180deg, #faf6f0 0%, #f5efe6 100%);
     border: 1px solid rgba(139, 125, 107, 0.2);
     border-radius: 12px;
-    padding: 36px 40px 0px 40px !important; /* Force Point A */
+    padding: 36px 40px 0px 40px !important;
+    /* Force Point A */
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.8),
         0 4px 20px rgba(0, 0, 0, 0.15);
@@ -919,7 +964,8 @@ h1.reader-page-title {
     font-size: 28px;
     font-weight: 600;
     color: #2c2416;
-    margin: 0 0 48px 0 !important; /* Force Point B */
+    margin: 0 0 48px 0 !important;
+    /* Force Point B */
     line-height: 1.35;
     position: relative;
     white-space: pre-wrap;
@@ -940,9 +986,11 @@ h1.reader-page-title {
     overflow-x: hidden;
     position: relative;
     max-height: none !important;
-    overflow-y: auto !important; /* Wrapper handles scrolling */
+    overflow-y: auto !important;
+    /* Wrapper handles scrolling */
     flex: 1;
-    min-height: 0; /* Ensures flex container can shrink and scroll */
+    min-height: 0;
+    /* Ensures flex container can shrink and scroll */
 }
 
 .reader-page-content p,
@@ -955,23 +1003,27 @@ h1.reader-page-title {
     min-width: 0;
 }
 
-.reader-page-content > *:first-child,
-.reader-page-content .ql-editor > *:first-child {
+.reader-page-content>*:first-child,
+.reader-page-content .ql-editor>*:first-child {
     margin-top: 0 !important;
 }
 
 .reader-page-content .ql-container,
 .reader-page-content .ql-editor {
-    height: auto !important; /* Remove ReactQuill fixed heights */
+    height: auto !important;
+    /* Remove ReactQuill fixed heights */
 }
 
 .reader-page-content .ql-editor {
     color: #0f172a !important;
-    padding: 0 !important; /* Neutralize Quill's default padding */
-    overflow-y: visible !important; /* Let wrapper handle scrolling */
+    padding: 0 !important;
+    /* Neutralize Quill's default padding */
+    overflow-y: visible !important;
+    /* Let wrapper handle scrolling */
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
-    white-space: pre-wrap !important; /* Force long strings to wrap */
+    white-space: pre-wrap !important;
+    /* Force long strings to wrap */
 }
 
 /* Remove unwanted focus rings when clicking links in Read-Only view */
@@ -996,7 +1048,7 @@ h1.reader-page-title {
 }
 
 /* Force Point C - Bottom Spacing */
-.reader-page-content .ql-editor > *:last-child {
+.reader-page-content .ql-editor>*:last-child {
     padding-bottom: 56px !important;
 }
 
@@ -1120,6 +1172,7 @@ h1.reader-page-title {
 }
 
 @media (max-width: 768px) {
+
     .modal-overlay,
     .reader-overlay {
         padding: 0;
@@ -1189,7 +1242,7 @@ h1.reader-page-title {
         max-height: none;
         flex: 1;
     }
-    
+
     .quill {
         flex: 1;
     }
@@ -1208,7 +1261,7 @@ h1.reader-page-title {
 .toggle-divider {
     width: 1px;
     height: 16px;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     margin: 0 8px;
 }
 
@@ -1217,7 +1270,7 @@ h1.reader-page-title {
         padding: 8px 12px !important;
         font-size: 1.2rem !important;
     }
-    
+
     .toggle-divider {
         display: none;
     }
@@ -1353,6 +1406,7 @@ h1.reader-page-title {
 .current-color-btn {
     transition: transform 0.2s ease;
 }
+
 .current-color-btn:hover {
     transform: scale(1.1);
 }
@@ -1467,7 +1521,7 @@ h1.reader-page-title {
 .color-swatch:hover {
     transform: scale(1.15);
     border-color: #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .rainbow-swatch {
@@ -1496,7 +1550,8 @@ h1.reader-page-title {
 }
 
 .primary-btn {
-    background: #00d4aa; /* Premium App Accent Color */
+    background: #00d4aa;
+    /* Premium App Accent Color */
     color: #1e1e1e;
     font-weight: 600;
     box-shadow: 0 4px 14px rgba(0, 212, 170, 0.3);
@@ -1556,7 +1611,7 @@ h1.reader-page-title {
     .modal-action-buttons {
         gap: 6px;
     }
-    
+
     .modal-action-buttons .custom-btn {
         padding: 14px 10px;
         font-size: 0.8rem;
@@ -1568,7 +1623,7 @@ h1.reader-page-title {
         justify-content: space-between;
         align-items: center;
     }
-    
+
     .doodle-tools-container {
         position: static;
         left: auto;
@@ -1687,13 +1742,25 @@ h1.reader-page-title {
 }
 
 @keyframes menuPopIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @media (min-width: 768px) {
@@ -1701,8 +1768,9 @@ h1.reader-page-title {
         max-width: 440px;
         padding: 24px;
     }
-    
-    .cancel-btn, .primary-btn {
+
+    .cancel-btn,
+    .primary-btn {
         flex: 0 1 220px;
         max-width: 220px;
     }
@@ -1754,20 +1822,23 @@ h1.reader-page-title {
 }
 
 @media (max-width: 600px) {
+
     /* Refined Mobile Tooltip Layout */
     .ql-snow .ql-tooltip:not(.ql-hidden) {
         max-width: 85vw !important;
         justify-content: center;
-        margin-top: 0 !important; /* Reset margin since we use absolute centering */
-        gap: 8px 10px; /* Slightly tighter gap for mobile to prevent button wrap */
+        margin-top: 0 !important;
+        /* Reset margin since we use absolute centering */
+        gap: 8px 10px;
+        /* Slightly tighter gap for mobile to prevent button wrap */
     }
-    
+
     /* Ensure long text doesn't break layout and is centered */
     .ql-snow .ql-tooltip a.ql-preview,
     .ql-snow .ql-tooltip input[type=text] {
         text-align: center;
     }
-    
+
     /* Remove desktop right-alignment so buttons center naturally */
     .ql-snow .ql-tooltip a.ql-action {
         margin-left: 0 !important;
@@ -1787,7 +1858,7 @@ h1.reader-page-title {
 }
 
 .modal-header,
-.modal-body > .form-group:first-child {
+.modal-body>.form-group:first-child {
     position: relative;
     z-index: 20;
 }
@@ -1814,7 +1885,7 @@ h1.reader-page-title {
     justify-content: center;
     border: 2px solid rgba(255, 255, 255, 0.1);
     transition: all 0.2s ease;
-    color: rgba(255,255,255,0.8);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 14px;
 }
 
@@ -1838,17 +1909,22 @@ h1.reader-page-title {
 
 /* Define the specific colors for the circles */
 .theme-default {
-    background: #1e293b; /* Matches standard modal background */
+    background: #1e293b;
+    /* Matches standard modal background */
 }
+
 .theme-pastel-red {
     background: #ffb3ba;
 }
+
 .theme-pastel-blue {
     background: #bae1ff;
 }
+
 .theme-pastel-green {
     background: #baffc9;
 }
+
 .theme-pastel-yellow {
     background: #ffffba;
 }

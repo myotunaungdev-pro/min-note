@@ -21,52 +21,70 @@ import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { ReactSketchCanvas } from 'react-sketch-canvas';
 import { Pencil, PenTool, Highlighter, Eraser, Undo2, Trash2, X } from 'lucide-react';
+import DOMPurify from 'dompurify';
 
 const preserveSpacesInHtml = (html) => {
     if (!html) return '';
-    return html.replace(/(>|^)([^<]+)(<|$)/g, (match, p1, p2, p3) => {
-        let text = p2.replace(/^ /g, '&nbsp;');
-        text = text.replace(/  /g, ' &nbsp;');
+    // Preserve newlines that might be outside tags (if any)
+    let formatted = html.replace(/\n/g, '<br>');
+    return formatted.replace(/(>|^)([^<]+)(<|$)/g, (match, p1, p2, p3) => {
+        let text = p2;
+        // Convert tabs to 4 non-breaking spaces
+        text = text.replace(/\t/g, '\u00A0\u00A0\u00A0\u00A0');
+        // Convert spaces
+        text = text.replace(/ {2,}/g, (spaces) => {
+            let res = '';
+            for (let i = 0; i < spaces.length; i++) {
+                res += (i % 2 === 0) ? '\u00A0' : ' ';
+            }
+            return res;
+        });
+        if (text.startsWith(' ')) {
+            text = '\u00A0' + text.slice(1);
+        }
+        if (text.endsWith(' ')) {
+            text = text.slice(0, -1) + '\u00A0';
+        }
         return p1 + text + p3;
     });
 };
 
 async function getCroppedImg(image, crop) {
-  const canvas = document.createElement("canvas")
-  const scaleX = image.naturalWidth / image.width;
-  const scaleY = image.naturalHeight / image.height;
-  const ctx = canvas.getContext("2d")
+    const canvas = document.createElement("canvas")
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    const ctx = canvas.getContext("2d")
 
-  if (!ctx) {
-    return null
-  }
+    if (!ctx) {
+        return null
+    }
 
-  canvas.width = Math.floor(crop.width * scaleX);
-  canvas.height = Math.floor(crop.height * scaleY);
+    canvas.width = Math.floor(crop.width * scaleX);
+    canvas.height = Math.floor(crop.height * scaleY);
 
-  ctx.imageSmoothingQuality = 'high';
+    ctx.imageSmoothingQuality = 'high';
 
-  ctx.drawImage(
-    image,
-    crop.x * scaleX,
-    crop.y * scaleY,
-    crop.width * scaleX,
-    crop.height * scaleY,
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  )
+    ctx.drawImage(
+        image,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    )
 
-  return new Promise((resolve, reject) => {
-    canvas.toBlob((file) => {
-      if (!file) {
-        reject(new Error('Canvas is empty'));
-        return;
-      }
-      resolve(file);
-    }, 'image/jpeg', 1.0)
-  })
+    return new Promise((resolve, reject) => {
+        canvas.toBlob((file) => {
+            if (!file) {
+                reject(new Error('Canvas is empty'));
+                return;
+            }
+            resolve(file);
+        }, 'image/jpeg', 1.0)
+    })
 }
 
 const compressImage = async (file) => {
@@ -189,20 +207,20 @@ const DoodleModal = ({ imageSrc, onClose, onUpdateImage }) => {
 
     const handleSave = async (mode) => {
         if (!canvasRef.current || !imgRef.current) return;
-        
+
         try {
             const sketchBase64 = await canvasRef.current.exportImage("png");
             const originalImg = imgRef.current;
             const naturalWidth = originalImg.naturalWidth;
             const naturalHeight = originalImg.naturalHeight;
-            
+
             const canvas = document.createElement("canvas");
             canvas.width = naturalWidth;
             canvas.height = naturalHeight;
             const ctx = canvas.getContext("2d");
-            
+
             ctx.drawImage(originalImg, 0, 0, naturalWidth, naturalHeight);
-            
+
             const sketchImg = new Image();
             sketchImg.onload = () => {
                 ctx.drawImage(sketchImg, 0, 0, naturalWidth, naturalHeight);
@@ -224,17 +242,17 @@ const DoodleModal = ({ imageSrc, onClose, onUpdateImage }) => {
                 }, 'image/jpeg', 1.0);
             };
             sketchImg.src = sketchBase64;
-            
+
         } catch (error) {
             console.error("Failed to export doodle:", error);
         }
     };
 
     const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
-    
+
     const presetColors = [
-        '#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e', 
-        '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', 
+        '#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e',
+        '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef',
         '#f43f5e', '#ffffff', '#94a3b8', '#475569', '#0f172a'
     ];
 
@@ -281,7 +299,7 @@ const DoodleModal = ({ imageSrc, onClose, onUpdateImage }) => {
     const getCanvasCursor = () => {
         const isEraser = brushType === 'eraser';
         const w = getActualStrokeWidth();
-        
+
         const svgSize = Math.max(w, 4);
         const halfWidth = svgSize / 2;
         const circleRadius = w / 2;
@@ -293,7 +311,7 @@ const DoodleModal = ({ imageSrc, onClose, onUpdateImage }) => {
             const fill = brushType === 'highlighter' ? hexToRgba(strokeColor, 0.4) : strokeColor;
             svg = `<svg width="${svgSize}" height="${svgSize}" xmlns="http://www.w3.org/2000/svg"><circle cx="${halfWidth}" cy="${halfWidth}" r="${Math.max(0.1, circleRadius - 0.5)}" fill="${fill}" stroke="white" stroke-width="1" /></svg>`;
         }
-        
+
         const encoded = encodeURIComponent(svg);
         return `url('data:image/svg+xml;utf8,${encoded}') ${halfWidth} ${halfWidth}, crosshair`;
     };
@@ -322,27 +340,27 @@ const DoodleModal = ({ imageSrc, onClose, onUpdateImage }) => {
             }}>
                 <div className="crop-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'auto', paddingBottom: '150px' }}>
                     <div style={{ position: 'relative', display: 'inline-block', maxWidth: '100%', maxHeight: '75vh' }}>
-                        <img 
-                            ref={imgRef} 
-                            src={imageSrc} 
-                            onLoad={handleImageLoad} 
-                            style={{ display: 'block', maxWidth: '100%', maxHeight: '75vh', width: 'auto', height: 'auto', userSelect: 'none' }} 
-                            alt="Doodle target" 
-                            crossOrigin="anonymous" 
+                        <img
+                            ref={imgRef}
+                            src={imageSrc}
+                            onLoad={handleImageLoad}
+                            style={{ display: 'block', maxWidth: '100%', maxHeight: '75vh', width: 'auto', height: 'auto', userSelect: 'none' }}
+                            alt="Doodle target"
+                            crossOrigin="anonymous"
                         />
                         {imgDimensions.width > 0 && (
-                            <div 
-                                className="doodle-canvas-wrapper" 
+                            <div
+                                className="doodle-canvas-wrapper"
                                 style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', touchAction: 'none', cursor: getCanvasCursor() }}
                             >
-                                <ReactSketchCanvas 
-                                    ref={canvasRef} 
-                                    strokeWidth={getActualStrokeWidth()} 
+                                <ReactSketchCanvas
+                                    ref={canvasRef}
+                                    strokeWidth={getActualStrokeWidth()}
                                     eraserWidth={eraserWidth}
-                                    strokeColor={getActualStrokeColor()} 
-                                    width="100%" 
-                                    height="100%" 
-                                    canvasColor="transparent" 
+                                    strokeColor={getActualStrokeColor()}
+                                    width="100%"
+                                    height="100%"
+                                    canvasColor="transparent"
                                 />
                             </div>
                         )}
@@ -356,7 +374,7 @@ const DoodleModal = ({ imageSrc, onClose, onUpdateImage }) => {
                                 <button className={`brush-btn ${brushType === 'pen' ? 'active' : ''}`} style={getActiveBrushStyle('pen')} onClick={() => { setBrushType('pen'); setIsEraserSliderOpen(false); }}><PenTool size={18} /></button>
                                 <button className={`brush-btn ${brushType === 'highlighter' ? 'active' : ''}`} style={getActiveBrushStyle('highlighter')} onClick={() => { setBrushType('highlighter'); setIsEraserSliderOpen(false); }}><Highlighter size={18} /></button>
                             </div>
-                            <button 
+                            <button
                                 className="current-color-btn"
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -368,12 +386,12 @@ const DoodleModal = ({ imageSrc, onClose, onUpdateImage }) => {
                                     boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
                                 }}
                             />
-                            
+
                             {isColorPickerOpen && (
                                 <div className="color-picker-popover" onClick={e => e.stopPropagation()}>
                                     <div className="color-palette-grid">
                                         {presetColors.map(c => (
-                                            <button 
+                                            <button
                                                 key={c}
                                                 className="color-swatch"
                                                 onClick={() => {
@@ -384,8 +402,8 @@ const DoodleModal = ({ imageSrc, onClose, onUpdateImage }) => {
                                             />
                                         ))}
                                         <div className="color-swatch rainbow-swatch">
-                                            <input 
-                                                type="color" 
+                                            <input
+                                                type="color"
                                                 className="custom-color-input"
                                                 value={strokeColor}
                                                 onChange={(e) => setStrokeColor(e.target.value)}
@@ -397,8 +415,8 @@ const DoodleModal = ({ imageSrc, onClose, onUpdateImage }) => {
                         </div>
                         <div style={{ position: 'relative' }}>
                             <div className="brush-selector-group" style={{ display: 'flex', gap: '4px', background: 'rgba(255,255,255,0.1)', padding: '4px', borderRadius: '50px' }}>
-                                <button 
-                                    className={`brush-btn ${brushType === 'eraser' ? 'active' : ''}`} 
+                                <button
+                                    className={`brush-btn ${brushType === 'eraser' ? 'active' : ''}`}
                                     onClick={() => {
                                         if (brushType === 'eraser') {
                                             setIsEraserSliderOpen(!isEraserSliderOpen);
@@ -406,22 +424,22 @@ const DoodleModal = ({ imageSrc, onClose, onUpdateImage }) => {
                                             setBrushType('eraser');
                                             setIsEraserSliderOpen(true);
                                         }
-                                    }} 
-                                    
+                                    }}
+
                                 >
                                     <Eraser size={18} />
                                 </button>
                                 <button className="brush-btn" onClick={() => canvasRef.current?.undo()} disabled={savingAction !== null}><Undo2 size={18} /></button>
                                 <button className="brush-btn" onClick={() => canvasRef.current?.clearCanvas()} disabled={savingAction !== null}><Trash2 size={18} /></button>
                             </div>
-                            
+
                             {isEraserSliderOpen && brushType === 'eraser' && (
                                 <div className="eraser-slider-popover" onClick={e => e.stopPropagation()}>
                                     <span style={{ color: '#fff', fontSize: '12px', fontWeight: '500' }}>Size: {eraserWidth}px</span>
-                                    <input 
-                                        type="range" 
-                                        min="5" 
-                                        max="50" 
+                                    <input
+                                        type="range"
+                                        min="5"
+                                        max="50"
                                         value={eraserWidth}
                                         onChange={(e) => setEraserWidth(Number(e.target.value))}
                                         className="custom-range-input"
@@ -515,9 +533,9 @@ const ImageInputMenu = ({ isOpen, onClose, onGallerySelect, onCameraSelect, onDe
     if (!isOpen) return null;
 
     // Strict Mobile OS detection (prevents narrowed desktop windows from triggering mobile fallback)
-    const isMobileDevice = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) || 
-                           (navigator.maxTouchPoints > 0 && navigator.userAgent.includes('Mac'));
-    
+    const isMobileDevice = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ||
+        (navigator.maxTouchPoints > 0 && navigator.userAgent.includes('Mac'));
+
     const handleTakePhoto = () => {
         if (isUploading) return;
         if (isMobileDevice) {
@@ -529,7 +547,7 @@ const ImageInputMenu = ({ isOpen, onClose, onGallerySelect, onCameraSelect, onDe
 
     return createPortal(
         <div className="image-menu-overlay" onClick={(e) => { e.stopPropagation(); onClose(); }}>
-            <div className="image-menu-sheet" onClick={e => { if(isUploading) return; e.stopPropagation(); }}>
+            <div className="image-menu-sheet" onClick={e => { if (isUploading) return; e.stopPropagation(); }}>
                 <div className="image-menu-header">
                     <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: '#ffffff' }}>
                         {isUploading ? t("notes.uploadingToCloud") : t("notes.addImage")}
@@ -542,13 +560,13 @@ const ImageInputMenu = ({ isOpen, onClose, onGallerySelect, onCameraSelect, onDe
                 </div>
                 {isUploading ? (
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 0', gap: '16px' }}>
-                        <div style={{ 
-                            width: '40px', 
-                            height: '40px', 
-                            border: '3px solid rgba(255, 255, 255, 0.1)', 
-                            borderTopColor: '#00d4aa', 
-                            borderRadius: '50%', 
-                            animation: 'spin 1s linear infinite' 
+                        <div style={{
+                            width: '40px',
+                            height: '40px',
+                            border: '3px solid rgba(255, 255, 255, 0.1)',
+                            borderTopColor: '#00d4aa',
+                            borderRadius: '50%',
+                            animation: 'spin 1s linear infinite'
                         }}></div>
                         <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
                         <span style={{ color: '#94a3b8', fontSize: '14px', fontWeight: '500' }}>{t("notes.uploadingToCloud")}</span>
@@ -569,7 +587,7 @@ const ImageInputMenu = ({ isOpen, onClose, onGallerySelect, onCameraSelect, onDe
                         </button>
                     </div>
                 )}
-                
+
                 <input type="file" accept="image/*" multiple ref={galleryRef} style={{ display: 'none' }} onChange={onGallerySelect} disabled={isUploading} />
                 <input type="file" accept="image/*" capture="environment" ref={cameraRef} style={{ display: 'none' }} onChange={onCameraSelect} disabled={isUploading} />
             </div>
@@ -586,7 +604,7 @@ Font.whitelist = ['', 'lora', 'padauk', 'dancing-script', 'playfair-display'];
 // yields 'ql-font-dancing' as the key, causing string matching errors during HTML hydration.
 // We safely normalize the keys() parsing so it exactly matches the 'ql-font' whitelist.
 if (Font.constructor && Font.constructor.keys) {
-    Font.constructor.keys = function(node) {
+    Font.constructor.keys = function (node) {
         return Array.from(node.classList).map(name => {
             if (name.startsWith('ql-font-')) {
                 return 'ql-font';
@@ -705,141 +723,141 @@ const NoteReadView = ({ note, onClose }) => {
 
     return (
         <>
-        <div className="reader-overlay" onClick={onClose}>
-            <div className={`reader-modal reader-modal-${viewSize}`} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="reader-title">
-                <div className="reader-header">
-                    <h2 className="reader-title" id="reader-title">
-                        <i className="bi bi-book"></i>
-                        {note.title} <span className="reader-badge">({t("notes.modal.readOnly")})</span>
-                    </h2>
-                    <div className="reader-header-actions">
-                        <div className="image-toggle-controls">
-                            <button 
-                                className="size-btn image-toggle-btn" 
-                                onClick={() => setIsImageGrid(!isImageGrid)} 
+            <div className="reader-overlay" onClick={onClose}>
+                <div className={`reader-modal reader-modal-${viewSize}`} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="reader-title">
+                    <div className="reader-header">
+                        <h2 className="reader-title" id="reader-title">
+                            <i className="bi bi-book"></i>
+                            {note.title} <span className="reader-badge">({t("notes.modal.readOnly")})</span>
+                        </h2>
+                        <div className="reader-header-actions">
+                            <div className="image-toggle-controls">
+                                <button
+                                    className="size-btn image-toggle-btn"
+                                    onClick={() => setIsImageGrid(!isImageGrid)}
+                                >
+                                    <i className={`bi ${isImageGrid ? 'bi-distribute-vertical' : 'bi-grid-fill'}`}></i>
+                                </button>
+                                <div className="toggle-divider"></div>
+                            </div>
+                            <div className="view-size-controls">
+                                <button className={`size-btn ${viewSize === 'default' ? 'active' : ''}`} onClick={() => setViewSize('default')}>
+                                    <i className="bi bi-window"></i>
+                                </button>
+                                <button className={`size-btn ${viewSize === 'wide' ? 'active' : ''}`} onClick={() => setViewSize('wide')}>
+                                    <i className="bi bi-aspect-ratio"></i>
+                                </button>
+                                <button className={`size-btn ${viewSize === 'fullscreen' ? 'active' : ''}`} onClick={() => setViewSize('fullscreen')}>
+                                    <i className="bi bi-arrows-fullscreen"></i>
+                                </button>
+                            </div>
+                            <button className="modal-close" onClick={onClose} aria-label={t("notes.modal.closeView")}>
+                                <i className="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="reader-body">
+                        <article className={`reader-page bg-theme-${note.theme || 'default'}`}>
+                            <h1 className={`reader-page-title ${note.titleFontFamily ? `ql-font-${note.titleFontFamily}` : ''}`}>{note.title}</h1>
+                            <div
+                                ref={contentRef}
+                                className={`reader-page-content ${isImageGrid ? 'editor-image-grid' : 'editor-image-stack'}`}
+                                onClick={handleContentClick}
                             >
-                                <i className={`bi ${isImageGrid ? 'bi-distribute-vertical' : 'bi-grid-fill'}`}></i>
-                            </button>
-                            <div className="toggle-divider"></div>
+                                <div className="ql-editor" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(note.content) }}></div>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div className="reader-footer">
+                        <div className="reader-tags-section">
+                            <div className="tag-selector tag-selector-readonly">
+                                {tagOptions.map((tag) => {
+                                    const isActive = tag.label === noteTag.label;
+                                    if (!isActive) return null; // Only show the active tag to save space
+                                    return (
+                                        <span
+                                            key={tag.label}
+                                            className={`tag-option tag-option-readonly tag-option--${tagClassSlug(tag.label)} ${isActive ? 'selected' : ''}`}
+                                            style={{
+                                                '--tag-color': tag.color,
+                                                backgroundColor: isActive ? `${tag.color}20` : 'transparent',
+                                                borderColor: isActive ? tag.color : 'rgba(61, 53, 40, 0.15)',
+                                                color: isActive ? tag.color : '#8b7d6b',
+                                            }}
+                                        >
+                                            <span className="tag-dot" style={{ backgroundColor: tag.color }}></span>
+                                            {t(`tags.${tag.label.toLowerCase()}`)}
+                                        </span>
+                                    );
+                                })}
+                            </div>
                         </div>
-                        <div className="view-size-controls">
-                            <button className={`size-btn ${viewSize === 'default' ? 'active' : ''}`} onClick={() => setViewSize('default')}>
-                                <i className="bi bi-window"></i>
-                            </button>
-                            <button className={`size-btn ${viewSize === 'wide' ? 'active' : ''}`} onClick={() => setViewSize('wide')}>
-                                <i className="bi bi-aspect-ratio"></i>
-                            </button>
-                            <button className={`size-btn ${viewSize === 'fullscreen' ? 'active' : ''}`} onClick={() => setViewSize('fullscreen')}>
-                                <i className="bi bi-arrows-fullscreen"></i>
-                            </button>
-                        </div>
-                        <button className="modal-close" onClick={onClose} aria-label={t("notes.modal.closeView")}>
+                        <button type="button" className="btn-close-view" onClick={onClose}>
                             <i className="bi bi-x-lg"></i>
+                            {t("notes.modal.closeView")}
                         </button>
                     </div>
                 </div>
-
-                <div className="reader-body">
-                    <article className={`reader-page bg-theme-${note.theme || 'default'}`}>
-                        <h1 className={`reader-page-title ${note.titleFontFamily ? `ql-font-${note.titleFontFamily}` : ''}`}>{note.title}</h1>
-                        <div 
-                            ref={contentRef}
-                            className={`reader-page-content ${isImageGrid ? 'editor-image-grid' : 'editor-image-stack'}`}
-                            onClick={handleContentClick}
-                        >
-                            <div className="ql-editor" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: note.content }}></div>
-                        </div>
-                    </article>
-                </div>
-
-                <div className="reader-footer">
-                    <div className="reader-tags-section">
-                        <div className="tag-selector tag-selector-readonly">
-                            {tagOptions.map((tag) => {
-                                const isActive = tag.label === noteTag.label;
-                                if (!isActive) return null; // Only show the active tag to save space
-                                return (
-                                    <span
-                                        key={tag.label}
-                                        className={`tag-option tag-option-readonly tag-option--${tagClassSlug(tag.label)} ${isActive ? 'selected' : ''}`}
-                                        style={{
-                                            '--tag-color': tag.color,
-                                            backgroundColor: isActive ? `${tag.color}20` : 'transparent',
-                                            borderColor: isActive ? tag.color : 'rgba(61, 53, 40, 0.15)',
-                                            color: isActive ? tag.color : '#8b7d6b',
-                                        }}
-                                    >
-                                        <span className="tag-dot" style={{ backgroundColor: tag.color }}></span>
-                                        {t(`tags.${tag.label.toLowerCase()}`)}
-                                    </span>
-                                );
-                            })}
-                        </div>
-                    </div>
-                    <button type="button" className="btn-close-view" onClick={onClose}>
-                        <i className="bi bi-x-lg"></i>
-                        {t("notes.modal.closeView")}
-                    </button>
-                </div>
             </div>
-        </div>
-        <Lightbox
-            open={lightboxIndex >= 0}
-            close={() => setLightboxIndex(-1)}
-            index={lightboxIndex >= 0 ? lightboxIndex : 0}
-            slides={lightboxSlides}
-            plugins={[Zoom]}
-            on={{ view: ({ index: currentIndex }) => setLightboxIndex(currentIndex) }}
-            toolbar={{
-                buttons: [
-                    <button 
-                        key="crop" 
-                        type="button" 
-                        className="yarl__button" 
-                        onClick={() => setCropImageSrc(lightboxSlides[lightboxIndex]?.src)} 
-                        
-                        aria-label={t("notes.cropImage")}
-                    >
-                        <svg className="yarl__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                            <path d="M17 15h2V7c0-1.1-.9-2-2-2H9v2h8v8zM7 17V1H5v4H1v2h4v10c0 1.1.9 2 2 2h10v4h2v-4h4v-2H7z" />
-                        </svg>
-                    </button>,
-                    <button 
-                        key="doodle" 
-                        type="button" 
-                        className="yarl__button" 
-                        onClick={() => setDoodleImageSrc(lightboxSlides[lightboxIndex]?.src)} 
-                        
-                        aria-label={t("notes.drawOnImage")}
-                    >
-                        <svg className="yarl__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.995.995 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-                        </svg>
-                    </button>,
-                    <button 
-                        key="download" 
-                        type="button" 
-                        className="yarl__button" 
-                        onClick={handleDownloadImage} 
-                        
-                        aria-label={t("notes.downloadImage")}
-                        style={{ marginRight: 'auto' }}
-                    >
-                        <svg className="yarl__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-                        </svg>
-                    </button>,
-                    "zoom",
-                    "close"
-                ]
-            }}
-            render={{
-                buttonPrev: lightboxSlides.length <= 1 ? () => null : undefined,
-                buttonNext: lightboxSlides.length <= 1 ? () => null : undefined,
-            }}
-        />
-        {cropImageSrc && <ImageCropModal imageSrc={cropImageSrc} onClose={() => setCropImageSrc(null)} onUpdateImage={handleUpdateImage} />}
-        {doodleImageSrc && <DoodleModal imageSrc={doodleImageSrc} onClose={() => setDoodleImageSrc(null)} onUpdateImage={handleUpdateImage} />}
+            <Lightbox
+                open={lightboxIndex >= 0}
+                close={() => setLightboxIndex(-1)}
+                index={lightboxIndex >= 0 ? lightboxIndex : 0}
+                slides={lightboxSlides}
+                plugins={[Zoom]}
+                on={{ view: ({ index: currentIndex }) => setLightboxIndex(currentIndex) }}
+                toolbar={{
+                    buttons: [
+                        <button
+                            key="crop"
+                            type="button"
+                            className="yarl__button"
+                            onClick={() => setCropImageSrc(lightboxSlides[lightboxIndex]?.src)}
+
+                            aria-label={t("notes.cropImage")}
+                        >
+                            <svg className="yarl__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                <path d="M17 15h2V7c0-1.1-.9-2-2-2H9v2h8v8zM7 17V1H5v4H1v2h4v10c0 1.1.9 2 2 2h10v4h2v-4h4v-2H7z" />
+                            </svg>
+                        </button>,
+                        <button
+                            key="doodle"
+                            type="button"
+                            className="yarl__button"
+                            onClick={() => setDoodleImageSrc(lightboxSlides[lightboxIndex]?.src)}
+
+                            aria-label={t("notes.drawOnImage")}
+                        >
+                            <svg className="yarl__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.995.995 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                            </svg>
+                        </button>,
+                        <button
+                            key="download"
+                            type="button"
+                            className="yarl__button"
+                            onClick={handleDownloadImage}
+
+                            aria-label={t("notes.downloadImage")}
+                            style={{ marginRight: 'auto' }}
+                        >
+                            <svg className="yarl__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                            </svg>
+                        </button>,
+                        "zoom",
+                        "close"
+                    ]
+                }}
+                render={{
+                    buttonPrev: lightboxSlides.length <= 1 ? () => null : undefined,
+                    buttonNext: lightboxSlides.length <= 1 ? () => null : undefined,
+                }}
+            />
+            {cropImageSrc && <ImageCropModal imageSrc={cropImageSrc} onClose={() => setCropImageSrc(null)} onUpdateImage={handleUpdateImage} />}
+            {doodleImageSrc && <DoodleModal imageSrc={doodleImageSrc} onClose={() => setDoodleImageSrc(null)} onUpdateImage={handleUpdateImage} />}
         </>
     );
 };
@@ -881,12 +899,12 @@ const NoteEditModal = () => {
     const [linkUrl, setLinkUrl] = useState('');
     const [savedSelectionRange, setSavedSelectionRange] = useState(null);
     const openLinkModalRef = useRef(null);
-    
+
     // Image Delete Overlay State
     const [hoveredImgNode, setHoveredImgNode] = useState(null);
     const [overlayPos, setOverlayPos] = useState({ top: 0, left: 0, width: 0, height: 0 });
     const overlayRef = useRef(null);
-    
+
     // Wire the ref to the logic that triggers the custom modal
     openLinkModalRef.current = (quill) => {
         const range = quill.getSelection(true);
@@ -913,12 +931,12 @@ const NoteEditModal = () => {
                 [{ 'font': ['', 'lora', 'padauk', 'dancing-script', 'playfair-display'] }],
                 [{ 'header': [1, 2, 3, false] }],
                 ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
                 ['link', 'image'],
                 ['clean']
             ],
             handlers: {
-                link: function(value) {
+                link: function (value) {
                     if (openLinkModalRef.current) {
                         openLinkModalRef.current(this.quill);
                     }
@@ -968,7 +986,7 @@ const NoteEditModal = () => {
     const handleEditorInteract = (e) => {
         if (e.target.tagName === 'IMG') {
             const rect = e.target.getBoundingClientRect();
-            
+
             const editorNode = quillWrapperRef.current?.querySelector('.ql-editor');
             if (editorNode) {
                 const editorRect = editorNode.getBoundingClientRect();
@@ -978,7 +996,7 @@ const NoteEditModal = () => {
                     return;
                 }
             }
-            
+
             setHoveredImgNode(e.target);
             setOverlayPos({
                 top: rect.top,
@@ -1063,7 +1081,7 @@ const NoteEditModal = () => {
         theme === (editingNote?.theme || user?.defaultNoteTheme || 'default');
 
     const isCreateDisabled = !title.trim() || !content;
-    
+
     const isButtonDisabled = editingNote ? isUnchanged : isCreateDisabled;
 
     useEffect(() => {
@@ -1089,7 +1107,7 @@ const NoteEditModal = () => {
                 const isOutsideQuill = !quillWrapperRef.current.contains(event.target);
                 const clickedPicker = event.target.closest('.ql-picker');
                 const expandedPickers = quillWrapperRef.current.querySelectorAll('.ql-picker.ql-expanded');
-                
+
                 expandedPickers.forEach(picker => {
                     if (isOutsideQuill) {
                         picker.classList.remove('ql-expanded');
@@ -1173,13 +1191,13 @@ const NoteEditModal = () => {
     const handleLinkSave = (e) => {
         e.preventDefault();
         if (!quillRef.current || !savedSelectionRange) return;
-        
+
         const quill = quillRef.current.getEditor();
         const { index, length } = savedSelectionRange;
-        
+
         const textToInsert = linkDisplayText.trim() || linkUrl.trim();
         const urlToInsert = linkUrl.trim();
-        
+
         if (urlToInsert) {
             if (length > 0) {
                 quill.deleteText(index, length);
@@ -1189,7 +1207,7 @@ const NoteEditModal = () => {
                 quill.setSelection(index + textToInsert.length);
             }
         }
-        
+
         setIsLinkModalOpen(false);
         setLinkDisplayText('');
         setLinkUrl('');
@@ -1198,7 +1216,7 @@ const NoteEditModal = () => {
 
     const isValidUrl = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/.test(linkUrl.trim());
     const isLinkSaveDisabled = !linkDisplayText.trim() || !isValidUrl;
-    
+
     const handleLinkKeyDown = (e) => {
         if (e.key === 'Enter' && !isLinkSaveDisabled) {
             handleLinkSave(e);
@@ -1230,7 +1248,7 @@ const NoteEditModal = () => {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                             <label className="form-label" style={{ marginBottom: 0 }}>{t("notes.modal.titleLabel")}</label>
                             <div className="title-font-dropdown-container" ref={fontDropdownRef} style={{ position: 'relative' }}>
-                                <button 
+                                <button
                                     type="button"
                                     className="title-font-dropdown-toggle"
                                     onClick={() => setIsTitleFontDropdownOpen(!isTitleFontDropdownOpen)}
@@ -1240,7 +1258,7 @@ const NoteEditModal = () => {
                                     </span>
                                     <i className="bi bi-chevron-down" style={{ fontSize: '12px', marginLeft: '6px' }}></i>
                                 </button>
-                                
+
                                 {isTitleFontDropdownOpen && (
                                     <div className="title-font-dropdown-menu">
                                         {titleFontOptions.map(opt => (
@@ -1272,7 +1290,7 @@ const NoteEditModal = () => {
                         />
                     </div>
 
-                    <div 
+                    <div
                         ref={quillWrapperRef}
                         className={`form-group quill-group ${isComposing ? 'is-composing' : ''}`}
                         onCompositionStart={() => setIsComposing(true)}
@@ -1289,11 +1307,11 @@ const NoteEditModal = () => {
                         }}
                     >
                         <label className="form-label">{t("notes.modal.contentLabel")}</label>
-                        <ReactQuill 
+                        <ReactQuill
                             ref={quillRef}
-                            theme="snow" 
-                            value={content} 
-                            onChange={setContent} 
+                            theme="snow"
+                            value={content}
+                            onChange={setContent}
                             modules={quillModules}
                             formats={quillFormats}
                             placeholder={t("notes.modal.contentPlaceholder")}
@@ -1305,7 +1323,7 @@ const NoteEditModal = () => {
                         <label className="form-label">{t("notes.modal.themeLabel", "Theme")}</label>
                         <div className="theme-palette">
                             {['default', 'pastel-red', 'pastel-blue', 'pastel-green', 'pastel-yellow'].map(tOption => (
-                                <div 
+                                <div
                                     key={tOption}
                                     className={`theme-circle theme-${tOption} ${theme === tOption ? 'selected' : ''}`}
                                     onClick={() => setTheme(tOption)}
@@ -1351,13 +1369,13 @@ const NoteEditModal = () => {
                     </button>
                 </div>
             </form>
-            
-            <ImageInputMenu 
-                isOpen={showImageMenu} 
-                onClose={() => setShowImageMenu(false)} 
-                onGallerySelect={handleGallerySelect} 
+
+            <ImageInputMenu
+                isOpen={showImageMenu}
+                onClose={() => setShowImageMenu(false)}
+                onGallerySelect={handleGallerySelect}
                 onCameraSelect={handleCameraSelect}
-                onDesktopCameraSelect={handleDesktopCameraSelect} 
+                onDesktopCameraSelect={handleDesktopCameraSelect}
                 isUploading={isUploading}
             />
 
@@ -1390,9 +1408,9 @@ const NoteEditModal = () => {
                         </div>
                         <div className="modal-footer" style={{ marginTop: '20px', padding: 0, borderTop: 'none' }}>
                             <button type="button" className="btn-cancel" onClick={() => setIsLinkModalOpen(false)}>{t("common.cancel")}</button>
-                            <button 
-                                type="button" 
-                                className="btn-save" 
+                            <button
+                                type="button"
+                                className="btn-save"
                                 onClick={handleLinkSave}
                                 disabled={isLinkSaveDisabled}
                                 style={{ opacity: isLinkSaveDisabled ? 0.5 : 1, cursor: isLinkSaveDisabled ? 'not-allowed' : 'pointer' }}
@@ -1403,16 +1421,16 @@ const NoteEditModal = () => {
                     </div>
                 </div>
             )}
-            
+
             {showWebcamModal && (
-                <WebcamCaptureModal 
-                    onClose={() => setShowWebcamModal(false)} 
-                    onCapture={handleWebcamCapture} 
+                <WebcamCaptureModal
+                    onClose={() => setShowWebcamModal(false)}
+                    onCapture={handleWebcamCapture}
                 />
             )}
-            
+
             {hoveredImgNode && createPortal(
-                <div 
+                <div
                     ref={overlayRef}
                     className="image-delete-overlay"
                     style={{
