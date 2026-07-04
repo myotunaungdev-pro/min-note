@@ -416,7 +416,9 @@
       "current": "Current Plan",
       "proDesc": "You are currently on the Pro Plan.",
       "free": "Free Plan",
-      "upgrade": "Upgrade to Pro"
+      "upgrade": "Upgrade to Pro",
+      "proComingSoonTitle": "Coming Soon",
+      "proComingSoonDesc": "Pro features are currently under development. We are working hard to bring you advanced capabilities and premium tools in future updates. Stay tuned!"
     },
     "logout": {
       "title": "Leaving so soon?",

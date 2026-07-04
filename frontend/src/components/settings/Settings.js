@@ -18,6 +18,7 @@ const Settings = () => {
     const [isLogoutModalOpen, setIsLogoutModalOpen] = React.useState(false);
     const [isAvatarModalOpen, setIsAvatarModalOpen] = React.useState(false);
     const [isLightboxOpen, setIsLightboxOpen] = React.useState(false);
+    const [isProModalOpen, setIsProModalOpen] = React.useState(false);
     const fileInputRef = React.useRef(null);
 
     const [formData, setFormData] = React.useState({
@@ -106,6 +107,18 @@ const Settings = () => {
         window.addEventListener('keydown', handleSettingsKeyDown);
         return () => window.removeEventListener('keydown', handleSettingsKeyDown);
     }, [isLogoutModalOpen, confirmLogout]);
+
+    React.useEffect(() => {
+        const handleProModalKeyDown = (e) => {
+            if (e.key === 'Escape' && isProModalOpen) {
+                e.preventDefault();
+                setIsProModalOpen(false);
+            }
+        };
+
+        window.addEventListener('keydown', handleProModalKeyDown);
+        return () => window.removeEventListener('keydown', handleProModalKeyDown);
+    }, [isProModalOpen]);
 
     return (
         <div className="settings-page">
@@ -200,7 +213,7 @@ const Settings = () => {
                         </div>
                         <div className="subscription-body">
                             <p>{t("settings.plan.free")}</p>
-                            <button className="btn-upgrade">{t("settings.plan.upgrade")}</button>
+                            <button className="btn-upgrade" onClick={() => setIsProModalOpen(true)}>{t("settings.plan.upgrade")}</button>
                         </div>
                     </div>
                 </section>
@@ -275,6 +288,26 @@ const Settings = () => {
                             )}
                             <button className="btn-avatar-option btn-avatar-cancel" onClick={() => setIsAvatarModalOpen(false)}>
                                 {t("common.cancel")}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {isProModalOpen && (
+                <div className="logout-modal-overlay" onClick={() => setIsProModalOpen(false)}>
+                    <div className="logout-modal" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close-icon" onClick={() => setIsProModalOpen(false)} aria-label={t("settings.closeEsc")}>
+                            <i className="bi bi-x-lg"></i>
+                        </button>
+                        <div className="logout-modal-icon avatar-modal-icon">
+                            <i className="bi bi-stars"></i>
+                        </div>
+                        <h3 className="page-title" style={{ fontSize: '24px', marginBottom: '16px' }}>{t("settings.plan.proComingSoonTitle")}</h3>
+                        <p style={{ marginBottom: '24px', lineHeight: '1.6' }}>{t("settings.plan.proComingSoonDesc")}</p>
+                        <div className="logout-modal-actions" style={{ display: 'flex', justifyContent: 'center' }}>
+                            <button className="btn-avatar-option btn-avatar-upload" style={{ padding: '12px 32px', width: 'auto', minWidth: '160px' }} onClick={() => setIsProModalOpen(false)}>
+                                {t("settings.closeEsc")}
                             </button>
                         </div>
                     </div>

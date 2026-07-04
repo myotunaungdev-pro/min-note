@@ -288,9 +288,45 @@
     font-size: 1rem !important;
 }
 
+.ql-container.bg-theme-pastel-red .ql-editor,
+.ql-container.bg-theme-pastel-blue .ql-editor,
+.ql-container.bg-theme-pastel-green .ql-editor,
+.ql-container.bg-theme-pastel-yellow .ql-editor,
+.ql-container.bg-theme-pastel-peach .ql-editor,
+.ql-container.bg-theme-pastel-lavender .ql-editor,
+.ql-container.bg-theme-white .ql-editor,
+.ql-container.bg-theme-pattern-1 .ql-editor,
+.ql-container.bg-theme-pattern-2 .ql-editor,
+.ql-container.bg-theme-pattern-3 .ql-editor,
+.ql-container.bg-theme-pattern-4 .ql-editor,
+.ql-container.bg-theme-pattern-5 .ql-editor,
+.ql-container.bg-theme-pattern-6 .ql-editor,
+.ql-container.bg-theme-pattern-7 .ql-editor,
+.ql-container.bg-theme-pattern-8 .ql-editor {
+    color: #334155 !important;
+}
+
 .ql-editor.ql-blank::before {
     color: #64748b;
     font-style: normal;
+}
+
+.ql-container.bg-theme-pastel-red .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pastel-blue .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pastel-green .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pastel-yellow .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pastel-peach .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pastel-lavender .ql-editor.ql-blank::before,
+.ql-container.bg-theme-white .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pattern-1 .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pattern-2 .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pattern-3 .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pattern-4 .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pattern-5 .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pattern-6 .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pattern-7 .ql-editor.ql-blank::before,
+.ql-container.bg-theme-pattern-8 .ql-editor.ql-blank::before {
+    color: #64748b !important; /* Placeholder text is already a medium gray, but ensuring it overrides if needed */
 }
 
 .ql-editor:not(.ql-blank)::before {
@@ -1022,8 +1058,76 @@ h1.reader-page-title {
     /* Let wrapper handle scrolling */
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
-    white-space: pre-wrap !important;
-    /* Force long strings to wrap */
+}
+
+/* Ensure nested elements in reader don't override the theme text color */
+.reader-page-content * {
+    color: inherit;
+}
+.reader-page-content .ql-editor * {
+    color: inherit !important;
+}
+
+/* Dynamic Text Colors for Read-Only Modal based on Theme */
+/* Default Theme (Dark) */
+.reader-page.bg-theme-default h1.reader-page-title {
+    color: #f1f5f9 !important;
+}
+.reader-page.bg-theme-default .reader-page-content,
+.reader-page.bg-theme-default .reader-page-content .ql-editor {
+    color: #f8fafc !important;
+}
+
+/* White & Pastel & Pattern Themes (Light) */
+.reader-page.bg-theme-white h1.reader-page-title,
+.reader-page.bg-theme-pastel-red h1.reader-page-title,
+.reader-page.bg-theme-pastel-blue h1.reader-page-title,
+.reader-page.bg-theme-pastel-green h1.reader-page-title,
+.reader-page.bg-theme-pastel-yellow h1.reader-page-title,
+.reader-page.bg-theme-pastel-peach h1.reader-page-title,
+.reader-page.bg-theme-pastel-lavender h1.reader-page-title,
+.reader-page.bg-theme-pattern-1 h1.reader-page-title,
+.reader-page.bg-theme-pattern-2 h1.reader-page-title,
+.reader-page.bg-theme-pattern-3 h1.reader-page-title,
+.reader-page.bg-theme-pattern-4 h1.reader-page-title,
+.reader-page.bg-theme-pattern-5 h1.reader-page-title,
+.reader-page.bg-theme-pattern-6 h1.reader-page-title,
+.reader-page.bg-theme-pattern-7 h1.reader-page-title,
+.reader-page.bg-theme-pattern-8 h1.reader-page-title {
+    color: #0f172a !important;
+}
+
+.reader-page.bg-theme-white .reader-page-content,
+.reader-page.bg-theme-pastel-red .reader-page-content,
+.reader-page.bg-theme-pastel-blue .reader-page-content,
+.reader-page.bg-theme-pastel-green .reader-page-content,
+.reader-page.bg-theme-pastel-yellow .reader-page-content,
+.reader-page.bg-theme-pastel-peach .reader-page-content,
+.reader-page.bg-theme-pastel-lavender .reader-page-content,
+.reader-page.bg-theme-pattern-1 .reader-page-content,
+.reader-page.bg-theme-pattern-2 .reader-page-content,
+.reader-page.bg-theme-pattern-3 .reader-page-content,
+.reader-page.bg-theme-pattern-4 .reader-page-content,
+.reader-page.bg-theme-pattern-5 .reader-page-content,
+.reader-page.bg-theme-pattern-6 .reader-page-content,
+.reader-page.bg-theme-pattern-7 .reader-page-content,
+.reader-page.bg-theme-pattern-8 .reader-page-content,
+.reader-page.bg-theme-white .reader-page-content .ql-editor,
+.reader-page.bg-theme-pastel-red .reader-page-content .ql-editor,
+.reader-page.bg-theme-pastel-blue .reader-page-content .ql-editor,
+.reader-page.bg-theme-pastel-green .reader-page-content .ql-editor,
+.reader-page.bg-theme-pastel-yellow .reader-page-content .ql-editor,
+.reader-page.bg-theme-pastel-peach .reader-page-content .ql-editor,
+.reader-page.bg-theme-pastel-lavender .reader-page-content .ql-editor,
+.reader-page.bg-theme-pattern-1 .reader-page-content .ql-editor,
+.reader-page.bg-theme-pattern-2 .reader-page-content .ql-editor,
+.reader-page.bg-theme-pattern-3 .reader-page-content .ql-editor,
+.reader-page.bg-theme-pattern-4 .reader-page-content .ql-editor,
+.reader-page.bg-theme-pattern-5 .reader-page-content .ql-editor,
+.reader-page.bg-theme-pattern-6 .reader-page-content .ql-editor,
+.reader-page.bg-theme-pattern-7 .reader-page-content .ql-editor,
+.reader-page.bg-theme-pattern-8 .reader-page-content .ql-editor {
+    color: #334155 !important;
 }
 
 /* Remove unwanted focus rings when clicking links in Read-Only view */
@@ -1903,7 +2007,18 @@ h1.reader-page-title {
 .theme-pastel-red.selected,
 .theme-pastel-blue.selected,
 .theme-pastel-green.selected,
-.theme-pastel-yellow.selected {
+.theme-pastel-yellow.selected,
+.theme-pastel-peach.selected,
+.theme-pastel-lavender.selected,
+.theme-white.selected,
+.theme-pattern-1.selected,
+.theme-pattern-2.selected,
+.theme-pattern-3.selected,
+.theme-pattern-4.selected,
+.theme-pattern-5.selected,
+.theme-pattern-6.selected,
+.theme-pattern-7.selected,
+.theme-pattern-8.selected {
     color: #1e293b;
 }
 
@@ -1911,6 +2026,11 @@ h1.reader-page-title {
 .theme-default {
     background: #1e293b;
     /* Matches standard modal background */
+}
+
+.theme-white {
+    background: #ffffff;
+    border-color: #cbd5e1; /* Subtle border for visibility */
 }
 
 .theme-pastel-red {
@@ -1926,5 +2046,70 @@ h1.reader-page-title {
 }
 
 .theme-pastel-yellow {
-    background: #ffffba;
+    background: #fffbe6;
+}
+
+.theme-pastel-peach {
+    background: #ffdcb3;
+}
+
+.theme-pastel-lavender {
+    background: #e6d7ff;
+}
+
+/* Background Pattern Thumbnails */
+.theme-pattern-1 {
+    background-image: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=400&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.theme-pattern-2 {
+    background-image: url('https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?q=80&w=400&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.theme-pattern-3 {
+    background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.theme-pattern-4 {
+    background-image: url('https://images.unsplash.com/photo-1603502840656-74fc2197171e?q=80&w=400&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.theme-pattern-5 {
+    background-image: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=400&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.theme-pattern-6 {
+    background-image: url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=400&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.theme-pattern-7 {
+    background-image: url('https://images.unsplash.com/photo-1557683311-eac922347aa1?q=80&w=400&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.theme-pattern-8 {
+    background-image: url('https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?q=80&w=400&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    border-color: rgba(255, 255, 255, 0.4);
 }

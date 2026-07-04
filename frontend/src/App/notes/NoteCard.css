@@ -188,6 +188,7 @@
     font-weight: normal !important;
     line-height: inherit !important;
     background: transparent !important;
+    color: inherit !important;
 }
 
 /* Ensure block elements get a line break so paragraphs don't mash together */

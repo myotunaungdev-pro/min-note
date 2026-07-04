@@ -6,7 +6,7 @@ import Sidebar from './Sidebar';
 import Header from './Header';
 import NoteCard from './NoteCard';
 import NoteModal from './NoteModal';
-import { setSidebarCollapsed, toggleCategoryFilter, selectAllNotes, clearSelection, setModalOpen, setReaderOpen, setEditingNote, toggleSelectNote } from '../store/notesSlice';
+import { setSidebarCollapsed, toggleCategoryFilter, selectAllNotes, clearSelection, setModalOpen, setReaderOpen, setEditingNote, toggleSelectNote, setStatusFilter, setSortBy } from '../store/notesSlice';
 import { fetchNotes, permanentlyDeleteFromServer } from '../store/notesThunks';
 import { tagOptions } from './NoteModal';
 import { useTranslation } from 'react-i18next';
@@ -121,6 +121,8 @@ const NotesApp = () => {
     useEffect(() => {
         dispatch(toggleCategoryFilter('All'));
         dispatch(clearSelection());
+        dispatch(setStatusFilter('all'));
+        dispatch(setSortBy('latest'));
     }, [activeView, dispatch]);
 
 

@@ -323,14 +323,37 @@ article.reader-page {
 .note-card.bg-theme-pastel-red,
 .note-card.bg-theme-pastel-blue,
 .note-card.bg-theme-pastel-green,
-.note-card.bg-theme-pastel-yellow {
+.note-card.bg-theme-pastel-yellow,
+.note-card.bg-theme-pastel-peach,
+.note-card.bg-theme-pastel-lavender,
+.note-card.bg-theme-white,
+.note-card.bg-theme-pattern-1,
+.note-card.bg-theme-pattern-2,
+.note-card.bg-theme-pattern-3,
+.note-card.bg-theme-pattern-4,
+.note-card.bg-theme-pattern-5,
+.note-card.bg-theme-pattern-6,
+.note-card.bg-theme-pattern-7,
+.note-card.bg-theme-pattern-8 {
     border: 1px solid rgba(0, 0, 0, 0.05);
+    backdrop-filter: none !important;
 }
 
 .note-card.bg-theme-pastel-red .note-title,
 .note-card.bg-theme-pastel-blue .note-title,
 .note-card.bg-theme-pastel-green .note-title,
-.note-card.bg-theme-pastel-yellow .note-title {
+.note-card.bg-theme-pastel-yellow .note-title,
+.note-card.bg-theme-pastel-peach .note-title,
+.note-card.bg-theme-pastel-lavender .note-title,
+.note-card.bg-theme-white .note-title,
+.note-card.bg-theme-pattern-1 .note-title,
+.note-card.bg-theme-pattern-2 .note-title,
+.note-card.bg-theme-pattern-3 .note-title,
+.note-card.bg-theme-pattern-4 .note-title,
+.note-card.bg-theme-pattern-5 .note-title,
+.note-card.bg-theme-pattern-6 .note-title,
+.note-card.bg-theme-pattern-7 .note-title,
+.note-card.bg-theme-pattern-8 .note-title {
     color: #0f172a !important;
 }
 
@@ -338,14 +361,47 @@ article.reader-page {
 .note-card.bg-theme-pastel-blue .note-content,
 .note-card.bg-theme-pastel-green .note-content,
 .note-card.bg-theme-pastel-yellow .note-content,
+.note-card.bg-theme-pastel-peach .note-content,
+.note-card.bg-theme-pastel-lavender .note-content,
+.note-card.bg-theme-white .note-content,
+.note-card.bg-theme-pattern-1 .note-content,
+.note-card.bg-theme-pattern-2 .note-content,
+.note-card.bg-theme-pattern-3 .note-content,
+.note-card.bg-theme-pattern-4 .note-content,
+.note-card.bg-theme-pattern-5 .note-content,
+.note-card.bg-theme-pattern-6 .note-content,
+.note-card.bg-theme-pattern-7 .note-content,
+.note-card.bg-theme-pattern-8 .note-content,
 .note-card.bg-theme-pastel-red .note-date,
 .note-card.bg-theme-pastel-blue .note-date,
 .note-card.bg-theme-pastel-green .note-date,
 .note-card.bg-theme-pastel-yellow .note-date,
+.note-card.bg-theme-pastel-peach .note-date,
+.note-card.bg-theme-pastel-lavender .note-date,
+.note-card.bg-theme-white .note-date,
+.note-card.bg-theme-pattern-1 .note-date,
+.note-card.bg-theme-pattern-2 .note-date,
+.note-card.bg-theme-pattern-3 .note-date,
+.note-card.bg-theme-pattern-4 .note-date,
+.note-card.bg-theme-pattern-5 .note-date,
+.note-card.bg-theme-pattern-6 .note-date,
+.note-card.bg-theme-pattern-7 .note-date,
+.note-card.bg-theme-pattern-8 .note-date,
 .note-card.bg-theme-pastel-red .status-btn span,
 .note-card.bg-theme-pastel-blue .status-btn span,
 .note-card.bg-theme-pastel-green .status-btn span,
-.note-card.bg-theme-pastel-yellow .status-btn span {
+.note-card.bg-theme-pastel-yellow .status-btn span,
+.note-card.bg-theme-pastel-peach .status-btn span,
+.note-card.bg-theme-pastel-lavender .status-btn span,
+.note-card.bg-theme-white .status-btn span,
+.note-card.bg-theme-pattern-1 .status-btn span,
+.note-card.bg-theme-pattern-2 .status-btn span,
+.note-card.bg-theme-pattern-3 .status-btn span,
+.note-card.bg-theme-pattern-4 .status-btn span,
+.note-card.bg-theme-pattern-5 .status-btn span,
+.note-card.bg-theme-pattern-6 .status-btn span,
+.note-card.bg-theme-pattern-7 .status-btn span,
+.note-card.bg-theme-pattern-8 .status-btn span {
     color: #334155 !important;
 }
 
@@ -366,9 +422,78 @@ article.reader-page {
     background: #fffbe6 !important;
 }
 
+.bg-theme-pastel-peach {
+    background: #ffdcb3 !important;
+}
+
+.bg-theme-pastel-lavender {
+    background: #e6d7ff !important;
+}
+
+.bg-theme-white {
+    background: #ffffff !important;
+}
+
+/* Background Pattern Definitions */
+.bg-theme-pattern-1 {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=400&auto=format&fit=crop') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.bg-theme-pattern-2 {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1518640467707-6811f4a6ab73?q=80&w=400&auto=format&fit=crop') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.bg-theme-pattern-3 {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.bg-theme-pattern-4 {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1603502840656-74fc2197171e?q=80&w=400&auto=format&fit=crop') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.bg-theme-pattern-5 {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=400&auto=format&fit=crop') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.bg-theme-pattern-6 {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1557682250-33bd709cbe85?q=80&w=400&auto=format&fit=crop') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.bg-theme-pattern-7 {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1557683311-eac922347aa1?q=80&w=400&auto=format&fit=crop') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.bg-theme-pattern-8 {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?q=80&w=400&auto=format&fit=crop') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
 /* Default Theme - Reader Page */
 article.reader-page.bg-theme-default {
-    background: linear-gradient(180deg, #faf6f0 0%, #f5efe6 100%) !important;
+    background: #1e293b !important;
 }
 
 /* Default Theme - Note Card */

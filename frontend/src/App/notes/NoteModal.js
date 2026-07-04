@@ -765,7 +765,11 @@ const NoteReadView = ({ note, onClose }) => {
                                 className={`reader-page-content ${isImageGrid ? 'editor-image-grid' : 'editor-image-stack'}`}
                                 onClick={handleContentClick}
                             >
-                                <div className="ql-editor" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(note.content) }}></div>
+                                <div className="ql-editor" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{
+                                    __html: DOMPurify.sanitize(note.content, {
+                                        ADD_ATTR: ['data-list', 'data-align', 'data-indent', 'data-value']
+                                    })
+                                }}></div>
                             </div>
                         </article>
                     </div>
@@ -1145,6 +1149,24 @@ const NoteEditModal = () => {
         }
     }, []);
 
+    // Apply dynamic theme background EXCLUSIVELY to the text input area (.ql-container)
+    // This preserves the dark theme of the formatting toolbar (.ql-toolbar)
+    useEffect(() => {
+        if (!quillWrapperRef.current) return;
+        const qlContainer = quillWrapperRef.current.querySelector('.ql-container');
+        if (qlContainer) {
+            // Remove any existing theme classes
+            qlContainer.className = qlContainer.className.replace(/bg-theme-\S+/g, '').trim();
+            
+            // Apply new theme class
+            if (theme && theme !== 'default') {
+                qlContainer.classList.add(`bg-theme-${theme}`);
+            } else {
+                qlContainer.classList.add('bg-theme-default');
+            }
+        }
+    }, [theme]);
+
     const handleClose = () => {
         dispatch(setModalOpen(false));
         dispatch(setEditingNote(null));
@@ -1321,17 +1343,31 @@ const NoteEditModal = () => {
 
                     <div className="form-group theme-selector-group">
                         <label className="form-label">{t("notes.modal.themeLabel", "Theme")}</label>
-                        <div className="theme-palette">
-                            {['default', 'pastel-red', 'pastel-blue', 'pastel-green', 'pastel-yellow'].map(tOption => (
-                                <div
-                                    key={tOption}
-                                    className={`theme-circle theme-${tOption} ${theme === tOption ? 'selected' : ''}`}
-                                    onClick={() => setTheme(tOption)}
-                                    title={tOption}
-                                >
-                                    {theme === tOption && <i className="bi bi-check"></i>}
-                                </div>
-                            ))}
+                        <div className="theme-palette-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                            <div className="theme-palette" style={{ flexWrap: 'wrap', justifyContent: 'center' }}>
+                                {['default', 'white', 'pastel-red', 'pastel-blue', 'pastel-green', 'pastel-yellow', 'pastel-peach'].map(tOption => (
+                                    <div
+                                        key={tOption}
+                                        className={`theme-circle theme-${tOption} ${theme === tOption ? 'selected' : ''}`}
+                                        onClick={() => setTheme(tOption)}
+                                        title={tOption}
+                                    >
+                                        {theme === tOption && <i className="bi bi-check"></i>}
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="theme-palette" style={{ flexWrap: 'wrap', justifyContent: 'center' }}>
+                                {['pattern-1', 'pattern-2', 'pattern-3', 'pattern-5', 'pattern-6', 'pattern-7', 'pattern-8'].map(tOption => (
+                                    <div
+                                        key={tOption}
+                                        className={`theme-circle theme-${tOption} ${theme === tOption ? 'selected' : ''}`}
+                                        onClick={() => setTheme(tOption)}
+                                        title={tOption}
+                                    >
+                                        {theme === tOption && <i className="bi bi-check"></i>}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
