@@ -14,6 +14,7 @@ import ReactQuill, { Quill } from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import './NoteModal.css';
 import { useTranslation } from 'react-i18next';
+import { SOLID_COLORS, BACKGROUND_PATTERNS } from './themeConstants';
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
@@ -1344,8 +1345,8 @@ const NoteEditModal = () => {
                     <div className="form-group theme-selector-group">
                         <label className="form-label">{t("notes.modal.themeLabel", "Theme")}</label>
                         <div className="theme-palette-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                            <div className="theme-palette" style={{ flexWrap: 'wrap', justifyContent: 'center' }}>
-                                {['default', 'white', 'pastel-red', 'pastel-blue', 'pastel-green', 'pastel-yellow', 'pastel-peach'].map(tOption => (
+                            <div className="theme-palette" style={{ flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+                                {SOLID_COLORS.map(tOption => (
                                     <div
                                         key={tOption}
                                         className={`theme-circle theme-${tOption} ${theme === tOption ? 'selected' : ''}`}
@@ -1356,8 +1357,8 @@ const NoteEditModal = () => {
                                     </div>
                                 ))}
                             </div>
-                            <div className="theme-palette" style={{ flexWrap: 'wrap', justifyContent: 'center' }}>
-                                {['pattern-1', 'pattern-2', 'pattern-3', 'pattern-5', 'pattern-6', 'pattern-7', 'pattern-8'].map(tOption => (
+                            <div className="theme-palette" style={{ flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+                                {BACKGROUND_PATTERNS.map(tOption => (
                                     <div
                                         key={tOption}
                                         className={`theme-circle theme-${tOption} ${theme === tOption ? 'selected' : ''}`}

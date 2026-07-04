@@ -150,6 +150,7 @@
       "titleLabel": "Title",
       "titlePlaceholder": "Enter note title...",
       "contentLabel": "Content",
+      "themeLabel": "Theme",
       "contentPlaceholder": "Write your note here...",
       "tagLabel": "Tag",
       "updateNote": "Update Note",

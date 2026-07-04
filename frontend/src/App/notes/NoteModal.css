@@ -2113,3 +2113,46 @@ h1.reader-page-title {
     background-position: center;
     border-color: rgba(255, 255, 255, 0.4);
 }
+
+/* Custom Scrollbar for Modal content (Replicating Keyboard Shortcuts Style) */
+.note-modal .modal-body::-webkit-scrollbar,
+.reader-modal .reader-body::-webkit-scrollbar,
+.crop-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.note-modal .modal-body::-webkit-scrollbar-track,
+.reader-modal .reader-body::-webkit-scrollbar-track,
+.crop-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.note-modal .modal-body::-webkit-scrollbar-thumb,
+.reader-modal .reader-body::-webkit-scrollbar-thumb,
+.crop-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.note-modal .modal-body::-webkit-scrollbar-thumb:hover,
+.reader-modal .reader-body::-webkit-scrollbar-thumb:hover,
+.crop-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 242, 254, 0.3);
+}
+
+.note-modal .modal-body::-webkit-scrollbar-button,
+.reader-modal .reader-body::-webkit-scrollbar-button,
+.crop-container::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Firefox Support */
+.note-modal .modal-body,
+.reader-modal .reader-body,
+.crop-container {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}

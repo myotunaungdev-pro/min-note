@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { setShortcutModalOpen } from '../../App/store/notesSlice';
 import { updateUserProfile } from '../../App/store/authSlice';
 import LanguageSwitcher from '../common/LanguageSwitcher';
+import { SOLID_COLORS, BACKGROUND_PATTERNS } from '../../App/notes/themeConstants';
 import './Settings.css';
 
 const SystemSettings = () => {
@@ -66,17 +67,31 @@ const SystemSettings = () => {
                                 <i className="bi bi-card-heading"></i>
                                 <span>{t("settings.defaultNoteTheme", "Default Note Theme")}</span>
                             </div>
-                            <div className="theme-palette" style={{ padding: '0', marginTop: '5px' }}>
-                                {['default', 'pastel-red', 'pastel-blue', 'pastel-green', 'pastel-yellow'].map(tOption => (
-                                    <div 
-                                        key={tOption}
-                                        className={`theme-circle theme-${tOption} ${user?.defaultNoteTheme === tOption ? 'selected' : ''}`}
-                                        onClick={() => handleThemeChange(tOption)}
-                                        title={tOption}
-                                    >
-                                        {user?.defaultNoteTheme === tOption && <i className="bi bi-check"></i>}
-                                    </div>
-                                ))}
+                            <div className="theme-palette-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '5px', width: '100%' }}>
+                                <div className="theme-palette" style={{ flexWrap: 'wrap', justifyContent: 'flex-start', padding: 0 }}>
+                                    {SOLID_COLORS.map(tOption => (
+                                        <div 
+                                            key={tOption}
+                                            className={`theme-circle theme-${tOption} ${user?.defaultNoteTheme === tOption ? 'selected' : ''}`}
+                                            onClick={() => handleThemeChange(tOption)}
+                                            title={tOption}
+                                        >
+                                            {user?.defaultNoteTheme === tOption && <i className="bi bi-check"></i>}
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="theme-palette" style={{ flexWrap: 'wrap', justifyContent: 'flex-start', padding: 0 }}>
+                                    {BACKGROUND_PATTERNS.map(tOption => (
+                                        <div 
+                                            key={tOption}
+                                            className={`theme-circle theme-${tOption} ${user?.defaultNoteTheme === tOption ? 'selected' : ''}`}
+                                            onClick={() => handleThemeChange(tOption)}
+                                            title={tOption}
+                                        >
+                                            {user?.defaultNoteTheme === tOption && <i className="bi bi-check"></i>}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                         <div className="preference-divider"></div>
