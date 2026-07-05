@@ -110,6 +110,11 @@
     "Invalid_email_or_password": "อีเมลหรือรหัสผ่านไม่ถูกต้อง"
   },
   "notes": {
+    "timeline": {
+      "today": "วันนี้",
+      "previous7Days": "7 วันที่ผ่านมา",
+      "previous30Days": "30 วันที่ผ่านมา"
+    },
     "sidebar": {
       "allNotes": "โน้ตทั้งหมด",
       "archive": "เก็บถาวร",

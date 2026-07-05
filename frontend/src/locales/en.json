@@ -113,6 +113,11 @@
     "Invalid_email_or_password": "Invalid email or password"
   },
   "notes": {
+    "timeline": {
+      "today": "Today",
+      "previous7Days": "Previous 7 Days",
+      "previous30Days": "Previous 30 Days"
+    },
     "sidebar": {
       "allNotes": "All Notes",
       "archive": "Archive",

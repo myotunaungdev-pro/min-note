@@ -113,6 +113,11 @@
     "Invalid_email_or_password": "အီးမေးလ် သို့မဟုတ် စကားဝှက် မှားယွင်းနေပါသည်"
   },
   "notes": {
+    "timeline": {
+      "today": "ယနေ့",
+      "previous7Days": "လွန်ခဲ့သော ၇ ရက်",
+      "previous30Days": "လွန်ခဲ့သော ၃၀ ရက်"
+    },
     "sidebar": {
       "allNotes": "မှတ်စုများအားလုံး",
       "archive": "သိမ်းဆည်းထားသောမှတ်စုများ",

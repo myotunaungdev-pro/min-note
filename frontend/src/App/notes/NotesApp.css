@@ -175,16 +175,55 @@ body,
 /* ── Category Chips ── */
 .category-chips-wrapper {
     width: 100%;
-    padding: 6px 32px 0;
+    padding: 12px 32px 0;
     background-color: var(--app-bg);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* slightly more visible divider */
     z-index: 10;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 16px;
-    padding-bottom: 6px;
+    padding-bottom: 12px;
+}
+
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: none; /* strictly hidden on mobile */
+}
+
+@media (min-width: 768px) {
+    .scroll-btn {
+        display: flex; /* only show on md breakpoint and above */
+    }
+}
+
+.scroll-btn:hover {
+    background-color: rgba(51, 65, 85, 0.9);
+    color: #fff;
+}
+
+.scroll-btn-left {
+    left: 12px;
+}
+
+.scroll-btn-right {
+    right: 12px;
 }
 
 .category-chips-scroll {
@@ -194,10 +233,9 @@ body,
     flex: 1;
     min-width: 0;
     gap: 12px;
-    padding-top: 10px;
-    padding-bottom: 0;
+    padding: 0; /* Remove unequal padding */
     scrollbar-width: none;
-    /* Firefox */
+    align-items: center; /* Vertically center tags */
 }
 
 .category-chips-scroll::-webkit-scrollbar {
@@ -303,9 +341,8 @@ body,
     .notes-container {
         padding: 20px;
     }
-
     .category-chips-wrapper {
-        padding: 2px 20px 0;
+        padding: 12px 20px;
     }
 }
 

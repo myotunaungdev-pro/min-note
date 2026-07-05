@@ -14,8 +14,33 @@ import './NotesApp.css';
 
 const NotesApp = () => {
     const dispatch = useDispatch();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [noteToDelete, setNoteToDelete] = useState(null);
+    
+    const { notes, activeView, searchQuery, sortBy, statusFilter, sidebarCollapsed, categoryFilter, selectedNoteIds, isModalOpen, isReaderOpen } = useSelector(
+        (state) => state.notes
+    );
+
+    // Strict memoization to prevent infinite render loops caused by the empty array reference
+    const safeCategoryFilter = useMemo(() => Array.isArray(categoryFilter) ? categoryFilter : [], [categoryFilter]);
+
+    const scrollRef = useRef(null);
+    const [showLeftScroll, setShowLeftScroll] = useState(false);
+    const [showRightScroll, setShowRightScroll] = useState(false);
+
+    const handleScroll = useCallback(() => {
+        if (scrollRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+            setShowLeftScroll(scrollLeft > 0);
+            setShowRightScroll(scrollLeft < scrollWidth - clientWidth - 1);
+        }
+    }, []);
+
+    useEffect(() => {
+        handleScroll();
+        window.addEventListener('resize', handleScroll);
+        return () => window.removeEventListener('resize', handleScroll);
+    }, [handleScroll, safeCategoryFilter]);
 
     const confirmPermanentDelete = () => {
         if (noteToDelete) {
@@ -27,13 +52,6 @@ const NotesApp = () => {
     useEffect(() => {
         dispatch(fetchNotes());
     }, [dispatch]);
-
-    const { notes, activeView, searchQuery, sortBy, statusFilter, sidebarCollapsed, categoryFilter, selectedNoteIds, isModalOpen, isReaderOpen } = useSelector(
-        (state) => state.notes
-    );
-
-    // Strict memoization to prevent infinite render loops caused by the empty array reference
-    const safeCategoryFilter = useMemo(() => Array.isArray(categoryFilter) ? categoryFilter : [], [categoryFilter]);
 
     const filteredAndSortedNotes = useMemo(() => {
         let filtered = notes;
@@ -281,10 +299,14 @@ const NotesApp = () => {
         const isDateSorted = !['a-z', 'done', 'not-done'].includes(sortBy);
         if (!isDateSorted) return null;
 
+        const todayKey = t("notes.timeline.today", "Today");
+        const sevenDaysKey = t("notes.timeline.previous7Days", "Previous 7 Days");
+        const thirtyDaysKey = t("notes.timeline.previous30Days", "Previous 30 Days");
+
         const groups = {
-            'Today': [],
-            'Previous 7 Days': [],
-            'Previous 30 Days': [],
+            [todayKey]: [],
+            [sevenDaysKey]: [],
+            [thirtyDaysKey]: [],
         };
 
         const now = new Date();
@@ -299,13 +321,13 @@ const NotesApp = () => {
             const noteDay = new Date(noteDate.getFullYear(), noteDate.getMonth(), noteDate.getDate());
 
             if (noteDay.getTime() === today.getTime()) {
-                groups['Today'].push(note);
+                groups[todayKey].push(note);
             } else if (noteDay >= sevenDaysAgo) {
-                groups['Previous 7 Days'].push(note);
+                groups[sevenDaysKey].push(note);
             } else if (noteDay >= thirtyDaysAgo) {
-                groups['Previous 30 Days'].push(note);
+                groups[thirtyDaysKey].push(note);
             } else {
-                const monthYear = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(noteDate);
+                const monthYear = new Intl.DateTimeFormat(i18n.language || 'en-US', { month: 'long', year: 'numeric' }).format(noteDate);
                 if (!groups[monthYear]) {
                     groups[monthYear] = [];
                 }
@@ -321,7 +343,7 @@ const NotesApp = () => {
             }
         });
         return result;
-    }, [filteredAndSortedNotes, sortBy]);
+    }, [filteredAndSortedNotes, sortBy, t, i18n.language]);
 
     return (
         <div className={`notes-app ${isSidebarOpen ? 'sidebar-open' : ''}`}>
@@ -338,8 +360,17 @@ const NotesApp = () => {
             >
                 <Header onSelectAll={() => dispatch(selectAllNotes(filteredAndSortedNotes.map(n => n._id)))} />
 
-                <div className="category-chips-wrapper">
-                    <div className="category-chips-scroll">
+                <div className="category-chips-wrapper" style={{ position: 'relative' }}>
+                    {showLeftScroll && (
+                        <button 
+                            className="scroll-btn scroll-btn-left hidden md:flex" 
+                            onClick={() => scrollRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
+                        >
+                            <i className="bi bi-chevron-left"></i>
+                        </button>
+                    )}
+
+                    <div className="category-chips-scroll" ref={scrollRef} onScroll={handleScroll}>
                         <button
                             className={`category-chip ${safeCategoryFilter.length === 0 ? 'active' : ''}`}
                             onClick={() => {
@@ -370,6 +401,14 @@ const NotesApp = () => {
                         })}
                     </div>
 
+                    {showRightScroll && (
+                        <button 
+                            className="scroll-btn scroll-btn-right hidden md:flex" 
+                            onClick={() => scrollRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
+                        >
+                            <i className="bi bi-chevron-right"></i>
+                        </button>
+                    )}
                 </div>
 
                 <div className="notes-container">
