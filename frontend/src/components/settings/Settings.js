@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { logout, updateUserProfile } from '../../App/store/authSlice';
 import Lightbox from '../common/Lightbox';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import './Settings.css';
 
 const Settings = () => {
@@ -24,7 +26,7 @@ const Settings = () => {
     const [formData, setFormData] = React.useState({
         name: user?.name || '',
         email: user?.email || '',
-        birthdate: user?.birthdate ? new Date(user.birthdate).toISOString().split("settings.t")[0] : ''
+        birthdate: user?.birthdate ? new Date(user.birthdate).toISOString().split('T')[0] : ''
     });
 
     const handleInputChange = (e) => {
@@ -34,7 +36,7 @@ const Settings = () => {
     const isFormChanged = 
         formData.name !== (user?.name || '') ||
         formData.email !== (user?.email || '') ||
-        formData.birthdate !== (user?.birthdate ? new Date(user.birthdate).toISOString().split("settings.t")[0] : '');
+        formData.birthdate !== (user?.birthdate ? new Date(user.birthdate).toISOString().split('T')[0] : '');
 
     const handleSaveProfile = async (e) => {
         e.preventDefault();
@@ -51,7 +53,7 @@ const Settings = () => {
         setFormData({
             name: user?.name || '',
             email: user?.email || '',
-            birthdate: user?.birthdate ? new Date(user.birthdate).toISOString().split("settings.t")[0] : ''
+            birthdate: user?.birthdate ? new Date(user.birthdate).toISOString().split('T')[0] : ''
         });
         setIsEditMode(false);
     };
@@ -188,7 +190,26 @@ const Settings = () => {
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label">{t("settings.profile.birthdate")}</label>
-                                    <input type="date" name="birthdate" className="form-input" value={formData.birthdate} onChange={handleInputChange} />
+                                    <div className="date-picker-wrapper w-full">
+                                        <DatePicker
+                                            selected={formData.birthdate ? new Date(formData.birthdate) : null}
+                                            onChange={(date) => {
+                                                setFormData({
+                                                    ...formData,
+                                                    birthdate: date ? date.toISOString().split('T')[0] : ''
+                                                });
+                                            }}
+                                            dateFormat="MM/dd/yyyy"
+                                            showYearDropdown
+                                            showMonthDropdown
+                                            scrollableYearDropdown
+                                            yearDropdownItemNumber={120}
+                                            maxDate={new Date()}
+                                            className="form-input w-full"
+                                            placeholderText="MM/DD/YYYY"
+                                            portalId="root"
+                                        />
+                                    </div>
                                 </div>
                                 <div className="form-actions mt-3">
                                     <button type="submit" className="btn-save" disabled={!isFormChanged}>

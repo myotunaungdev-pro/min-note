@@ -16,7 +16,7 @@ const NotesApp = () => {
     const dispatch = useDispatch();
     const { t, i18n } = useTranslation();
     const [noteToDelete, setNoteToDelete] = useState(null);
-    
+
     const { notes, activeView, searchQuery, sortBy, statusFilter, sidebarCollapsed, categoryFilter, selectedNoteIds, isModalOpen, isReaderOpen } = useSelector(
         (state) => state.notes
     );
@@ -362,8 +362,8 @@ const NotesApp = () => {
 
                 <div className="category-chips-wrapper" style={{ position: 'relative' }}>
                     {showLeftScroll && (
-                        <button 
-                            className="scroll-btn scroll-btn-left hidden md:flex" 
+                        <button
+                            className="scroll-btn scroll-btn-left hidden md:flex"
                             onClick={() => scrollRef.current?.scrollBy({ left: -200, behavior: 'smooth' })}
                         >
                             <i className="bi bi-chevron-left"></i>
@@ -402,8 +402,8 @@ const NotesApp = () => {
                     </div>
 
                     {showRightScroll && (
-                        <button 
-                            className="scroll-btn scroll-btn-right hidden md:flex" 
+                        <button
+                            className="scroll-btn scroll-btn-right hidden md:flex"
                             onClick={() => scrollRef.current?.scrollBy({ left: 200, behavior: 'smooth' })}
                         >
                             <i className="bi bi-chevron-right"></i>

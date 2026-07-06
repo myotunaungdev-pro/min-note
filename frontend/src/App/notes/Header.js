@@ -27,11 +27,13 @@ const Header = ({ onSelectAll }) => {
 
     const [isSortOpen, setIsSortOpen] = useState(false);
     const [isStatusOpen, setIsStatusOpen] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
 
     const sortDropdownRef = useRef(null);
     const statusDropdownRef = useRef(null);
+    const mobileMenuRef = useRef(null);
 
     useEffect(() => {
         const handleScroll = (event) => {
@@ -57,14 +59,17 @@ const Header = ({ onSelectAll }) => {
             if (statusDropdownRef.current && !statusDropdownRef.current.contains(event.target)) {
                 setIsStatusOpen(false);
             }
+            if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+                setIsMobileMenuOpen(false);
+            }
         };
 
-        if (isSortOpen || isStatusOpen) {
+        if (isSortOpen || isStatusOpen || isMobileMenuOpen) {
             document.addEventListener('mousedown', handleClickOutside);
         }
 
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isSortOpen, isStatusOpen]);
+    }, [isSortOpen, isStatusOpen, isMobileMenuOpen]);
 
     const handleTrashOrDelete = React.useCallback(() => {
         if (activeView === 'trash') {
@@ -128,7 +133,7 @@ const Header = ({ onSelectAll }) => {
 
     if (isSelectionMode) {
         return (
-            <header 
+            <header
                 className="app-header selection-mode"
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={(e) => e.stopPropagation()}
@@ -159,8 +164,8 @@ const Header = ({ onSelectAll }) => {
                         </button>
                     )}
 
-                    <button 
-                        className={`action-btn trash-btn ${activeView === 'trash' ? 'permanent-delete' : ''}`} 
+                    <button
+                        className={`action-btn trash-btn ${activeView === 'trash' ? 'permanent-delete' : ''}`}
                         onClick={handleTrashOrDelete}
                     >
                         {activeView === 'trash' ? (
@@ -201,8 +206,8 @@ const Header = ({ onSelectAll }) => {
             onKeyDown={(e) => e.stopPropagation()}
         >
             <div className="header-left">
-                <button className="mobile-menu-btn" onClick={() => dispatch(toggleSidebar())} data-tooltip-id="global-tooltip" data-tooltip-content={t("notes.toggleSidebarCtrl")}>
-                    <i className="bi bi-list"></i>
+                <button className="mobile-menu-btn w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-200 active:scale-90" onClick={() => dispatch(toggleSidebar())} data-tooltip-id="global-tooltip" data-tooltip-content={t("notes.toggleSidebarCtrl")}>
+                    <i className="bi bi-list text-3xl"></i>
                 </button>
 
                 <h1 className="page-title">{getViewTitle()}</h1>
@@ -228,8 +233,8 @@ const Header = ({ onSelectAll }) => {
             </div>
 
             <div className="header-right">
-                <button 
-                    className="select-all-btn" 
+                <button
+                    className="select-all-btn desktop-only"
                     onClick={onSelectAll}
                     data-tooltip-id="global-tooltip"
                     data-tooltip-content={t("notes.selectAllVisibleCtrl")}
@@ -237,7 +242,7 @@ const Header = ({ onSelectAll }) => {
                     <i className="bi bi-check2-all"></i>
                 </button>
                 <div
-                    className={`dropdown ${isStatusOpen ? 'show' : ''}`}
+                    className={`dropdown desktop-only ${isStatusOpen ? 'show' : ''}`}
                     ref={statusDropdownRef}
                 >
                     <button
@@ -288,7 +293,7 @@ const Header = ({ onSelectAll }) => {
                 </div>
 
                 <div
-                    className={`dropdown ${isSortOpen ? 'show' : ''}`}
+                    className={`dropdown desktop-only ${isSortOpen ? 'show' : ''}`}
                     ref={sortDropdownRef}
                 >
                     <button
@@ -344,6 +349,102 @@ const Header = ({ onSelectAll }) => {
                                 type="button"
                                 className={`dropdown-item ${sortBy === 'not-done' ? 'active' : ''}`}
                                 onClick={() => handleSortSelect('not-done')}
+                            >
+                                <i className="bi bi-circle"></i> {t("notes.card.pendingFirst")}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div className="dropdown mobile-only" ref={mobileMenuRef}>
+                    <button
+                        className="mobile-menu-btn transition-all duration-200 active:scale-90"
+                        style={{ background: 'transparent', color: 'var(--text-color, #f8fafc)', border: 'none', padding: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                        type="button"
+                        aria-expanded={isMobileMenuOpen}
+                        onClick={() => {
+                            setIsMobileMenuOpen((open) => !open);
+                        }}
+                    >
+                        <i className={`bi ${isMobileMenuOpen ? 'bi-x-lg rotate-180 text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]' : 'bi-sliders rotate-0 text-gray-300'} hover:text-emerald-400 hover:drop-shadow-[0_0_8px_rgba(52,211,153,0.8)] w-6 h-6 flex items-center justify-center transition-all duration-500 ease-out transform`} style={{ fontSize: '1.2rem' }}></i>
+                    </button>
+                    <ul className={`dropdown-menu dropdown-menu-dark ${isMobileMenuOpen ? 'show' : ''}`} style={{ right: 0, left: 'auto', minWidth: '200px' }}>
+                        <li>
+                            <button
+                                type="button"
+                                className="dropdown-item"
+                                onClick={() => {
+                                    onSelectAll();
+                                    setIsMobileMenuOpen(false);
+                                }}
+                            >
+                                <i className="bi bi-check2-all"></i> {t("notes.selectAllVisibleCtrl")}
+                            </button>
+                        </li>
+                        <li><hr className="dropdown-divider" style={{ borderColor: 'rgba(255,255,255,0.1)' }} /></li>
+                        <li className="dropdown-header" style={{ padding: '0.25rem 1rem', fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>Filter</li>
+                        <li>
+                            <button
+                                type="button"
+                                className={`dropdown-item ${statusFilter === 'all' ? 'active' : ''}`}
+                                onClick={() => { handleStatusSelect('all'); setIsMobileMenuOpen(false); }}
+                            >
+                                <i className="bi bi-infinity"></i> {t("notes.all")}
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                type="button"
+                                className={`dropdown-item ${statusFilter === 'pending' ? 'active' : ''}`}
+                                onClick={() => { handleStatusSelect('pending'); setIsMobileMenuOpen(false); }}
+                            >
+                                <i className="bi bi-circle"></i> {t("notes.card.pending")}
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                type="button"
+                                className={`dropdown-item ${statusFilter === 'done' ? 'active' : ''}`}
+                                onClick={() => { handleStatusSelect('done'); setIsMobileMenuOpen(false); }}
+                            >
+                                <i className="bi bi-check-circle"></i> {t("notes.card.done")}
+                            </button>
+                        </li>
+                        <li><hr className="dropdown-divider" style={{ borderColor: 'rgba(255,255,255,0.1)' }} /></li>
+                        <li className="dropdown-header" style={{ padding: '0.25rem 1rem', fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase' }}>Sort</li>
+                        <li>
+                            <button
+                                type="button"
+                                className={`dropdown-item ${sortBy === 'latest' ? 'active' : ''}`}
+                                onClick={() => { handleSortSelect('latest'); setIsMobileMenuOpen(false); }}
+                            >
+                                <i className="bi bi-clock"></i> {t("notes.sidebar.sortLatestFirst")}
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                type="button"
+                                className={`dropdown-item ${sortBy === 'a-z' ? 'active' : ''}`}
+                                onClick={() => { handleSortSelect('a-z'); setIsMobileMenuOpen(false); }}
+                            >
+                                <i className="bi bi-sort-alpha-down"></i> {t("notes.sidebar.sortAZ")}
+                            </button>
+                        </li>
+                        <li><hr className="dropdown-divider" style={{ borderColor: 'rgba(255,255,255,0.1)' }} /></li>
+                        <li>
+                            <button
+                                type="button"
+                                className={`dropdown-item ${sortBy === 'done' ? 'active' : ''}`}
+                                onClick={() => { handleSortSelect('done'); setIsMobileMenuOpen(false); }}
+                            >
+                                <i className="bi bi-check-circle"></i> {t("notes.card.doneFirst")}
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                type="button"
+                                className={`dropdown-item ${sortBy === 'not-done' ? 'active' : ''}`}
+                                onClick={() => { handleSortSelect('not-done'); setIsMobileMenuOpen(false); }}
                             >
                                 <i className="bi bi-circle"></i> {t("notes.card.pendingFirst")}
                             </button>

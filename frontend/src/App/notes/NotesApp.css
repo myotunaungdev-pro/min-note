@@ -175,7 +175,7 @@ body,
 /* ── Category Chips ── */
 .category-chips-wrapper {
     width: 100%;
-    padding: 12px 32px 0;
+    padding: 0 32px;
     background-color: var(--app-bg);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* slightly more visible divider */
     z-index: 10;
@@ -184,7 +184,6 @@ body,
     align-items: center;
     flex-wrap: wrap;
     gap: 16px;
-    padding-bottom: 12px;
 }
 
 .scroll-btn {
@@ -233,7 +232,7 @@ body,
     flex: 1;
     min-width: 0;
     gap: 12px;
-    padding: 0; /* Remove unequal padding */
+    padding: 12px 0; /* Vertical padding to prevent shadow clipping */
     scrollbar-width: none;
     align-items: center; /* Vertically center tags */
 }
@@ -271,12 +270,10 @@ body,
     background-color: color-mix(in srgb, var(--chip-color, #f8fafc) 15%, transparent);
     color: var(--chip-color, #f8fafc);
     border-color: var(--chip-color, #f8fafc);
-    box-shadow: 0 0 10px color-mix(in srgb, var(--chip-color, #f8fafc) 30%, transparent);
-    text-shadow: 0 0 8px color-mix(in srgb, var(--chip-color, #f8fafc) 50%, transparent);
 }
 
 .category-chip.active:hover {
-    box-shadow: 0 4px 16px color-mix(in srgb, var(--chip-color, #f8fafc) 40%, transparent);
+    background-color: color-mix(in srgb, var(--chip-color, #f8fafc) 25%, transparent);
 }
 
 .chip-close-icon {
@@ -342,7 +339,7 @@ body,
         padding: 20px;
     }
     .category-chips-wrapper {
-        padding: 12px 20px;
+        padding: 0 20px;
     }
 }
 

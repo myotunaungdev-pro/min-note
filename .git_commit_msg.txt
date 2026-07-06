@@ -1,0 +1,26 @@
+﻿feat & fix: comprehensive UI/UX polish, DatePicker integration, and bug fixes
+
+# Comprehensive UI/UX Polish, Configuration Updates, and Bug Fixes
+
+## ✨ UI/UX Improvements
+- **Mobile Header Refinements (Header.js)**:
+  - **Balanced Proportions**: Resized the Hamburger menu button's wrapper to exactly match the geometric footprint (1:1 proportion, w-11 h-11, ounded-xl) of the primary green "Create Note" button. Scaled up the inner icon to 	ext-3xl and perfectly centered it for a symmetrical mobile layout.
+  - **Dynamic Toggle Button**: Upgraded the static mobile dropdown toggle into a dynamic, "living" switch.
+  - **Neon Glow Effect**: Reverted to the explicit i-x-lg icon for the close state, but implemented an elegant, brand-aligned Emerald Green neon drop-shadow (drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]) that activates on hover and when the menu is open.
+  - **Fluid Animations**: Implemented a buttery-smooth duration-500 ease-out transition with a 180-degree rotation (otate-180), completely eliminating the previous harsh, snappy rendering.
+- **Premium DatePicker Integration (Settings.js & Settings.css)**:
+  - Replaced native HTML white dropdowns with a fully customized eact-datepicker implementation.
+  - **Deep Dark Theme Customization**: Engineered extensive CSS overrides to strip away the default white styling, forcefully injecting custom dark theme colors (Slate 800/900 backgrounds) and transparent dividers to perfectly match the app's aesthetic.
+  - Formatted the selected date highlight to use the brand's primary Emerald Green (#10b981).
+
+## 🐛 Bug Fixes
+- **DatePicker Z-Index Clipping**: Fixed a severe layout issue where the new DatePicker popup was rendering underneath the Subscription UI card. Increased CSS specificity (.date-picker-wrapper) and safely forced the .react-datepicker-popper z-index to 9999 so it floats cleanly above all other elements.
+- **Dynamic IP Resolution (server.js & xiosConfig.js)**: Resolved the local network connection failure by updating the hardcoded backend API and CORS origins from the stale 192.168.1.101 to the newly leased 192.168.1.105 IP address, restoring full login and signup functionality.
+- **Syntax Error Resolution (NotesApp.js)**: Cleaned up the bottom of the root notes component, removing a stray closing brace and a duplicate default export that was crashing the React build.
+
+## 🔧 Configuration & Chores
+- **Webpack Warning Resolution**: 
+  - Eliminated the persistent Webpack critical dependency warnings caused by recent library upgrades.
+  - Integrated eact-app-rewired into the build process (package.json).
+  - Added custom Webpack overrides via config-overrides.js to intelligently suppress strictly non-breaking warnings, resulting in a perfectly clean terminal output during 
+pm start.
