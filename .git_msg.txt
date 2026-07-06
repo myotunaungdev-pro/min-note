@@ -1,0 +1,10 @@
+feat: overhaul HelpGuide UI and resolve NoteModal compilation crash
+
+🎨 UI/UX Overhaul (`HelpGuide.js`):
+* **Modern Mobile Navigation:** Replaced the outdated horizontal tabs with a modern, swipeable "Pill/Chip" layout using `flex overflow-x-auto`.
+* **Precision Spacing:** Fixed mobile flexbox stretching issues. Shrunk padding and enforced natural button sizes using `w-auto flex-none whitespace-nowrap` for a tight, premium feel.
+* **Premium Card UI:** Wrapped the help content in sleek, high-end dashboard cards (`bg-slate-800/50 rounded-2xl p-6`).
+* **Typography Cleanup:** Scrubbed the entire component to remove visually jarring stray colons (`:`) and floating hyphens (`-`) from descriptions and keyboard shortcuts. Established a better visual hierarchy with white subheadings and soft gray text.
+
+🐛 Bug Fixes & Maintenance:
+* **Component Crash Resolution (`NoteModal.js`):** Fixed a critical React compilation crash (`SyntaxError: 'return' outside of function`) caused by a lingering curly brace and duplicate code block after reverting experimental code.

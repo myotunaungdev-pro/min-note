@@ -26,11 +26,11 @@ const HelpGuide = () => {
             </div>
             <div className="help-guide-content-wrapper">
                 <div className="help-guide-sidebar">
-                    <ul className="help-tabs">
+                    <ul className="help-tabs flex overflow-x-auto justify-start items-center gap-2 w-full pb-4 no-scrollbar">
                         {tabs.map(tab => (
                             <li 
                                 key={tab.id} 
-                                className={`help-tab ${activeTab === tab.id ? 'active' : ''}`}
+                                className={`help-tab w-max flex-shrink-0 whitespace-nowrap px-4 py-2 cursor-pointer flex items-center gap-1.5 rounded-full transition-all duration-300 font-medium ${activeTab === tab.id ? 'bg-emerald-500 text-white shadow-lg' : 'bg-slate-800 text-gray-400 hover:bg-slate-700 hover:text-gray-200'}`}
                                 onClick={() => setActiveTab(tab.id)}
                             >
                                 <i className={`bi ${tab.icon}`}></i>
@@ -41,52 +41,52 @@ const HelpGuide = () => {
                 </div>
                 <div className="help-guide-main">
                     {activeTab === 'getting_started' && (
-                        <div className="help-section fade-in">
-                            <h3><i className="bi bi-rocket-takeoff text-primary"></i> {t("help.gettingStarted")}</h3>
-                            <ul className="help-list">
-                                <li><strong>{t("help.creatingNotes")}</strong>: {t("help.clickTheNewNoteButto")}</li>
-                                <li><strong>{t("help.usingTags")}</strong>: {t("help.organizeYourWorkflow")}</li>
-                                <li><strong>{t("help.richText")}</strong>: {t("help.selectAnyTextWhileEd")}</li>
-                                <li><strong>{t("help.doodleMode")}</strong>: {t("help.expressYourselfVisua")}</li>
-                                <li><strong>{t("help.highQualityImages")}</strong>: {t("help.allYourUploadedImage")}</li>
-                                <li><strong>{t("help.imageTextRecognition")}</strong>: {t("help.extractTextFromYourU")}</li>
+                        <div className="help-section fade-in bg-slate-800/40 rounded-2xl p-6 lg:p-8 shadow-xl backdrop-blur-sm">
+                            <h3 className="mb-6 flex items-center gap-2"><i className="bi bi-rocket-takeoff text-emerald-400"></i> <span className="text-white font-semibold">{t("help.gettingStarted")}</span></h3>
+                            <ul className="help-list space-y-4">
+                                <li className="flex flex-col sm:flex-row sm:gap-2"><strong className="text-gray-100 font-medium shrink-0">{t("help.creatingNotes")}</strong> <span className="text-gray-400">{t("help.clickTheNewNoteButto")}</span></li>
+                                <li className="flex flex-col sm:flex-row sm:gap-2"><strong className="text-gray-100 font-medium shrink-0">{t("help.usingTags")}</strong> <span className="text-gray-400">{t("help.organizeYourWorkflow")}</span></li>
+                                <li className="flex flex-col sm:flex-row sm:gap-2"><strong className="text-gray-100 font-medium shrink-0">{t("help.richText")}</strong> <span className="text-gray-400">{t("help.selectAnyTextWhileEd")}</span></li>
+                                <li className="flex flex-col sm:flex-row sm:gap-2"><strong className="text-gray-100 font-medium shrink-0">{t("help.doodleMode")}</strong> <span className="text-gray-400">{t("help.expressYourselfVisua")}</span></li>
+                                <li className="flex flex-col sm:flex-row sm:gap-2"><strong className="text-gray-100 font-medium shrink-0">{t("help.highQualityImages")}</strong> <span className="text-gray-400">{t("help.allYourUploadedImage")}</span></li>
+                                <li className="flex flex-col sm:flex-row sm:gap-2"><strong className="text-gray-100 font-medium shrink-0">{t("help.imageTextRecognition")}</strong> <span className="text-gray-400">{t("help.extractTextFromYourU")}</span></li>
                             </ul>
                         </div>
                     )}
                     {activeTab === 'pro_features' && (
-                        <div className="help-section fade-in">
-                            <h3><i className="bi bi-star-fill text-warning"></i> {t("help.proFeatures")}</h3>
+                        <div className="help-section fade-in bg-slate-800/40 rounded-2xl p-6 lg:p-8 shadow-xl backdrop-blur-sm">
+                            <h3 className="mb-6 flex items-center gap-2"><i className="bi bi-star-fill text-yellow-400"></i> <span className="text-white font-semibold">{t("help.proFeatures")}</span></h3>
                             <div className="mt-3">
-                                <h5>{t("help.comingSoonTitle")}</h5>
-                                <p className="help-text">{t("help.comingSoonDesc")}</p>
+                                <h5 className="text-gray-100 font-medium mb-2">{t("help.comingSoonTitle")}</h5>
+                                <p className="text-gray-400">{t("help.comingSoonDesc")}</p>
                             </div>
                         </div>
                     )}
                     {activeTab === 'shortcuts' && (
-                        <div className="help-section fade-in">
-                            <h3><i className="bi bi-keyboard text-success"></i> {t("help.essentialShortcuts")}</h3>
-                            <p className="help-text">
+                        <div className="help-section fade-in bg-slate-800/40 rounded-2xl p-6 lg:p-8 shadow-xl backdrop-blur-sm">
+                            <h3 className="mb-6 flex items-center gap-2"><i className="bi bi-keyboard text-indigo-400"></i> <span className="text-white font-semibold">{t("help.essentialShortcuts")}</span></h3>
+                            <p className="text-gray-400 mb-6">
                                 {t("help.masterYourWorkflowWi")} 
-                                <strong>{t("help.completeList")}</strong> 
+                                <strong className="text-gray-100 font-medium mx-1">{t("help.completeList")}</strong> 
                                 {t("help.OfAllAvailableShortc")}
                             </p>
-                            <div className="shortcut-highlight">
-                                <kbd>?</kbd> {t("help.or")} <kbd>Ctrl</kbd> + <kbd>/</kbd>
+                            <div className="shortcut-highlight bg-slate-900/50 p-4 rounded-xl border border-slate-700 mb-6 flex items-center justify-center gap-3">
+                                <kbd className="bg-slate-700 text-gray-100 px-2 py-1 rounded-md text-sm font-mono shadow">?</kbd> <span className="text-gray-400">{t("help.or")}</span> <kbd className="bg-slate-700 text-gray-100 px-2 py-1 rounded-md text-sm font-mono shadow">Ctrl</kbd> <span className="text-gray-500">+</span> <kbd className="bg-slate-700 text-gray-100 px-2 py-1 rounded-md text-sm font-mono shadow">/</kbd>
                             </div>
-                            <ul className="help-list mt-3">
-                                <li><strong>{t("notes.sidebar.newNote")}</strong>: <kbd>Ctrl</kbd> + <kbd>N</kbd></li>
-                                <li><strong>{t("help.saveNote")}</strong>: <kbd>Ctrl</kbd> + <kbd>Enter</kbd></li>
-                                <li><strong>{t("help.toggleSidebar")}</strong>: <kbd>Ctrl</kbd> + <kbd>\</kbd></li>
+                            <ul className="help-list space-y-4">
+                                <li className="flex flex-col sm:flex-row sm:items-center sm:gap-2"><strong className="text-gray-100 font-medium shrink-0 min-w-[120px]">{t("notes.sidebar.newNote")}</strong> <div className="flex items-center gap-2 text-gray-400"><kbd className="bg-slate-700 text-gray-100 px-2 py-1 rounded text-xs font-mono">Ctrl</kbd> + <kbd className="bg-slate-700 text-gray-100 px-2 py-1 rounded text-xs font-mono">N</kbd></div></li>
+                                <li className="flex flex-col sm:flex-row sm:items-center sm:gap-2"><strong className="text-gray-100 font-medium shrink-0 min-w-[120px]">{t("help.saveNote")}</strong> <div className="flex items-center gap-2 text-gray-400"><kbd className="bg-slate-700 text-gray-100 px-2 py-1 rounded text-xs font-mono">Ctrl</kbd> + <kbd className="bg-slate-700 text-gray-100 px-2 py-1 rounded text-xs font-mono">Enter</kbd></div></li>
+                                <li className="flex flex-col sm:flex-row sm:items-center sm:gap-2"><strong className="text-gray-100 font-medium shrink-0 min-w-[120px]">{t("help.toggleSidebar")}</strong> <div className="flex items-center gap-2 text-gray-400"><kbd className="bg-slate-700 text-gray-100 px-2 py-1 rounded text-xs font-mono">Ctrl</kbd> + <kbd className="bg-slate-700 text-gray-100 px-2 py-1 rounded text-xs font-mono">\</kbd></div></li>
                             </ul>
                         </div>
                     )}
                     {activeTab === 'settings_language' && (
-                        <div className="help-section fade-in">
-                            <h3><i className="bi bi-globe text-info"></i> {t("help.settingsLanguage")}</h3>
-                            <ul className="help-list">
-                                <li><strong>{t("help.profileCustomization")}</strong>: {t("help.headOverToTheSetting")}</li>
-                                <li><strong>{t("help.multiLanguageSupport")}</strong>: {t("help.ourAppSupportsMultip")}</li>
-                                <li><strong>{t("help.themePreferences")}</strong>: {t("help.switchBetweenOurPrem")}</li>
+                        <div className="help-section fade-in bg-slate-800/40 rounded-2xl p-6 lg:p-8 shadow-xl backdrop-blur-sm">
+                            <h3 className="mb-6 flex items-center gap-2"><i className="bi bi-globe text-cyan-400"></i> <span className="text-white font-semibold">{t("help.settingsLanguage")}</span></h3>
+                            <ul className="help-list space-y-4">
+                                <li className="flex flex-col sm:flex-row sm:gap-2"><strong className="text-gray-100 font-medium shrink-0">{t("help.profileCustomization")}</strong> <span className="text-gray-400">{t("help.headOverToTheSetting")}</span></li>
+                                <li className="flex flex-col sm:flex-row sm:gap-2"><strong className="text-gray-100 font-medium shrink-0">{t("help.multiLanguageSupport")}</strong> <span className="text-gray-400">{t("help.ourAppSupportsMultip")}</span></li>
+                                <li className="flex flex-col sm:flex-row sm:gap-2"><strong className="text-gray-100 font-medium shrink-0">{t("help.themePreferences")}</strong> <span className="text-gray-400">{t("help.switchBetweenOurPrem")}</span></li>
                             </ul>
                         </div>
                     )}

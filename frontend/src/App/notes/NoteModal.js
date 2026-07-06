@@ -1158,7 +1158,7 @@ const NoteEditModal = () => {
         if (qlContainer) {
             // Remove any existing theme classes
             qlContainer.className = qlContainer.className.replace(/bg-theme-\S+/g, '').trim();
-            
+
             // Apply new theme class
             if (theme && theme !== 'default') {
                 qlContainer.classList.add(`bg-theme-${theme}`);
@@ -1514,5 +1514,6 @@ const NoteModal = () => {
         </>
     );
 };
+
 
 export default NoteModal;
