@@ -9,6 +9,7 @@
 .help-guide-header {
     display: flex;
     align-items: center;
+    gap: 24px;
     padding: 24px 32px;
     border-bottom: 1px solid var(--border-color);
     background: rgba(15, 23, 42, 0.4);
@@ -24,23 +25,23 @@
 }
 
 .help-guide-header .back-btn {
-    background: transparent;
-    border: none;
-    color: #e0e0e0;
-    font-size: 16px;
-    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-right: 24px;
-    padding: 8px 12px;
-    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    padding: 8px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
     transition: all 0.2s ease;
 }
 
 .help-guide-header .back-btn:hover {
-    background: var(--surface-color);
-    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
 }
 
 .help-guide-content-wrapper {

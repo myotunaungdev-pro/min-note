@@ -643,9 +643,9 @@ const NoteReadView = ({ note, onClose }) => {
         color: note.tagColor || '#94a3b8',
     };
 
-    // Extract all images from the note content for the Lightbox gallery
+    // Extract image URLs for lightbox + bottom gallery (does not mutate note.content)
     const lightboxSlides = useMemo(() => {
-        if (!note || !note.content) return [];
+        if (!note?.content) return [];
         const regex = /<img[^>]+src="([^">]+)"/g;
         let match;
         const images = [];
@@ -654,6 +654,10 @@ const NoteReadView = ({ note, onClose }) => {
         }
         return images;
     }, [note]);
+
+    useEffect(() => {
+        setIsImageGrid(false);
+    }, [note?.id]);
 
     const handleContentClick = (e) => {
         if (e.target.tagName === 'IMG') {
@@ -724,6 +728,10 @@ const NoteReadView = ({ note, onClose }) => {
 
     return (
         <>
+            <style>{`
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+            `}</style>
             <div className="reader-overlay" onClick={onClose}>
                 <div className={`reader-modal reader-modal-${viewSize}`} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="reader-title">
                     <div className="reader-header">
@@ -732,15 +740,20 @@ const NoteReadView = ({ note, onClose }) => {
                             {note.title} <span className="reader-badge">({t("notes.modal.readOnly")})</span>
                         </h2>
                         <div className="reader-header-actions">
-                            <div className="image-toggle-controls">
-                                <button
-                                    className="size-btn image-toggle-btn"
-                                    onClick={() => setIsImageGrid(!isImageGrid)}
-                                >
-                                    <i className={`bi ${isImageGrid ? 'bi-distribute-vertical' : 'bi-grid-fill'}`}></i>
-                                </button>
-                                <div className="toggle-divider"></div>
-                            </div>
+                            {lightboxSlides.length > 0 && (
+                                <div className="image-toggle-controls">
+                                    <button
+                                        type="button"
+                                        className="size-btn image-toggle-btn"
+                                        onClick={() => setIsImageGrid(!isImageGrid)}
+                                        aria-label={isImageGrid ? t('notes.listView', 'List view') : t('notes.gridView', 'Grid view')}
+                                        aria-pressed={isImageGrid}
+                                    >
+                                        <i className={`bi ${isImageGrid ? 'bi-distribute-vertical' : 'bi-grid-fill'}`}></i>
+                                    </button>
+                                    <div className="toggle-divider"></div>
+                                </div>
+                            )}
                             <div className="view-size-controls">
                                 <button className={`size-btn ${viewSize === 'default' ? 'active' : ''}`} onClick={() => setViewSize('default')}>
                                     <i className="bi bi-window"></i>
@@ -758,20 +771,43 @@ const NoteReadView = ({ note, onClose }) => {
                         </div>
                     </div>
 
-                    <div className="reader-body">
-                        <article className={`reader-page bg-theme-${note.theme || 'default'}`}>
+                    <div className="reader-body overflow-y-auto custom-scrollbar pb-12">
+                        <article className={`reader-page no-scrollbar bg-theme-${note.theme || 'default'} !border-none !shadow-none !overflow-visible !h-auto`}>
                             <h1 className={`reader-page-title ${note.titleFontFamily ? `ql-font-${note.titleFontFamily}` : ''}`}>{note.title}</h1>
                             <div
                                 ref={contentRef}
-                                className={`reader-page-content ${isImageGrid ? 'editor-image-grid' : 'editor-image-stack'}`}
+                                className="reader-page-content no-scrollbar reader-rich-text !overflow-visible !max-h-none"
                                 onClick={handleContentClick}
+                                style={{ minHeight: '80%' }}
                             >
-                                <div className="ql-editor" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{
-                                    __html: DOMPurify.sanitize(note.content, {
-                                        ADD_ATTR: ['data-list', 'data-align', 'data-indent', 'data-value']
-                                    })
-                                }}></div>
+                                <div className={`reader-rich-text-inner${isImageGrid ? ' grid-mode-active' : ''} !overflow-visible !max-h-none`}>
+                                    <div
+                                        className="ql-editor !overflow-visible !max-h-none !h-auto"
+                                        style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+                                        dangerouslySetInnerHTML={{
+                                            __html: DOMPurify.sanitize(note.content, {
+                                                ADD_ATTR: ['data-list', 'data-align', 'data-indent', 'data-value']
+                                            })
+                                        }}
+                                    />
+                                </div>
                             </div>
+
+                            {isImageGrid && lightboxSlides.length > 0 && (
+                                <div className="reader-image-gallery" role="list" aria-label={t('notes.imageGallery', 'Image gallery')}>
+                                    {lightboxSlides.map((slide, index) => (
+                                        <button
+                                            key={`${slide.src}-${index}`}
+                                            type="button"
+                                            className="reader-image-gallery-thumb"
+                                            onClick={() => setLightboxIndex(index)}
+                                            aria-label={t('notes.openImage', 'Open image {{number}}', { number: index + 1 })}
+                                        >
+                                            <img src={slide.src} alt="" loading="lazy" />
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </article>
                     </div>
 
