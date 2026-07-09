@@ -16,6 +16,7 @@ const NotesApp = () => {
     const dispatch = useDispatch();
     const { t, i18n } = useTranslation();
     const [noteToDelete, setNoteToDelete] = useState(null);
+    const [cardStyle, setCardStyle] = useState('default');
 
     const { notes, activeView, searchQuery, sortBy, statusFilter, sidebarCollapsed, categoryFilter, selectedNoteIds, isModalOpen, isReaderOpen } = useSelector(
         (state) => state.notes
@@ -358,7 +359,11 @@ const NotesApp = () => {
             <main
                 className={`main-content ${sidebarCollapsed ? 'expanded' : ''}`}
             >
-                <Header onSelectAll={() => dispatch(selectAllNotes(filteredAndSortedNotes.map(n => n._id)))} />
+                <Header 
+                    onSelectAll={() => dispatch(selectAllNotes(filteredAndSortedNotes.map(n => n._id)))} 
+                    cardStyle={cardStyle} 
+                    setCardStyle={setCardStyle} 
+                />
 
                 <div className="category-chips-wrapper" style={{ position: 'relative' }}>
                     {showLeftScroll && (
@@ -420,7 +425,7 @@ const NotesApp = () => {
                                         <h3 className="note-group-header">{t(groupKey)}</h3>
                                         <div className="notes-grid">
                                             {groupedNotes[groupKey].map((note) => (
-                                                <NoteCard key={note._id} note={note} onDeleteRequest={(note) => setNoteToDelete(note)} onSelectToggle={(e) => handleNoteSelect(note._id, e)} />
+                                                <NoteCard key={note._id} note={note} onDeleteRequest={(note) => setNoteToDelete(note)} onSelectToggle={(e) => handleNoteSelect(note._id, e)} cardStyle={cardStyle} />
                                             ))}
                                         </div>
                                     </div>
@@ -429,7 +434,7 @@ const NotesApp = () => {
                         ) : (
                             <div className="notes-grid">
                                 {filteredAndSortedNotes.map((note) => (
-                                    <NoteCard key={note._id} note={note} onDeleteRequest={(note) => setNoteToDelete(note)} onSelectToggle={(e) => handleNoteSelect(note._id, e)} />
+                                    <NoteCard key={note._id} note={note} onDeleteRequest={(note) => setNoteToDelete(note)} onSelectToggle={(e) => handleNoteSelect(note._id, e)} cardStyle={cardStyle} />
                                 ))}
                             </div>
                         )

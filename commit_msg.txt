@@ -1,11 +1,6 @@
-﻿✨ feat(ui): implement NoteModal UI/UX polishes and unify HelpGuide styling
+feat: overhaul note card designs and refactor network config
 
-🎨 NoteModal UI/UX Perfection (NoteModal.js):
-- 🖼️ **Image Grid View**: Successfully implemented the List/Grid view toggle for images using a pure CSS approach (hiding inline images cleanly without mutating the rich text HTML) and adding a responsive social-media-style bottom gallery.
-- 🖱️ **Scrollbar Overhaul**: Eliminated ugly nested double scrollbars. Implemented a sleek "Invisible Scrollbar" UI by applying a custom 
-o-scrollbar class to both the main <article> wrapper and the .reader-page-content div, keeping scroll functionality intact while hiding the visual track.
-- 📏 **Proportional Layout**: Added min-h-[80%] equivalent styling to the text container so the modal maintains a premium proportion even when content is short.
-- 🌈 **Theme Integration Fix**: Fixed a bug where the user's selected custom Theme (backgrounds/fonts) was not being dynamically applied to the Read-Only modal view.
-
-🔄 UI Consistency (HelpGuide.js):
-- 🔙 **Unified Back Button**: Redesigned the "Back" button to exactly match the sleek, dark-themed pill design found in the System Settings page, ensuring cross-app visual consistency.
+- feat: Implemented "Cyber" and "Dynamic 3D" (with Vanilla JS tilt converted to React useRef) card designs with isolated conditional rendering.
+- fix: Resolved mobile responsiveness issue in Header.js layout and reordered Dropdown items for better UX.
+- refactor: Purged old "Soft 3D" and "Glass" legacy code.
+- chore: Removed hardcoded local network IPs from CORS and Axios configurations, completely migrating to .env variables for production readiness.
