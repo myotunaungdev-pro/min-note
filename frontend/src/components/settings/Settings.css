@@ -868,3 +868,157 @@
 .react-datepicker__year-dropdown--scrollable {
     height: 200px !important;
 }
+
+.gallery-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Gap between images */
+    padding: 40px;
+}
+
+/* Using <label> as the gallery-item wrapper. 
+   Clicking anywhere inside (image or text) will select the hidden radio button. 
+*/
+.gallery-item {
+    display: flex;
+    align-items: center;
+    gap: 25px; 
+    cursor: pointer;
+    position: relative;
+}
+
+/* Alternating zigzag positioning */
+.gallery-item:nth-child(odd) {
+    transform: translateX(-55px);
+    flex-direction: row; 
+}
+
+.gallery-item:nth-child(even) {
+    transform: translateX(55px);
+    flex-direction: row-reverse; 
+}
+
+/* Hide the default radio buttons */
+.gallery-item input[type="radio"] {
+    display: none;
+}
+
+/* ------------- Image Styling ------------- */
+.image-box {
+    width: 320px; 
+    height: 250px;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #23262b; 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    border: 2px solid transparent; /* Transparent border prepared for active state */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0.8; /* Slightly dimmed before selection */
+    transition: opacity 0.3s ease;
+}
+
+/* Hover lift effect */
+.gallery-item:hover .image-box {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+.gallery-item:hover .image-box img {
+    opacity: 0.9;
+}
+
+/* ------------- Text & Icon Container ------------- */
+.item-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #9ca3af; /* Dimmed text color before selection */
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.gallery-item:nth-child(even) .item-label {
+    flex-direction: row-reverse;
+}
+
+.item-label i {
+    font-size: 20px; /* Icon size */
+}
+
+/* ================================================== */
+/* ?? ACTIVE (SELECTED) STATE EFFECTS ??              */
+/* ================================================== */
+
+/* 1. Image box glows and scales up slightly when selected */
+.gallery-item input[type="radio"]:checked ~ .image-box {
+    border: 2px solid #00d4aa; /* Cyber Accent Color */
+    box-shadow: 0 0 25px rgba(0, 212, 170, 0.25), 0 15px 35px rgba(0, 0, 0, 0.5);
+    transform: scale(1.03); /* Image pops out slightly */
+}
+
+/* Image becomes fully opaque when selected */
+.gallery-item input[type="radio"]:checked ~ .image-box img {
+    opacity: 1;
+}
+
+/* 2. Text and icon glow when selected */
+.gallery-item input[type="radio"]:checked ~ .item-label {
+    color: #ffffff;
+    font-weight: 600;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Change icon color when selected */
+.gallery-item input[type="radio"]:checked ~ .item-label i {
+    color: #00d4aa;
+    text-shadow: 0 0 15px rgba(0, 212, 170, 0.5);
+}
+
+/* ================================================== */
+/* ?? MOBILE RESPONSIVE LAYOUT ??                     */
+/* ================================================== */
+
+@media (max-width: 768px) {
+    .gallery-container {
+        padding: 20px;
+        gap: 40px; /* Increased gap between items on mobile */
+    }
+
+    /* Remove zigzag and stack vertically */
+    .gallery-item,
+    .gallery-item:nth-child(odd),
+    .gallery-item:nth-child(even) {
+        transform: none;
+        flex-direction: column; /* Image on top, text on bottom */
+        gap: 16px;
+        align-items: center;
+    }
+
+    /* Center align text and icons */
+    .gallery-item:nth-child(even) .item-label,
+    .gallery-item:nth-child(odd) .item-label {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    /* Adjust Image Box to fit mobile screen size */
+    .image-box {
+        width: 100%;
+        max-width: 340px;
+        height: 220px;
+    }
+
+    /* Reduce the active scale on mobile to prevent overflow */
+    .gallery-item input[type="radio"]:checked ~ .image-box {
+        transform: scale(1.02);
+    }
+}

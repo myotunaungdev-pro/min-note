@@ -442,7 +442,11 @@
     "defaultNoteTheme": "ธีมเริ่มต้นของโน้ต",
     "defaultNoteThemeUpdated": "อัปเดตธีมเริ่มต้นของโน้ตแล้ว!",
     "updateThemeFailed": "Failed to update theme",
-    "aPictureHelpsPeopleR": "รูปภาพช่วยให้ผู้คนจดจำคุณได้ และช่วยให้คุณรู้ว่าเมื่อใดที่คุณลงชื่อเข้าใช้บัญชีของคุณ"
+    "noteCardDesign": "การออกแบบการ์ดบันทึก",
+    "designDefault": "ค่าเริ่มต้น",
+    "designCyber": "ไซเบอร์",
+    "designDynamic3D": "ไดนามิก 3D",
+    "aPictureHelpsPeopleR": "รูปภาพจะช่วยให้ผู้อื่นจดจำคุณได้และแจ้งให้คุณทราบเมื่อคุณลงชื่อเข้าใช้บัญชีของคุณ"
   },
   "help": {
     "gettingStarted": "เริ่มต้นใช้งาน",

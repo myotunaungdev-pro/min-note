@@ -441,6 +441,10 @@
     "defaultNoteTheme": "Default Note Theme",
     "defaultNoteThemeUpdated": "Default note theme updated!",
     "updateThemeFailed": "Failed to update theme",
+    "noteCardDesign": "Note Card Design",
+    "designDefault": "Default",
+    "designCyber": "Cyber",
+    "designDynamic3D": "Dynamic 3D",
     "aPictureHelpsPeopleR": "A picture helps people recognize you and lets you know when you\\'re signed in to your account."
   },
   "help": {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,6 +18,15 @@ import ShortcutModal from './components/common/ShortcutModal';
 import HelpGuide from './components/help/HelpGuide';
 
 function App() {
+    const [cardStyle, setCardStyle] = useState(() => {
+        const savedStyle = localStorage.getItem('app_note_card_style');
+        return savedStyle || 'default';
+    });
+
+    useEffect(() => {
+        localStorage.setItem('app_note_card_style', cardStyle);
+    }, [cardStyle]);
+
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'light') {
@@ -40,9 +49,9 @@ function App() {
                     <Route path="/forgot-password" element={<ForgotPassword />} />
                 </Route>
                 <Route element={<ProtectedRoute />}>
-                    <Route path="/notes" element={<NotesApp />} />
+                    <Route path="/notes" element={<NotesApp cardStyle={cardStyle} />} />
                     <Route path="/settings" element={<Settings />} />
-                    <Route path="/system-settings" element={<SystemSettings />} />
+                    <Route path="/system-settings" element={<SystemSettings cardStyle={cardStyle} setCardStyle={setCardStyle} />} />
                     <Route path="/help" element={<HelpGuide />} />
                 </Route>
             </Routes>

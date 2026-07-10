@@ -15,7 +15,7 @@ import { bulkArchiveOnServer, bulkTrashOnServer, bulkRestoreOnServer, permanentl
 import './Header.css';
 import { useTranslation } from 'react-i18next';
 
-const Header = ({ onSelectAll, cardStyle, setCardStyle }) => {
+const Header = ({ onSelectAll }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
@@ -27,14 +27,14 @@ const Header = ({ onSelectAll, cardStyle, setCardStyle }) => {
 
     const [isSortOpen, setIsSortOpen] = useState(false);
     const [isStatusOpen, setIsStatusOpen] = useState(false);
-    const [isCardStyleOpen, setIsCardStyleOpen] = useState(false);
+
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
 
     const sortDropdownRef = useRef(null);
     const statusDropdownRef = useRef(null);
-    const cardStyleDropdownRef = useRef(null);
+
     const mobileMenuRef = useRef(null);
 
     useEffect(() => {
@@ -61,20 +61,17 @@ const Header = ({ onSelectAll, cardStyle, setCardStyle }) => {
             if (statusDropdownRef.current && !statusDropdownRef.current.contains(event.target)) {
                 setIsStatusOpen(false);
             }
-            if (cardStyleDropdownRef.current && !cardStyleDropdownRef.current.contains(event.target)) {
-                setIsCardStyleOpen(false);
-            }
             if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
                 setIsMobileMenuOpen(false);
             }
         };
 
-        if (isSortOpen || isStatusOpen || isMobileMenuOpen || isCardStyleOpen) {
+        if (isSortOpen || isStatusOpen || isMobileMenuOpen) {
             document.addEventListener('mousedown', handleClickOutside);
         }
 
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isSortOpen, isStatusOpen, isMobileMenuOpen, isCardStyleOpen]);
+    }, [isSortOpen, isStatusOpen, isMobileMenuOpen]);
 
     const handleTrashOrDelete = React.useCallback(() => {
         if (activeView === 'trash') {
@@ -237,7 +234,7 @@ const Header = ({ onSelectAll, cardStyle, setCardStyle }) => {
                 </div>
             </div>
 
-            <div className="header-right flex-wrap" style={{ gap: '8px' }}>
+            <div className="header-right flex items-center gap-2 sm:gap-4">
                 <button
                     className="select-all-btn desktop-only"
                     onClick={onSelectAll}
@@ -459,57 +456,7 @@ const Header = ({ onSelectAll, cardStyle, setCardStyle }) => {
                     </ul>
                 </div>
 
-                <div
-                    className={`dropdown ${isCardStyleOpen ? 'show' : ''}`}
-                    ref={cardStyleDropdownRef}
-                >
-                    <button
-                        className={`sort-dropdown dropdown-toggle ${isCardStyleOpen ? 'show' : ''}`}
-                        type="button"
-                        aria-expanded={isCardStyleOpen}
-                        onClick={() => {
-                            setIsCardStyleOpen((open) => !open);
-                            setIsSortOpen(false);
-                            setIsStatusOpen(false);
-                        }}
-                    >
-                        <i className="bi bi-palette"></i>
-                        <span>
-                            {cardStyle === 'default' && "Default"}
-                            {cardStyle === 'cyber' && "Cyber"}
-                            {cardStyle === 'dynamic3d' && "Dynamic 3D"}
-                        </span>
-                    </button>
-                    <ul className={`dropdown-menu dropdown-menu-dark ${isCardStyleOpen ? 'show' : ''}`}>
-                        <li>
-                            <button
-                                type="button"
-                                className={`dropdown-item ${cardStyle === 'default' ? 'active' : ''}`}
-                                onClick={() => { setCardStyle('default'); setIsCardStyleOpen(false); }}
-                            >
-                                🎨 Default
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                type="button"
-                                className={`dropdown-item ${cardStyle === 'cyber' ? 'active' : ''}`}
-                                onClick={() => { setCardStyle('cyber'); setIsCardStyleOpen(false); }}
-                            >
-                                <i className="bi bi-cpu"></i> Cyber
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                type="button"
-                                className={`dropdown-item ${cardStyle === 'dynamic3d' ? 'active' : ''}`}
-                                onClick={() => { setCardStyle('dynamic3d'); setIsCardStyleOpen(false); }}
-                            >
-                                <i className="bi bi-layers"></i> Dynamic 3D
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+
 
                 {activeView === 'all' && (
                     <button className="new-note-btn" onClick={handleNewNote} data-tooltip-id="global-tooltip" data-tooltip-content={t("notes.newNoteCtrlN")}>

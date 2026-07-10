@@ -1,6 +1,0 @@
-feat: overhaul note card designs and refactor network config
-
-- feat: Implemented "Cyber" and "Dynamic 3D" (with Vanilla JS tilt converted to React useRef) card designs with isolated conditional rendering.
-- fix: Resolved mobile responsiveness issue in Header.js layout and reordered Dropdown items for better UX.
-- refactor: Purged old "Soft 3D" and "Glass" legacy code.
-- chore: Removed hardcoded local network IPs from CORS and Axios configurations, completely migrating to .env variables for production readiness.

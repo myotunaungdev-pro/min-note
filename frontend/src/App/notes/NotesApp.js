@@ -12,11 +12,10 @@ import { tagOptions } from './NoteModal';
 import { useTranslation } from 'react-i18next';
 import './NotesApp.css';
 
-const NotesApp = () => {
+const NotesApp = ({ cardStyle }) => {
     const dispatch = useDispatch();
     const { t, i18n } = useTranslation();
     const [noteToDelete, setNoteToDelete] = useState(null);
-    const [cardStyle, setCardStyle] = useState('default');
 
     const { notes, activeView, searchQuery, sortBy, statusFilter, sidebarCollapsed, categoryFilter, selectedNoteIds, isModalOpen, isReaderOpen } = useSelector(
         (state) => state.notes
@@ -361,8 +360,6 @@ const NotesApp = () => {
             >
                 <Header 
                     onSelectAll={() => dispatch(selectAllNotes(filteredAndSortedNotes.map(n => n._id)))} 
-                    cardStyle={cardStyle} 
-                    setCardStyle={setCardStyle} 
                 />
 
                 <div className="category-chips-wrapper" style={{ position: 'relative' }}>
