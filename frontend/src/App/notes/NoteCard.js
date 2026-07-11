@@ -113,7 +113,7 @@ const NoteCard = ({ note, onDeleteRequest, onSelectToggle, cardStyle = 'default'
 
     const getCardStyleClasses = () => {
         let classes = `note-card ${note.isDone ? 'done' : ''} ${isSelected ? 'selected' : ''} `;
-        
+
         if (cardStyle === 'cyber') {
             classes += `bg-theme-${note.theme || 'default'}`;
         } else if (cardStyle === 'dynamic3d') {
@@ -132,11 +132,11 @@ const NoteCard = ({ note, onDeleteRequest, onSelectToggle, cardStyle = 'default'
         const dynamicClasses = `note-card ${note.isDone ? 'done' : ''} ${isSelected ? 'selected' : ''}`;
         return (
             <div className="theme-dynamic3d">
-                <div 
-                    className="scene" 
+                <div
+                    className="scene"
                     onMouseMove={handleMouseMove}
                     onMouseLeave={handleMouseLeave}
-                    onClick={(e) => e.stopPropagation()} 
+                    onClick={(e) => e.stopPropagation()}
                     onMouseDown={(e) => { if (e.shiftKey) e.preventDefault(); }}
                 >
                     <div className="card3d" ref={card3dRef}>

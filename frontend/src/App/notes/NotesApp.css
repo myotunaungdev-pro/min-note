@@ -59,7 +59,7 @@ body,
     display: flex;
     flex-direction: column;
     transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     /* Firefox Support for Custom Scrollbar */
     scrollbar-width: thin;
     scrollbar-color: #334155 transparent;
@@ -177,7 +177,8 @@ body,
     width: 100%;
     padding: 0 32px;
     background-color: var(--app-bg);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* slightly more visible divider */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    /* slightly more visible divider */
     z-index: 10;
     display: flex;
     justify-content: space-between;
@@ -203,12 +204,14 @@ body,
     z-index: 20;
     transition: all 0.2s;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    display: none; /* strictly hidden on mobile */
+    display: none;
+    /* strictly hidden on mobile */
 }
 
 @media (min-width: 768px) {
     .scroll-btn {
-        display: flex; /* only show on md breakpoint and above */
+        display: flex;
+        /* only show on md breakpoint and above */
     }
 }
 
@@ -232,9 +235,11 @@ body,
     flex: 1;
     min-width: 0;
     gap: 12px;
-    padding: 12px 0; /* Vertical padding to prevent shadow clipping */
+    padding: 12px 0;
+    /* Vertical padding to prevent shadow clipping */
     scrollbar-width: none;
-    align-items: center; /* Vertically center tags */
+    align-items: center;
+    /* Vertically center tags */
 }
 
 .category-chips-scroll::-webkit-scrollbar {
@@ -338,6 +343,7 @@ body,
     .notes-container {
         padding: 20px;
     }
+
     .category-chips-wrapper {
         padding: 0 20px;
     }

@@ -441,7 +441,7 @@
     overflow: visible;
     box-shadow:
         0 24px 60px rgba(0, 0, 0, 0.55),
-        0 0 0 1px rgba(124, 92, 255, 0.04);
+        0 0 0 1px rgba(52, 211, 153, 0.04);
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
 }
 
@@ -449,20 +449,20 @@
     transform: translateY(-4px);
     box-shadow:
         0 30px 70px rgba(0, 0, 0, 0.6),
-        0 0 0 1px rgba(124, 92, 255, 0.18),
-        0 0 40px rgba(124, 92, 255, 0.12);
+        0 0 0 1px rgba(52, 211, 153, 0.18),
+        0 0 40px rgba(52, 211, 153, 0.12);
 }
 
 .theme-cyber .note-card.selected {
     box-shadow:
         0 24px 60px rgba(0, 0, 0, 0.55),
-        0 0 0 1.5px #7C5CFF,
-        0 0 40px rgba(124, 92, 255, 0.25);
+        0 0 0 1.5px #34D399,
+        0 0 40px rgba(52, 211, 153, 0.25);
 }
 
 .theme-cyber .note-spine {
     position: relative;
-    background: linear-gradient(180deg, #7C5CFF, #4F46E5);
+    background: linear-gradient(180deg, #34D399, #10B981);
     border-radius: 4px 0 0 4px;
     display: flex;
     align-items: flex-end;
@@ -505,7 +505,7 @@
     top: 14px;
     right: -13px;
     padding: 5px 14px 5px 12px;
-    background: linear-gradient(135deg, #7C5CFF, #4F46E5);
+    background: linear-gradient(135deg, #34D399, #10B981);
     color: #fff;
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
@@ -513,7 +513,7 @@
     letter-spacing: 0.8px;
     text-transform: uppercase;
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 10px 50%);
-    box-shadow: 0 6px 16px rgba(124, 92, 255, 0.45);
+    box-shadow: 0 6px 16px rgba(52, 211, 153, 0.45);
     z-index: 3;
 }
 
@@ -537,7 +537,7 @@
     height: 26px;
     border-radius: 50%;
     background: #16161d;
-    border: 1.5px solid rgba(124, 92, 255, 0.5);
+    border: 1.5px solid rgba(52, 211, 153, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -547,15 +547,15 @@
 }
 
 .theme-cyber .custom-checkbox:hover {
-    border-color: #7C5CFF;
-    box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.12);
+    border-color: #34D399;
+    box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.12);
 }
 
 .theme-cyber .custom-checkbox.checked {
-    background: linear-gradient(135deg, #7C5CFF, #4F46E5);
+    background: linear-gradient(135deg, #34D399, #10B981);
     border-color: transparent;
     color: #fff;
-    box-shadow: 0 0 0 4px rgba(124, 92, 255, 0.18);
+    box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.18);
 }
 
 .theme-cyber .note-title {
@@ -594,7 +594,7 @@
 }
 
 .theme-cyber .note-card-body:focus-visible {
-    outline: 1px solid rgba(124, 92, 255, 0.5);
+    outline: 1px solid rgba(52, 211, 153, 0.5);
     outline-offset: 3px;
 }
 
@@ -666,7 +666,7 @@
 
 .theme-cyber .note-content li[data-list="checked"]::before {
     content: '◆';
-    color: #7C5CFF;
+    color: #34D399;
 }
 
 .theme-cyber .note-content li[data-list="unchecked"]::before {
@@ -696,9 +696,9 @@
     gap: 6px;
     padding: 6px 12px;
     background: #1A1A22;
-    border: 1px solid rgba(124, 92, 255, 0.35);
+    border: 1px solid rgba(52, 211, 153, 0.35);
     border-radius: 999px;
-    color: #C4B5FD;
+    color: #6EE7B7;
     font-family: 'JetBrains Mono', monospace;
     font-size: 10.5px;
     font-weight: 500;
@@ -710,8 +710,8 @@
 }
 
 .theme-cyber .status-btn:hover {
-    border-color: #7C5CFF;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(124, 92, 255, 0.25);
+    border-color: #34D399;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(52, 211, 153, 0.25);
 }
 
 .theme-cyber .status-btn.completed {
@@ -737,7 +737,7 @@
     gap: 8px;
     background: rgba(17, 17, 22, 0.9);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(124, 92, 255, 0.18);
+    border: 1px solid rgba(52, 211, 153, 0.18);
     border-radius: 12px;
     opacity: 0;
     transform: translateX(-8px);
@@ -767,7 +767,7 @@
 }
 
 .theme-cyber .action-btn:hover {
-    background: rgba(124, 92, 255, 0.12);
+    background: rgba(52, 211, 153, 0.12);
     transform: scale(1.08);
 }
 

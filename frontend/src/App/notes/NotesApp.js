@@ -358,8 +358,8 @@ const NotesApp = ({ cardStyle }) => {
             <main
                 className={`main-content ${sidebarCollapsed ? 'expanded' : ''}`}
             >
-                <Header 
-                    onSelectAll={() => dispatch(selectAllNotes(filteredAndSortedNotes.map(n => n._id)))} 
+                <Header
+                    onSelectAll={() => dispatch(selectAllNotes(filteredAndSortedNotes.map(n => n._id)))}
                 />
 
                 <div className="category-chips-wrapper" style={{ position: 'relative' }}>
