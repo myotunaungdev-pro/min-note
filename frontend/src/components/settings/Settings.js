@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import PremiumFeatureModal from '../common/PremiumFeatureModal';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { logout, updateUserProfile } from '../../App/store/authSlice';
@@ -315,25 +316,13 @@ const Settings = () => {
                 </div>
             )}
 
-            {isProModalOpen && (
-                <div className="logout-modal-overlay" onClick={() => setIsProModalOpen(false)}>
-                    <div className="logout-modal" onClick={(e) => e.stopPropagation()}>
-                        <button className="modal-close-icon" onClick={() => setIsProModalOpen(false)} aria-label={t("settings.closeEsc")}>
-                            <i className="bi bi-x-lg"></i>
-                        </button>
-                        <div className="logout-modal-icon avatar-modal-icon">
-                            <i className="bi bi-stars"></i>
-                        </div>
-                        <h3 className="page-title" style={{ fontSize: '24px', marginBottom: '16px' }}>{t("settings.plan.proComingSoonTitle")}</h3>
-                        <p style={{ marginBottom: '24px', lineHeight: '1.6' }}>{t("settings.plan.proComingSoonDesc")}</p>
-                        <div className="logout-modal-actions" style={{ display: 'flex', justifyContent: 'center' }}>
-                            <button className="btn-avatar-option btn-avatar-upload" style={{ padding: '12px 32px', width: 'auto', minWidth: '160px' }} onClick={() => setIsProModalOpen(false)}>
-                                {t("settings.closeEsc")}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <PremiumFeatureModal 
+                isOpen={isProModalOpen} 
+                onClose={() => setIsProModalOpen(false)} 
+                title={t("settings.plan.proComingSoonTitle")}
+                description={t("settings.plan.proComingSoonDesc")}
+                buttonText={t("settings.closeEsc")}
+            />
 
             {isLightboxOpen && (
                 <Lightbox onClose={() => setIsLightboxOpen(false)}>

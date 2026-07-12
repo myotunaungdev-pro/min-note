@@ -431,7 +431,6 @@
 
 .theme-cyber .note-card-wrap {
     width: 100%;
-    /* 🔴 ပြင်ဆင်ထားသည့်အပိုင်း: တစ်ခုတည်းရှိချိန် အရှည်ကြီးမဖြစ်စေရန် max-width ကို သတ်မှတ်ထားပါသည် */
     max-width: 400px;
     padding: 14px 6px 50px 6px;
 }
@@ -787,8 +786,8 @@
     z-index: 6;
 }
 
-.note-card:hover .note-actions,
-.theme-cyber .note-card:focus-within .note-actions {
+.theme-cyber .note-card-wrap:hover .note-actions,
+.theme-cyber .note-card-wrap:focus-within .note-actions {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0) scale(1);

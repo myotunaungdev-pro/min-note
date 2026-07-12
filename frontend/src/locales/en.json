@@ -484,5 +484,11 @@
   },
   "shortcuts": {
     "mobileNote": "Note: These shortcuts are designed for physical keyboards. Mobile users do not need to worry about them."
+  },
+  "features": {
+    "textRecognition": {
+      "title": "Image Text Recognition",
+      "desc": "Extract text from your uploaded images instantly (Coming Soon!)."
+    }
   }
 }

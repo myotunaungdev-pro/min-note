@@ -24,6 +24,8 @@ import { ReactSketchCanvas } from 'react-sketch-canvas';
 import { Pencil, PenTool, Highlighter, Eraser, Undo2, Trash2, X } from 'lucide-react';
 import DOMPurify from 'dompurify';
 
+import PremiumFeatureModal from '../../components/common/PremiumFeatureModal';
+
 const preserveSpacesInHtml = (html) => {
     if (!html) return '';
     // Preserve newlines that might be outside tags (if any)
@@ -526,7 +528,7 @@ const WebcamCaptureModal = ({ onClose, onCapture }) => {
     );
 };
 
-const ImageInputMenu = ({ isOpen, onClose, onGallerySelect, onCameraSelect, onDesktopCameraSelect, isUploading }) => {
+const ImageInputMenu = ({ isOpen, onClose, onGallerySelect, onCameraSelect, onDesktopCameraSelect, isUploading, onRecognizeText }) => {
     const { t } = useTranslation();
     const galleryRef = useRef(null);
     const cameraRef = useRef(null);
@@ -582,7 +584,7 @@ const ImageInputMenu = ({ isOpen, onClose, onGallerySelect, onCameraSelect, onDe
                             <i className="bi bi-image"></i>
                             <span>{t("notes.selectPhoto")}</span>
                         </button>
-                        <button className="image-menu-option" onClick={() => alert("notes.recognizeTextOCRLogi")}>
+                        <button className="image-menu-option" onClick={onRecognizeText}>
                             <i className="bi bi-fonts"></i>
                             <span>{t("notes.recognizeText")}</span>
                         </button>
@@ -771,7 +773,7 @@ const NoteReadView = ({ note, onClose }) => {
                         </div>
                     </div>
 
-                    <div className="reader-body overflow-y-auto custom-scrollbar pb-12">
+                    <div className="reader-body overflow-y-auto overscroll-contain custom-scrollbar pb-12">
                         <article className={`reader-page no-scrollbar bg-theme-${note.theme || 'default'} !border-none !shadow-none !overflow-visible !h-auto`}>
                             <h1 className={`reader-page-title ${note.titleFontFamily ? `ql-font-${note.titleFontFamily}` : ''}`}>{note.title}</h1>
                             <div
@@ -914,6 +916,7 @@ const NoteEditModal = () => {
 
     const [title, setTitle] = useState(editingNote?.title || '');
     const [titleFontFamily, setTitleFontFamily] = useState(editingNote?.titleFontFamily || '');
+    const [isRecognizeTextModalOpen, setIsRecognizeTextModalOpen] = useState(false);
     const [content, setContent] = useState(editingNote?.content || '');
     const [theme, setTheme] = useState(editingNote?.theme || user?.defaultNoteTheme || 'default');
     const [isTitleFontDropdownOpen, setIsTitleFontDropdownOpen] = useState(false);
@@ -1450,6 +1453,10 @@ const NoteEditModal = () => {
                 onCameraSelect={handleCameraSelect}
                 onDesktopCameraSelect={handleDesktopCameraSelect}
                 isUploading={isUploading}
+                onRecognizeText={() => {
+                    setShowImageMenu(false);
+                    setIsRecognizeTextModalOpen(true);
+                }}
             />
 
             {isLinkModalOpen && (
@@ -1494,6 +1501,15 @@ const NoteEditModal = () => {
                     </div>
                 </div>
             )}
+
+
+            <PremiumFeatureModal 
+                isOpen={isRecognizeTextModalOpen} 
+                onClose={() => setIsRecognizeTextModalOpen(false)} 
+                title={t("features.textRecognition.title")}
+                description={t("features.textRecognition.desc")}
+                buttonText={t("notes.closeEsc", "Close")}
+            />
 
             {showWebcamModal && (
                 <WebcamCaptureModal
