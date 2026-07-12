@@ -2,45 +2,58 @@
 
 A stunning, production-ready note-taking workspace built on the **MERN Stack** (MongoDB, Express, React, Node.js). Engineered with a fanatical focus on pixel-perfect UI/UX, fluid animations, and highly performant state management, this application serves as a masterclass in modern frontend architecture and premium dark-mode aesthetics.
 
-## ✨ Key Technical Features & Architecture
+---
 
-This codebase goes far beyond basic CRUD. It demonstrates advanced DOM manipulation, complex React state synchronization, and enterprise-grade responsive layouts.
+## ✨ Key Features
 
-### 📐 Advanced Responsive Grid & Layout Architecture
-- **Fluid CSS Grid with Rigid Fallbacks:** Implements a highly robust CSS Grid system (`repeat(auto-fill, minmax)`) fortified with strict `!important` mobile overrides to guarantee note cards never stretch unnaturally. Beautifully scales from 4-column ultra-wide monitors down to a perfect 1-column mobile stack.
-- **Intelligent Mobile Overlay:** The sidebar converts into a high z-index slide-out drawer on viewports under `904px`. Incorporates a backdrop-filter blur overlay that intercepts clicks to seamlessly dismiss the drawer, mimicking native iOS/Android behaviors.
+Our note-taking application is packed with robust features designed for both power users and minimalists.
 
-### 🖱️ High-Performance DOM Manipulation
-- **60FPS Drag-to-Resize Sidebar:** Bypasses standard React state-driven re-renders during drag operations. Injects computed widths directly into a CSS Variable (`--sidebar-width-expanded`) on the DOM, ensuring butter-smooth resizing of both the sidebar and the adjacent main content area without layout thrashing.
+### 📝 Core Functionalities (CRUD)
+- **Create & Edit:** Write notes seamlessly with a fully integrated Rich Text Editor (`react-quill-new`), supporting complex formatting and inline images.
+- **Archive & Restore:** Declutter your workspace by sending completed or idle notes to the Archive. Easily restore them at any time.
+- **Trash & Permanent Delete:** Safely move items to a Trash bin before permanently destroying them, providing a safety net for accidental clicks.
+- **Bulk Operations:** Engineered a robust bulk-selection engine. Users can individually toggle or mass-select notes to execute batch API payloads (Archive, Trash, Restore) with instantaneous optimistic UI updates.
 
-### 🧠 Complex State & Data Flow (Redux Toolkit)
-- **Multi-Select & Bulk Operations:** Engineered a robust bulk-selection engine capable of tracking array matrices in the Redux store. Users can individually toggle or mass-select notes to execute batch API payloads (Archive, Trash, Restore) with instantaneous optimistic UI updates.
-- **Dynamic Category Filtering:** Features a horizontally scrollable, multi-select category chip system. Includes complex array-intersection logic wrapped in precisely memoized hooks (`useMemo`) to guarantee `O(1)` reference stability and strictly prevent infinite render loops.
+### 🎨 Custom Note Card Designs
+Personalize your workspace layout instantly with beautifully crafted, interactive card themes.
+- **Cyber Design:** A futuristic, glassmorphic layout featuring a locked 220px grid track, neon accent glows (`#00d4aa`), strict text constraints (`white-space: pre` and safe `-webkit-line-clamp: 4`), and a cleanly docked action bar. Built from the ground up without relying heavily on utility classes to guarantee layout stability.
+- **Dynamic 3D Design:** An immersive card utilizing perspective transforms and cubic-bezier animations for a deeply tactile hover experience.
+- **Minimal Design:** A clean, distraction-free card layout for maximum readability.
 
-### 🎨 Premium UI/UX Polish
-- **Dynamic Read-Only Modal:** The note reading modal is equipped with state-driven "View Size Presets" (Default, Wide, Fullscreen). Clicking a preset fluidly transitions the modal's `max-width` and `height` using optimized cubic-bezier easing.
-- **Glassmorphism & Micro-Interactions:** Utilizes heavily optimized `backdrop-filter: blur()`, neon accent glows (`#00d4aa`), and hover-lift transformations (`translateY`) to create a deeply tactile, modern interface.
-- **Complete Internationalization (i18n):** Flawlessly localizes the entire workspace across English, Burmese, and Thai.
+### 📐 Responsive UI & Layout Architecture
+- **Fluid CSS Grid:** Implements a highly robust CSS Grid system (`repeat(auto-fill, minmax)`) fortified with strict constraints to guarantee note cards never stretch unnaturally. Beautifully scales from 4-column ultra-wide monitors down to a perfect 1-column mobile stack.
+- **Intelligent Mobile Overlay:** The sidebar converts into a high z-index slide-out drawer on viewports under `904px`. Incorporates a backdrop-filter blur overlay that intercepts clicks to seamlessly dismiss the drawer.
+- **High-Performance DOM Manipulation:** 60FPS Drag-to-Resize Sidebar bypasses standard React state-driven re-renders during drag operations, injecting computed widths directly into a CSS Variable (`--sidebar-width-expanded`) to avoid layout thrashing.
+
+### 🌐 Dynamic Localization (i18n)
+- **Multi-Language Support:** Flawlessly localizes the entire workspace across three distinct languages: **English**, **Burmese**, and **Thai**.
+- **Instant Translation:** Powered by `i18next` and `react-i18next`, language toggles apply translations dynamically across the entire UI—including deep settings menus like the "Change Design" modal—without requiring a page reload.
+
+---
 
 ## 🛠️ Tech Stack
 
-**Frontend Engineering:**
-- **React 18** (Functional Components, Custom Hooks)
+### Frontend Engineering
+- **React 19** (Functional Components, Custom Hooks)
 - **Redux Toolkit** (Global State, Slices, Thunks)
-- **React Router DOM v6** (Client-side Routing)
+- **React Router DOM v7** (Client-side Routing)
 - **Vanilla CSS3** (Custom Modules, CSS Variables, Advanced Grid/Flexbox)
-- **i18next / react-i18next** (Localization)
+- **i18next / react-i18next** (Dynamic Multi-Language Localization)
+- **React Quill New** (Rich Text Editor)
+- **DOMPurify** (Secure HTML Sanitization)
 
-**Backend Architecture:**
+### Backend Architecture
 - **Node.js & Express.js** (RESTful API Design)
 - **MongoDB & Mongoose** (Schema modeling, Cloud Atlas)
+
+---
 
 ## 🚀 Getting Started
 
 Follow these instructions to get a local copy up and running.
 
 ### Prerequisites
-- Node.js (v16+ recommended)
+- Node.js (v18+ recommended)
 - A running MongoDB instance or a MongoDB Atlas connection string.
 
 ### 1. Clone the Repository
