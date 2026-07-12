@@ -420,7 +420,7 @@ const NotesApp = ({ cardStyle }) => {
                                 {Object.keys(groupedNotes).map((groupKey) => (
                                     <div className="note-group" key={groupKey}>
                                         <h3 className="note-group-header">{t(groupKey)}</h3>
-                                        <div className="notes-grid">
+                                        <div className="preview-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px', width: '100%' }}>
                                             {groupedNotes[groupKey].map((note) => (
                                                 <NoteCard key={note._id} note={note} onDeleteRequest={(note) => setNoteToDelete(note)} onSelectToggle={(e) => handleNoteSelect(note._id, e)} cardStyle={cardStyle} />
                                             ))}
@@ -429,7 +429,7 @@ const NotesApp = ({ cardStyle }) => {
                                 ))}
                             </div>
                         ) : (
-                            <div className="notes-grid">
+                            <div className="preview-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px', width: '100%' }}>
                                 {filteredAndSortedNotes.map((note) => (
                                     <NoteCard key={note._id} note={note} onDeleteRequest={(note) => setNoteToDelete(note)} onSelectToggle={(e) => handleNoteSelect(note._id, e)} cardStyle={cardStyle} />
                                 ))}

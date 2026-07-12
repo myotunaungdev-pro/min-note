@@ -124,7 +124,7 @@ const SystemSettings = ({ cardStyle, setCardStyle }) => {
                                 <span>{t("settings.noteCardDesign")}</span>
                             </div>
                             <button className="btn-upgrade" onClick={() => setIsDesignModalOpen(true)} style={{ background: 'transparent', border: '1px solid var(--border-color)', color: 'inherit' }}>
-                                {t("settings.changeDesign", "Change Design")}
+                                {t('settings.changeDesign')}
                             </button>
                         </div>
                         <div className="preference-divider"></div>

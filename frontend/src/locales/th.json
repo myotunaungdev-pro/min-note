@@ -386,6 +386,7 @@
     "footerFeaturesLink": "คุณสมบัติ"
   },
   "settings": {
+    "changeDesign": "เปลี่ยนดีไซน์",
     "language": {
       "toggle": "สลับภาษา"
     },

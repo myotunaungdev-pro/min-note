@@ -385,6 +385,7 @@
     "footerFeaturesLink": "Features"
   },
   "settings": {
+    "changeDesign": "Change Design",
     "language": {
       "toggle": "Toggle Language"
     },

@@ -242,6 +242,7 @@ const NoteCard = ({ note, onDeleteRequest, onSelectToggle, cardStyle = 'default'
             <div className="theme-cyber">
                 <div className="note-card-wrap" onClick={(e) => e.stopPropagation()} onMouseDown={(e) => { if (e.shiftKey) e.preventDefault(); }}>
                     <div className={cyberClasses}>
+
                         <div className="note-spine">
                             <span className="note-date">
                                 <i className="bi bi-calendar3"></i>
@@ -250,6 +251,7 @@ const NoteCard = ({ note, onDeleteRequest, onSelectToggle, cardStyle = 'default'
                         </div>
 
                         <div className="note-main">
+
                             <span className="note-tag" style={note.tagColor ? { background: `linear-gradient(135deg, ${note.tagColor}, ${note.tagColor}CC)` } : {}}>
                                 {t(`tags.${note.tag?.toLowerCase()}`, note.tag)}
                             </span>
@@ -286,45 +288,49 @@ const NoteCard = ({ note, onDeleteRequest, onSelectToggle, cardStyle = 'default'
                                 <div className="note-content" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(note.content) }}></div>
                             </div>
 
-                            <div className="note-status" onClick={(e) => e.stopPropagation()}>
-                                <button
-                                    className={`status-btn ${note.isDone ? 'completed' : ''}`}
-                                    onClick={handleToggleDone}
-                                >
-                                    <i className={`bi ${note.isDone ? 'bi-check-circle-fill' : 'bi-circle'}`}></i>
-                                    <span>{note.isDone ? t("notes.card.done") : t("notes.card.pending")}</span>
-                                </button>
+                            <div className="note-card-footer">
+                                <div className="note-status" onClick={(e) => e.stopPropagation()}>
+                                    <button
+                                        className={`status-btn ${note.isDone ? 'completed' : ''}`}
+                                        onClick={handleToggleDone}
+                                    >
+                                        <i className={`bi ${note.isDone ? 'bi-check-circle-fill' : 'bi-circle'}`}></i>
+                                        <span>{note.isDone ? t("notes.card.done") : t("notes.card.pending")}</span>
+                                    </button>
+                                </div>
+
+                                <div className="note-actions" onClick={(e) => e.stopPropagation()}>
+                                    {activeView === 'trash' ? (
+                                        <>
+                                            <button className="action-btn restore" onClick={handleRestore} title={t('notes.card.restore')}>
+                                                <i className="bi bi-arrow-counterclockwise"></i>
+                                            </button>
+                                            <button className="action-btn delete-permanent" onClick={handlePermanentDeleteClick} title={t('notes.card.permanentDelete')}>
+                                                <i className="bi bi-trash-fill" style={{ color: '#ef4444' }}></i>
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button className="action-btn edit" onClick={handleEdit} title={t('notes.card.edit')}>
+                                                <i className="bi bi-pencil"></i>
+                                            </button>
+                                            <button
+                                                className={`action-btn ${note.isArchived ? 'unarchive' : 'archive'}`}
+                                                onClick={handleArchiveToggle}
+                                                title={note.isArchived ? t('notes.card.unarchive') : t('notes.card.archive')}
+                                            >
+                                                <i className={`bi ${note.isArchived ? 'bi-box-arrow-up' : 'bi-archive'}`}></i>
+                                            </button>
+                                            <button className="action-btn delete" onClick={handleDelete} title={t('notes.card.delete')}>
+                                                <i className="bi bi-trash3"></i>
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
                             </div>
+
                         </div>
 
-                        <div className="note-actions" onClick={(e) => e.stopPropagation()}>
-                            {activeView === 'trash' ? (
-                                <>
-                                    <button className="action-btn restore" onClick={handleRestore} title={t('notes.card.restore')}>
-                                        <i className="bi bi-arrow-counterclockwise"></i>
-                                    </button>
-                                    <button className="action-btn delete-permanent" onClick={handlePermanentDeleteClick} title={t('notes.card.permanentDelete')}>
-                                        <i className="bi bi-trash-fill" style={{ color: '#ef4444' }}></i>
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <button className="action-btn edit" onClick={handleEdit} title={t('notes.card.edit')}>
-                                        <i className="bi bi-pencil"></i>
-                                    </button>
-                                    <button
-                                        className={`action-btn ${note.isArchived ? 'unarchive' : 'archive'}`}
-                                        onClick={handleArchiveToggle}
-                                        title={note.isArchived ? t('notes.card.unarchive') : t('notes.card.archive')}
-                                    >
-                                        <i className={`bi ${note.isArchived ? 'bi-box-arrow-up' : 'bi-archive'}`}></i>
-                                    </button>
-                                    <button className="action-btn delete" onClick={handleDelete} title={t('notes.card.delete')}>
-                                        <i className="bi bi-trash3"></i>
-                                    </button>
-                                </>
-                            )}
-                        </div>
                     </div>
                 </div>
             </div>
