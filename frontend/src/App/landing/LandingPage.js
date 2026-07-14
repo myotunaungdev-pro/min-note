@@ -1,31 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import usePageTitle from '../../hooks/usePageTitle';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '../../components/common/LanguageSwitcher';
 import './LandingPage.css';
 
 const LandingPage = () => {
+    usePageTitle("Home");
     const { t } = useTranslation();
-    const [isLightMode, setIsLightMode] = useState(false);
-
-    useEffect(() => {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            setIsLightMode(true);
-            document.body.classList.add('light-theme');
-        }
-    }, []);
-
-    const toggleTheme = () => {
-        setIsLightMode(!isLightMode);
-        if (!isLightMode) {
-            document.body.classList.add('light-theme');
-            localStorage.setItem('theme', 'light');
-        } else {
-            document.body.classList.remove('light-theme');
-            localStorage.setItem('theme', 'dark');
-        }
-    };
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -44,24 +25,9 @@ const LandingPage = () => {
     }, []);
 
     return (
-        <div className="landing-page">
-            <nav className="landing-nav">
-                <div className="logo">
-                    <i className="bi bi-journal-richtext"></i>
-                    <span>PremiumNotes</span>
-                </div>
-                <div className="nav-actions">
-                    <LanguageSwitcher />
-                    <button className="btn-theme-toggle" onClick={toggleTheme} aria-label="Toggle Theme">
-                        <i className={`bi ${isLightMode ? 'bi-moon-stars' : 'bi-sun'}`}></i>
-                    </button>
-                    <Link to="/login" className="btn-login">{t("auth.login.submit")}</Link>
-                </div>
-            </nav>
-
-            <main className="landing-main">
-                {/* Hero Section */}
-                <section className="hero-section">
+        <React.Fragment>
+            {/* Hero Section */}
+            <section className="hero-section">
                     <div className="hero-content">
                         <h1 className="hero-title">{t("landing.hero.title")}</h1>
                         <p className="hero-subtitle">
@@ -185,75 +151,8 @@ const LandingPage = () => {
                             <i className="bi bi-arrow-right-short"></i>
                         </Link>
                     </div>
-                </section>
-            </main>
-
-            {/* Rich Footer */}
-            <footer className="landing-footer">
-                <div className="footer-grid">
-                    <div className="footer-brand">
-                        <div className="logo">
-                            <i className="bi bi-journal-richtext"></i>
-                            <span>PremiumNotes</span>
-                        </div>
-                        <p className="footer-desc">
-                            {t("landing.hero.subtitle1")}
-                        </p>
-                        <div className="social-links">
-                            <a href="#twitter"><i className="bi bi-twitter-x"></i></a>
-                            <a href="#github"><i className="bi bi-github"></i></a>
-                            <a href="#linkedin"><i className="bi bi-linkedin"></i></a>
-                        </div>
-                    </div>
-                    
-                    <div className="footer-col">
-                        <h4>{t("landing.product")}</h4>
-                        <ul>
-                            <li><a href="#features">{t("landing.footerFeaturesLink")}</a></li>
-                            <li><a href="#pricing">{t("landing.pricing")}</a></li>
-                            <li><a href="#integrations">{t("landing.integrations")}</a></li>
-                            <li><a href="#changelog">{t("landing.changelog")}</a></li>
-                        </ul>
-                    </div>
-
-                    <div className="footer-col">
-                        <h4>{t("landing.resources")}</h4>
-                        <ul>
-                            <li><a href="#help">{t("landing.helpCenter")}</a></li>
-                            <li><a href="#guides">{t("landing.guides")}</a></li>
-                            <li><a href="#api">{t("landing.aPIDocs")}</a></li>
-                            <li><a href="#community">{t("landing.community")}</a></li>
-                        </ul>
-                    </div>
-
-                    <div className="footer-col">
-                        <h4>{t("landing.company")}</h4>
-                        <ul>
-                            <li><a href="#about">{t("landing.aboutUs")}</a></li>
-                            <li><a href="#careers">{t("landing.careers")}</a></li>
-                            <li><a href="#blog">{t("landing.blog")}</a></li>
-                            <li><a href="#contact">{t("landing.contact")}</a></li>
-                        </ul>
-                    </div>
-
-                    <div className="footer-col">
-                        <h4>{t("landing.legal")}</h4>
-                        <ul>
-                            <li><a href="#privacy">{t("landing.privacyPolicy")}</a></li>
-                            <li><a href="#terms">{t("landing.termsOfService")}</a></li>
-                            <li><a href="#cookies">{t("landing.cookiePolicy")}</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div className="footer-bottom">
-                    <p>&copy; {new Date().getFullYear()} PremiumNotes. {t("landing.footer.rights")}</p>
-                    <div className="footer-locale">
-                        {t("landing.builtWithPrecision")}
-                    </div>
-                </div>
-            </footer>
-        </div>
+            </section>
+        </React.Fragment>
     );
 };
 

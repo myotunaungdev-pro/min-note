@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { setActiveView, toggleSidebar, setSidebarCollapsed } from '../store/notesSlice';
 import { useTranslation } from 'react-i18next';
 import Lightbox from '../../components/common/Lightbox';
+import { useSubscription } from '../../context/SubscriptionContext';
 import './Sidebar.css';
 
 const MOBILE_BREAKPOINT = 904;
@@ -16,6 +17,7 @@ const Sidebar = () => {
     const navigate = useNavigate();
     const { activeView, sidebarCollapsed, notes } = useSelector((state) => state.notes);
     const { user } = useSelector((state) => state.auth);
+    const { plan } = useSubscription();
     const [isMobile, setIsMobile] = useState(false);
     const [sidebarWidth, setSidebarWidth] = useState(260);
     const [isResizing, setIsResizing] = useState(false);
@@ -103,107 +105,100 @@ const Sidebar = () => {
 
     return (
         <aside className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''} ${isResizing ? 'is-resizing' : ''}`}>
-                <div className="sidebar-header">
-                    <div className="logo-container">
-                        <div className="logo-icon">
-                            <i className="bi bi-lightning-charge-fill"></i>
-                        </div>
-                        {!sidebarCollapsed && <span className="logo-text">{t("notes.header.myNotes")}</span>}
+            <div className="sidebar-header">
+                <div className="logo-container">
+                    <div className="logo-icon">
+                        <i className="bi bi-lightning-charge-fill"></i>
                     </div>
-                    <button className="toggle-btn" onClick={() => dispatch(toggleSidebar())} data-tooltip-id="global-tooltip" data-tooltip-content={t("notes.toggleSidebarCtrl")}>
-                        <i className={`bi ${sidebarCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'}`}></i>
-                    </button>
+                    {!sidebarCollapsed && <span className="logo-text">{t("notes.header.myNotes")}</span>}
                 </div>
+                <button className="toggle-btn" onClick={() => dispatch(toggleSidebar())} data-tooltip-id="global-tooltip" data-tooltip-content={t("notes.toggleSidebarCtrl")}>
+                    <i className={`bi ${sidebarCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'}`}></i>
+                </button>
+            </div>
 
-                <nav className="sidebar-nav">
+            <nav className="sidebar-nav">
+                <ul className="nav-list">
+                    {menuItems.map((item) => (
+                        <li key={item.id}>
+                            <button
+                                className={`nav-item ${activeView === item.id ? 'active' : ''}`}
+                                onClick={() => handleNavItemClick(item.id)}
+
+                            >
+                                <i className={`bi ${item.icon}`}></i>
+                                {!sidebarCollapsed && (
+                                    <>
+                                        <span className={`nav-label ${sidebarCollapsed ? 'hidden' : 'visible'}`}>
+                                            {item.label}
+                                        </span>
+                                        <span className="nav-count">{item.count !== undefined ? item.count : ''}</span>
+                                    </>
+                                )}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+
+                <div style={{ marginTop: 'auto' }}>
                     <ul className="nav-list">
-                        {menuItems.map((item) => (
-                            <li key={item.id}>
-                                <button
-                                    className={`nav-item ${activeView === item.id ? 'active' : ''}`}
-                                    onClick={() => handleNavItemClick(item.id)}
-                                    
-                                >
-                                    <i className={`bi ${item.icon}`}></i>
-                                    {!sidebarCollapsed && (
-                                        <>
-                                            <span className={`nav-label ${sidebarCollapsed ? 'hidden' : 'visible'}`}>
-                                                {item.label}
-                                            </span>
-                                            <span className="nav-count">{item.count !== undefined ? item.count : ''}</span>
-                                        </>
-                                    )}
-                                </button>
-                            </li>
-                        ))}
+                        <li>
+                            <button
+                                className={`nav-item ${activeView === 'settings' ? 'active' : ''}`}
+                                onClick={() => handleNavItemClick('settings')}
+                            >
+                                <i className="bi bi-gear"></i>
+                                {!sidebarCollapsed && (
+                                    <span className={`nav-label ${sidebarCollapsed ? 'hidden' : 'visible'}`}>
+                                        {t("settings.title")}
+                                    </span>
+                                )}
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                className={`nav-item ${activeView === 'help' ? 'active' : ''}`}
+                                onClick={() => handleNavItemClick('help')}
+                            >
+                                <i className="bi bi-question-circle"></i>
+                                {!sidebarCollapsed && (
+                                    <span className={`nav-label ${sidebarCollapsed ? 'hidden' : 'visible'}`}>
+                                        {t("notes.helpGuide")}
+                                    </span>
+                                )}
+                            </button>
+                        </li>
                     </ul>
-                    
-                    <div style={{ marginTop: 'auto' }}>
-                        <ul className="nav-list">
-                            <li>
-                                <button
-                                    className={`nav-item ${activeView === 'settings' ? 'active' : ''}`}
-                                    onClick={() => handleNavItemClick('settings')}
-                                >
-                                    <i className="bi bi-gear"></i>
-                                    {!sidebarCollapsed && (
-                                        <span className={`nav-label ${sidebarCollapsed ? 'hidden' : 'visible'}`}>
-                                            {t("settings.title")}
-                                        </span>
-                                    )}
-                                </button>
-                            </li>
-                            <li>
-                                <button
-                                    className={`nav-item ${activeView === 'help' ? 'active' : ''}`}
-                                    onClick={() => handleNavItemClick('help')}
-                                >
-                                    <i className="bi bi-question-circle"></i>
-                                    {!sidebarCollapsed && (
-                                        <span className={`nav-label ${sidebarCollapsed ? 'hidden' : 'visible'}`}>
-                                            {t("notes.helpGuide")}
-                                        </span>
-                                    )}
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
+                </div>
+            </nav>
 
-                <div className="sidebar-footer">
-                    <div className="user-profile clickable" onClick={() => navigate('/settings')}>
-                        <div 
-                            className={`avatar ${user?.avatarUrl ? '' : 'initials-avatar'} ${user?.avatarUrl ? 'avatar-lightbox-trigger' : ''}`}
-                            onClick={(e) => {
-                                if (user?.avatarUrl) {
-                                    e.stopPropagation();
-                                    setActiveLightboxImage(user.avatarUrl);
-                                }
-                            }}
-                            style={{ cursor: user?.avatarUrl ? 'pointer' : 'default' }}
-                        >
-                            {user?.avatarUrl ? (
-                                <img src={user.avatarUrl} alt="Avatar" className="avatar-image" />
-                            ) : (
-                                user?.name ? user.name.charAt(0).toUpperCase() : 'U'
-                            )}
-                        </div>
-                        {!sidebarCollapsed && (
-                            <div className="user-info">
-                                <span className="user-name">{user?.name || 'User'}</span>
-                                <span className="user-plan">{t("settings.plan.free")}</span>
-                            </div>
+            <div className="sidebar-footer">
+                <div className="user-profile clickable" onClick={() => navigate('/settings')} style={{ cursor: 'pointer' }}>
+                    <div
+                        className={`avatar ${user?.avatarUrl ? '' : 'initials-avatar'}`}
+                    >
+                        {user?.avatarUrl ? (
+                            <img src={user.avatarUrl} alt="Avatar" className="avatar-image" />
+                        ) : (
+                            user?.name ? user.name.charAt(0).toUpperCase() : 'U'
                         )}
                     </div>
+                    {!sidebarCollapsed && (
+                        <div className="user-info">
+                            <span className="user-name">{user?.name || 'User'}</span>
+                            <span className="user-plan">{plan === 'pro' ? t('sidebar.proPlan') : t("settings.plan.free")}</span>
+                        </div>
+                    )}
                 </div>
-                
-                {!isMobile && !sidebarCollapsed && (
-                    <div className="sidebar-resize-handle" onMouseDown={startResizing} />
-                )}
-                
-                {activeLightboxImage && (
-                    <Lightbox src={activeLightboxImage} onClose={() => setActiveLightboxImage(null)} />
-                )}
+            </div>
+
+            {!isMobile && !sidebarCollapsed && (
+                <div className="sidebar-resize-handle" onMouseDown={startResizing} />
+            )}
+
+            {activeLightboxImage && (
+                <Lightbox src={activeLightboxImage} onClose={() => setActiveLightboxImage(null)} />
+            )}
         </aside>
     );
 };

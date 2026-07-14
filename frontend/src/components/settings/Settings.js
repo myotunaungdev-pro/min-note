@@ -1,12 +1,13 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import PremiumFeatureModal from '../common/PremiumFeatureModal';
+import { useSubscription } from '../../context/SubscriptionContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { logout, updateUserProfile } from '../../App/store/authSlice';
 import Lightbox from '../common/Lightbox';
+import ManageSubscriptionModal from '../ManageSubscriptionModal';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Settings.css';
@@ -16,12 +17,13 @@ const Settings = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.auth);
+    const { plan } = useSubscription();
 
     const [isEditMode, setIsEditMode] = React.useState(false);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = React.useState(false);
     const [isAvatarModalOpen, setIsAvatarModalOpen] = React.useState(false);
     const [isLightboxOpen, setIsLightboxOpen] = React.useState(false);
-    const [isProModalOpen, setIsProModalOpen] = React.useState(false);
+    const [isManageSubOpen, setIsManageSubOpen] = React.useState(false);
     const fileInputRef = React.useRef(null);
 
     const [formData, setFormData] = React.useState({
@@ -111,17 +113,6 @@ const Settings = () => {
         return () => window.removeEventListener('keydown', handleSettingsKeyDown);
     }, [isLogoutModalOpen, confirmLogout]);
 
-    React.useEffect(() => {
-        const handleProModalKeyDown = (e) => {
-            if (e.key === 'Escape' && isProModalOpen) {
-                e.preventDefault();
-                setIsProModalOpen(false);
-            }
-        };
-
-        window.addEventListener('keydown', handleProModalKeyDown);
-        return () => window.removeEventListener('keydown', handleProModalKeyDown);
-    }, [isProModalOpen]);
 
     return (
         <div className="settings-page">
@@ -230,12 +221,16 @@ const Settings = () => {
                     <h2 className="section-title">{t("settings.profile.subscription")}</h2>
                     <div className="settings-card subscription-card">
                         <div className="subscription-header">
-                            <i className="bi bi-star text-muted"></i>
+                            <i className={`bi ${plan === 'pro' ? 'bi-star-fill text-warning' : 'bi-star text-muted'}`}></i>
                             <h3>{t("settings.plan.current")}</h3>
                         </div>
                         <div className="subscription-body">
-                            <p>{t("settings.plan.free")}</p>
-                            <button className="btn-upgrade" onClick={() => setIsProModalOpen(true)}>{t("settings.plan.upgrade")}</button>
+                            <p>{plan === 'pro' ? t("billing.proPlan") : t("settings.plan.free")}</p>
+                            {plan !== 'pro' ? (
+                                <button className="btn-upgrade" onClick={() => navigate('/upgrade')}>{t("settings.plan.upgrade")}</button>
+                            ) : (
+                                <button className="btn-upgrade" onClick={() => setIsManageSubOpen(true)}>{t("billing.manageSubscription")}</button>
+                            )}
                         </div>
                     </div>
                 </section>
@@ -316,14 +311,6 @@ const Settings = () => {
                 </div>
             )}
 
-            <PremiumFeatureModal 
-                isOpen={isProModalOpen} 
-                onClose={() => setIsProModalOpen(false)} 
-                title={t("settings.plan.proComingSoonTitle")}
-                description={t("settings.plan.proComingSoonDesc")}
-                buttonText={t("settings.closeEsc")}
-            />
-
             {isLightboxOpen && (
                 <Lightbox onClose={() => setIsLightboxOpen(false)}>
                     {user?.avatarUrl ? (
@@ -335,6 +322,11 @@ const Settings = () => {
                     )}
                 </Lightbox>
             )}
+
+            <ManageSubscriptionModal 
+                isOpen={isManageSubOpen} 
+                onClose={() => setIsManageSubOpen(false)} 
+            />
         </div>
     );
 };

@@ -9,10 +9,11 @@
     top: 0;
     flex-shrink: 0;
     z-index: var(--z-header, 50);
-    transition: padding 0.4s cubic-bezier(0.4, 0, 0.2, 1), /* ✨ Transition Engine */
-                background-color 0.4s ease, 
-                backdrop-filter 0.4s ease,
-                box-shadow 0.4s ease;
+    transition: padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        /* ✨ Transition Engine */
+        background-color 0.4s ease,
+        backdrop-filter 0.4s ease,
+        box-shadow 0.4s ease;
 }
 
 /* Glass effect ✨ Scroll Dynamic Premium Animation Effect */
@@ -24,7 +25,8 @@
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); 
 } */
 
-.app-header.scrolled .page-title { /* Scroll Dynamic */
+.app-header.scrolled .page-title {
+    /* Scroll Dynamic */
     font-size: 21px;
     transition: font-size 0.3s ease;
 }
@@ -42,7 +44,8 @@
     font-weight: 700;
     color: #f1f5f9;
     margin: 0;
-    transition: font-size 0.3s ease; /* Transition */
+    transition: font-size 0.3s ease;
+    /* Transition */
 }
 
 .header-center {
@@ -157,9 +160,9 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     min-width: 180px;
     z-index: calc(var(--z-header, 50) + 1);
-    position: absolute; 
-    right: 0;           
-    margin-top: 8px;    
+    position: absolute;
+    right: 0;
+    margin-top: 8px;
 }
 
 .dropdown-menu-dark .dropdown-item {
@@ -327,6 +330,7 @@
     border-bottom: 1px solid #00d4aa;
     padding: 23px 32px;
 }
+
 .clear-selection-btn {
     background: none;
     border: none;
@@ -335,11 +339,13 @@
     cursor: pointer;
     margin-right: 16px;
 }
+
 .selection-count {
     color: #f1f5f9;
     font-weight: 600;
     font-size: 18px;
 }
+
 .selection-actions button {
     background: rgba(255, 255, 255, 0.05);
     border: none;
@@ -350,6 +356,7 @@
     cursor: pointer;
     transition: all 0.2s;
 }
+
 .selection-actions button:hover {
     background: rgba(0, 212, 170, 0.2);
     color: #00d4aa;
@@ -369,14 +376,16 @@
     cursor: pointer;
     transition: all 0.2s ease;
 }
+
 .action-btn:hover {
     background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
 }
+
 .restore-btn:hover {
     background: rgba(0, 212, 170, 0.1);
     border-color: rgba(0, 212, 170, 0.3);
-    color: #00d4aa; 
+    color: #00d4aa;
 }
 
 .select-all-btn {
@@ -402,8 +411,15 @@
 
 /* Custom Confirm Modal */
 @keyframes customModalSlideIn {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .custom-modal-overlay {
@@ -504,6 +520,7 @@
         opacity: 0;
         transform: scale(0.95) translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: scale(1) translateY(0);

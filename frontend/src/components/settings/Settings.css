@@ -240,8 +240,15 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .profile-form .form-input {
@@ -514,8 +521,15 @@
 }
 
 @keyframes modalSlideIn {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .logout-modal-icon {
@@ -739,8 +753,15 @@
 }
 
 @keyframes scaleUp {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 @media (max-width: 904px) {
@@ -798,8 +819,8 @@
     cursor: pointer;
 }
 
-.react-datepicker__current-month, 
-.react-datepicker-time__header, 
+.react-datepicker__current-month,
+.react-datepicker-time__header,
 .react-datepicker-year-header {
     color: #f8fafc !important;
 }
@@ -817,17 +838,17 @@
     border-radius: 50% !important;
 }
 
-.react-datepicker__day--selected, 
-.react-datepicker__day--in-selecting-range, 
-.react-datepicker__day--in-range, 
-.react-datepicker__month-text--selected, 
-.react-datepicker__month-text--in-selecting-range, 
-.react-datepicker__month-text--in-range, 
-.react-datepicker__quarter-text--selected, 
-.react-datepicker__quarter-text--in-selecting-range, 
-.react-datepicker__quarter-text--in-range, 
-.react-datepicker__year-text--selected, 
-.react-datepicker__year-text--in-selecting-range, 
+.react-datepicker__day--selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range,
+.react-datepicker__month-text--selected,
+.react-datepicker__month-text--in-selecting-range,
+.react-datepicker__month-text--in-range,
+.react-datepicker__quarter-text--selected,
+.react-datepicker__quarter-text--in-selecting-range,
+.react-datepicker__quarter-text--in-range,
+.react-datepicker__year-text--selected,
+.react-datepicker__year-text--in-selecting-range,
 .react-datepicker__year-text--in-range {
     background-color: #10b981 !important;
     color: #fff !important;
@@ -841,26 +862,26 @@
 
 .react-datepicker__year-read-view--down-arrow,
 .react-datepicker__month-read-view--down-arrow,
-.react-datepicker__month-year-read-view--down-arrow, 
+.react-datepicker__month-year-read-view--down-arrow,
 .react-datepicker__navigation-icon::before {
     border-color: #94a3b8 !important;
 }
 
-.react-datepicker__year-dropdown, 
-.react-datepicker__month-dropdown, 
+.react-datepicker__year-dropdown,
+.react-datepicker__month-dropdown,
 .react-datepicker__month-year-dropdown {
     background-color: #1f2937 !important;
     border: 1px solid #374151 !important;
 }
 
-.react-datepicker__year-option, 
-.react-datepicker__month-option, 
+.react-datepicker__year-option,
+.react-datepicker__month-option,
 .react-datepicker__month-year-option {
     color: #e2e8f0 !important;
 }
 
-.react-datepicker__year-option:hover, 
-.react-datepicker__month-option:hover, 
+.react-datepicker__year-option:hover,
+.react-datepicker__month-option:hover,
 .react-datepicker__month-year-option:hover {
     background-color: rgba(255, 255, 255, 0.1) !important;
 }
@@ -872,7 +893,8 @@
 .gallery-container {
     display: flex;
     flex-direction: column;
-    gap: 25px; /* Gap between images */
+    gap: 25px;
+    /* Gap between images */
     padding: 40px;
 }
 
@@ -882,7 +904,7 @@
 .gallery-item {
     display: flex;
     align-items: center;
-    gap: 25px; 
+    gap: 25px;
     cursor: pointer;
     position: relative;
 }
@@ -890,12 +912,12 @@
 /* Alternating zigzag positioning */
 .gallery-item:nth-child(odd) {
     transform: translateX(-55px);
-    flex-direction: row; 
+    flex-direction: row;
 }
 
 .gallery-item:nth-child(even) {
     transform: translateX(55px);
-    flex-direction: row-reverse; 
+    flex-direction: row-reverse;
 }
 
 /* Hide the default radio buttons */
@@ -910,9 +932,10 @@
     aspect-ratio: 4 / 3;
     border-radius: 20px;
     overflow: hidden;
-    background-color: #23262b; 
+    background-color: #23262b;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    border: 2px solid transparent; /* Transparent border prepared for active state */
+    border: 2px solid transparent;
+    /* Transparent border prepared for active state */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -921,7 +944,8 @@
     height: 100%;
     object-fit: contain;
     display: block;
-    opacity: 0.8; /* Slightly dimmed before selection */
+    opacity: 0.8;
+    /* Slightly dimmed before selection */
     transition: opacity 0.3s ease;
 }
 
@@ -942,7 +966,8 @@
     gap: 12px;
     font-size: 18px;
     font-weight: 500;
-    color: #9ca3af; /* Dimmed text color before selection */
+    color: #9ca3af;
+    /* Dimmed text color before selection */
     letter-spacing: 0.5px;
     transition: all 0.3s ease;
 }
@@ -952,7 +977,8 @@
 }
 
 .item-label i {
-    font-size: 20px; /* Icon size */
+    font-size: 20px;
+    /* Icon size */
 }
 
 /* ================================================== */
@@ -960,26 +986,28 @@
 /* ================================================== */
 
 /* 1. Image box glows and scales up slightly when selected */
-.gallery-item input[type="radio"]:checked ~ .image-box {
-    border: 2px solid #00d4aa; /* Cyber Accent Color */
+.gallery-item input[type="radio"]:checked~.image-box {
+    border: 2px solid #00d4aa;
+    /* Cyber Accent Color */
     box-shadow: 0 0 25px rgba(0, 212, 170, 0.25), 0 15px 35px rgba(0, 0, 0, 0.5);
-    transform: scale(1.03); /* Image pops out slightly */
+    transform: scale(1.03);
+    /* Image pops out slightly */
 }
 
 /* Image becomes fully opaque when selected */
-.gallery-item input[type="radio"]:checked ~ .image-box img {
+.gallery-item input[type="radio"]:checked~.image-box img {
     opacity: 1;
 }
 
 /* 2. Text and icon glow when selected */
-.gallery-item input[type="radio"]:checked ~ .item-label {
+.gallery-item input[type="radio"]:checked~.item-label {
     color: #ffffff;
     font-weight: 600;
     text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
 /* Change icon color when selected */
-.gallery-item input[type="radio"]:checked ~ .item-label i {
+.gallery-item input[type="radio"]:checked~.item-label i {
     color: #00d4aa;
     text-shadow: 0 0 15px rgba(0, 212, 170, 0.5);
 }
@@ -991,7 +1019,8 @@
 @media (max-width: 768px) {
     .gallery-container {
         padding: 20px;
-        gap: 40px; /* Increased gap between items on mobile */
+        gap: 40px;
+        /* Increased gap between items on mobile */
     }
 
     /* Remove zigzag and stack vertically */
@@ -999,7 +1028,8 @@
     .gallery-item:nth-child(odd),
     .gallery-item:nth-child(even) {
         transform: none;
-        flex-direction: column; /* Image on top, text on bottom */
+        flex-direction: column;
+        /* Image on top, text on bottom */
         gap: 16px;
         align-items: center;
     }
@@ -1018,8 +1048,7 @@
     }
 
     /* Reduce the active scale on mobile to prevent overflow */
-    .gallery-item input[type="radio"]:checked ~ .image-box {
+    .gallery-item input[type="radio"]:checked~.image-box {
         transform: scale(1.02);
     }
 }
-

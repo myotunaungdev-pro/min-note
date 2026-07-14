@@ -1,0 +1,46 @@
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
+
+const Header = () => {
+    const { t } = useTranslation();
+    const [isLightMode, setIsLightMode] = useState(false);
+
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            setIsLightMode(true);
+            document.body.classList.add('light-theme');
+        }
+    }, []);
+
+    const toggleTheme = () => {
+        setIsLightMode(!isLightMode);
+        if (!isLightMode) {
+            document.body.classList.add('light-theme');
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.body.classList.remove('light-theme');
+            localStorage.setItem('theme', 'dark');
+        }
+    };
+
+    return (
+        <nav className="landing-nav">
+            <Link to="/" className="logo" style={{ textDecoration: 'none' }}>
+                <i className="bi bi-journal-richtext"></i>
+                <span>PremiumNotes</span>
+            </Link>
+            <div className="nav-actions">
+                <LanguageSwitcher />
+                <button className="btn-theme-toggle" onClick={toggleTheme} aria-label="Toggle Theme">
+                    <i className={`bi ${isLightMode ? 'bi-moon-stars' : 'bi-sun'}`}></i>
+                </button>
+                <Link to="/login" className="btn-login">{t("auth.login.submit")}</Link>
+            </div>
+        </nav>
+    );
+};
+
+export default Header;

@@ -775,9 +775,11 @@
     background: transparent;
 }
 
+.tag-option.selected,
 .tag-option:hover {
     border-color: var(--tag-color);
     transform: translateY(-1px);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--tag-color) 25%, transparent);
 }
 
 .tag-dot {

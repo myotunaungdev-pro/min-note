@@ -247,6 +247,7 @@
     "lyrics": "Lyrics"
   },
   "auth": {
+    "123456": "123456",
     "errors": {
       "user_exists": "User already exists with this email",
       "user_not_found": "User not found",
@@ -258,7 +259,6 @@
       "email_taken": "Email is already taken",
       "forgot_password_failed": "Failed to process forgot password request"
     },
-    "123456": "123456",
     "login": {
       "title": "Login",
       "noAccount": "Don't have an account?",
@@ -425,7 +425,15 @@
       "free": "Free Plan",
       "upgrade": "Upgrade to Pro",
       "proComingSoonTitle": "Coming Soon",
-      "proComingSoonDesc": "Pro features are currently under development. We are working hard to bring you advanced capabilities and premium tools in future updates. Stay tuned!"
+      "proComingSoonDesc": "Pro features are currently under development. We are working hard to bring you advanced capabilities and premium tools in future updates. Stay tuned!",
+      "redirectStripe": "Redirecting to Stripe Billing Portal...",
+      "manageSubscription": "Manage Subscription",
+      "currentPlan": "Current Plan",
+      "nextBillingDate": "Next Billing Date",
+      "cancelWarning": "Are you sure you want to cancel? You will lose access to all premium features at the end of your current billing cycle.",
+      "cancelSubscriptionBtn": "Cancel Subscription",
+      "cancelSuccess": "Subscription successfully canceled.",
+      "cancelError": "Failed to cancel subscription."
     },
     "logout": {
       "title": "Leaving so soon?",
@@ -490,5 +498,98 @@
       "title": "Image Text Recognition",
       "desc": "Extract text from your uploaded images instantly (Coming Soon!)."
     }
+  },
+  "featuresPage": {
+    "heroTitle": "Powerful Features for Modern Thinkers",
+    "heroSubtitle": "Experience a seamless blend of aesthetics and productivity. PremiumNotes offers cutting-edge tools designed to elevate your workflow.",
+    "themeTitle": "Custom Note Themes",
+    "themeDesc": "Personalize your workspace with our exclusive <1>Cyber</1> and <3>Minimal</3> card designs. Choose a layout that perfectly resonates with your creative energy.",
+    "i18nTitle": "Seamless Localization",
+    "i18nDesc": "Built for a global audience. Experience instant, dynamic language switching between <1>English, Burmese, and Thai</1> with state-of-the-art i18n integration.",
+    "tagsTitle": "Fluid Organization",
+    "tagsDesc": "Keep your thoughts neatly categorized. Utilize beautifully color-coded Tags featuring our signature glowing UI, allowing for lightning-fast and seamless filtering.",
+    "ocrTitle": "Image Text Recognition",
+    "ocrComingSoon": "Coming Soon",
+    "ocrDesc": "Supercharge your note-taking with built-in OCR. Instantly extract text from your uploaded images and seamlessly convert them into editable rich text."
+  },
+  "pricingPage": {
+    "title": "Pricing",
+    "subtitle": "Choose the perfect plan for your note-taking needs. No hidden fees.",
+    "billing": {
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "save": "Save 20%"
+    },
+    "tiers": {
+      "free": {
+        "name": "Free",
+        "price": "$0",
+        "period": "Forever",
+        "desc": "Perfect for getting started",
+        "features": [
+          "Up to 100 notes",
+          "Basic themes",
+          "Community support"
+        ],
+        "button": "Get Started"
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "$8",
+        "period": "/month",
+        "desc": "For power users",
+        "features": [
+          "Unlimited notes",
+          "All premium themes",
+          "Image Text Recognition (OCR)",
+          "Priority support"
+        ],
+        "button": "Upgrade to Pro"
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "price": "Custom",
+        "period": "/month",
+        "desc": "For teams and businesses",
+        "features": [
+          "Everything in Pro",
+          "Advanced collaboration",
+          "Custom branding",
+          "24/7 dedicated support"
+        ],
+        "button": "Contact Sales"
+      }
+    },
+    "currentPlan": "Current Plan",
+    "authWarning": "Please sign up or log in first to upgrade"
+  },
+  "checkout": {
+    "errors": {
+      "fillAll": "Please fill in all fields",
+      "invalidCard": "Please enter valid test card details",
+      "failed": "Payment failed"
+    },
+    "title": "Upgrade to Pro",
+    "subtitle": "Enter your payment details to continue",
+    "cardNumber": "Card Number",
+    "expiry": "Expiry Date",
+    "cvv": "CVV",
+    "payNow": "Pay Now",
+    "processing": "Processing Payment...",
+    "successTitle": "Payment Successful!",
+    "successDesc": "Welcome to PremiumNotes Pro."
+  },
+  "billing": {
+    "manageSubscription": "Manage Subscription",
+    "currentPlan": "Current Plan",
+    "proPlan": "Pro Plan ✨",
+    "nextBillingDate": "Next Billing Date",
+    "cancelWarning": "Are you sure you want to cancel? You will lose access to all premium features at the end of your current billing cycle.",
+    "cancelSubscriptionBtn": "Cancel Subscription",
+    "cancelSuccess": "Subscription successfully canceled.",
+    "cancelError": "Failed to cancel subscription."
+  },
+  "sidebar": {
+    "proPlan": "Pro Plan ✨"
   }
 }
