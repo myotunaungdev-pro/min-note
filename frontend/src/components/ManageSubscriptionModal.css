@@ -59,6 +59,13 @@
     justify-content: flex-end;
 }
 
+.manage-btn-group {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+}
+
 .manage-btn-cancel {
     width: 100%;
     padding: 0.875rem;
@@ -86,4 +93,32 @@
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+}
+
+.manage-btn-keep {
+    width: 100%;
+    padding: 0.875rem;
+    background: linear-gradient(135deg, #00d4aa, #3b82f6);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+}
+
+.manage-btn-keep:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 212, 170, 0.5);
+}
+
+.manage-btn-keep:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
 }

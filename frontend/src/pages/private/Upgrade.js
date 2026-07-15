@@ -10,6 +10,7 @@ const Upgrade = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+    const [selectedPlanType, setSelectedPlanType] = useState('monthly');
     usePageTitle("Upgrade to Pro");
 
     return (
@@ -24,13 +25,17 @@ const Upgrade = () => {
 
             <div className="w-full" style={{ paddingTop: '20px' }}>
                 <div className="pricing-page-container" style={{ padding: 0, minHeight: 'auto' }}>
-                    <PricingCards onUpgradeClick={() => setIsCheckoutOpen(true)} />
+                    <PricingCards onUpgradeClick={(planType) => {
+                        setSelectedPlanType(planType);
+                        setIsCheckoutOpen(true);
+                    }} />
                 </div>
             </div>
 
             <CheckoutModal 
                 isOpen={isCheckoutOpen} 
                 onClose={() => setIsCheckoutOpen(false)} 
+                planType={selectedPlanType}
             />
         </div>
     );

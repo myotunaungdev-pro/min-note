@@ -6,7 +6,7 @@ import { useSubscription } from '../context/SubscriptionContext';
 import { processPayment } from '../services/paymentService';
 import './CheckoutModal.css';
 
-const CheckoutModal = ({ isOpen, onClose }) => {
+const CheckoutModal = ({ isOpen, onClose, planType = 'monthly' }) => {
     const { t } = useTranslation();
     const { upgradeToPro } = useSubscription();
     const [cardDetails, setCardDetails] = useState({ number: '', expiry: '', cvv: '' });
@@ -42,7 +42,7 @@ const CheckoutModal = ({ isOpen, onClose }) => {
             const response = await processPayment(cardDetails);
             if (response.success) {
                 setStatus('success');
-                upgradeToPro();
+                upgradeToPro(planType);
 
                 // Auto close after showing success for a moment
                 setTimeout(() => {

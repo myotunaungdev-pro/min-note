@@ -512,6 +512,14 @@
     "ocrComingSoon": "Coming Soon",
     "ocrDesc": "Supercharge your note-taking with built-in OCR. Instantly extract text from your uploaded images and seamlessly convert them into editable rich text."
   },
+  "enterprise": {
+    "helperText": "Tailored to your business needs",
+    "cta": "Contact Sales"
+  },
+  "pricing": {
+    "perMonth": "/month",
+    "perYear": "/year"
+  },
   "pricingPage": {
     "title": "Pricing",
     "subtitle": "Choose the perfect plan for your note-taking needs. No hidden fees.",
@@ -587,7 +595,10 @@
     "cancelWarning": "Are you sure you want to cancel? You will lose access to all premium features at the end of your current billing cycle.",
     "cancelSubscriptionBtn": "Cancel Subscription",
     "cancelSuccess": "Subscription successfully canceled.",
-    "cancelError": "Failed to cancel subscription."
+    "cancelError": "Failed to cancel subscription.",
+    "confirmCancelWarning": "This action cannot be undone. Are you absolutely sure you want to lose your Pro benefits?",
+    "keepProPlan": "Keep Pro Plan",
+    "yesCancel": "Yes, Cancel"
   },
   "sidebar": {
     "proPlan": "Pro Plan ✨"

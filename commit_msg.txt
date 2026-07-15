@@ -1,5 +1,0 @@
-feat(billing): implement mock checkout flow, mobile UI fixes, and global i18n
-
-- The mock payment/cancellation modals & contexts.
-- The exact CSS positioning and comprehensive mobile responsiveness fixes (card stacking, modal isolation, typography).
-- The massive i18next expansion and minimalist header adjustments across en.json, my.json, and th.json.

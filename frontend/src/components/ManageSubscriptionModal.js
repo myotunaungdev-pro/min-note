@@ -10,16 +10,22 @@ import './ManageSubscriptionModal.css';
 
 const ManageSubscriptionModal = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
-    const { cancelSubscription: revertToFree } = useSubscription();
+    const { cancelSubscription: revertToFree, nextBillingDate } = useSubscription();
     const [status, setStatus] = useState('idle'); // idle | processing
+    const [isConfirmingCancel, setIsConfirmingCancel] = useState(false);
 
     const handleClose = () => {
         if (status === 'processing') return;
+        setIsConfirmingCancel(false);
         onClose();
         setStatus('idle');
     };
 
-    const handleCancel = async () => {
+    const handleCancelClick = () => {
+        setIsConfirmingCancel(true);
+    };
+
+    const handleConfirmCancel = async () => {
         setStatus('processing');
         try {
             const response = await cancelSubscription();
@@ -34,8 +40,9 @@ const ManageSubscriptionModal = ({ isOpen, onClose }) => {
         }
     };
 
-    const nextBillingDate = new Date();
-    nextBillingDate.setMonth(nextBillingDate.getMonth() + 1);
+    const formattedNextBillingDate = nextBillingDate 
+        ? new Date(nextBillingDate).toLocaleDateString() 
+        : new Date().toLocaleDateString();
 
     return (
         <AnimatePresence>
@@ -71,28 +78,47 @@ const ManageSubscriptionModal = ({ isOpen, onClose }) => {
                                 </div>
                                 <div className="sub-detail-row">
                                     <span className="sub-detail-label">{t('billing.nextBillingDate')}</span>
-                                    <span className="sub-detail-value">{nextBillingDate.toLocaleDateString()}</span>
+                                    <span className="sub-detail-value">{formattedNextBillingDate}</span>
                                 </div>
                             </div>
 
                             <div className="manage-sub-warning">
                                 <AlertTriangle size={20} className="warning-icon" />
-                                <p>{t('billing.cancelWarning')}</p>
+                                <p>{isConfirmingCancel ? t('billing.confirmCancelWarning') : t('billing.cancelWarning')}</p>
                             </div>
                         </div>
 
                         <div className="checkout-footer manage-footer">
-                            <button
-                                className="manage-btn-cancel"
-                                onClick={handleCancel}
-                                disabled={status === 'processing'}
-                            >
-                                {status === 'processing' ? (
-                                    <div className="spinner-small"></div>
-                                ) : (
-                                    t('billing.cancelSubscriptionBtn')
-                                )}
-                            </button>
+                            {isConfirmingCancel ? (
+                                <div className="manage-btn-group">
+                                    <button
+                                        className="manage-btn-keep flex-1"
+                                        onClick={() => setIsConfirmingCancel(false)}
+                                        disabled={status === 'processing'}
+                                    >
+                                        {t('billing.keepProPlan')}
+                                    </button>
+                                    <button
+                                        className="manage-btn-cancel flex-1"
+                                        onClick={handleConfirmCancel}
+                                        disabled={status === 'processing'}
+                                    >
+                                        {status === 'processing' ? (
+                                            <div className="spinner-small"></div>
+                                        ) : (
+                                            t('billing.yesCancel')
+                                        )}
+                                    </button>
+                                </div>
+                            ) : (
+                                <button
+                                    className="manage-btn-cancel"
+                                    onClick={handleCancelClick}
+                                    disabled={status === 'processing'}
+                                >
+                                    {t('billing.cancelSubscriptionBtn')}
+                                </button>
+                            )}
                         </div>
                     </motion.div>
                 </motion.div>
