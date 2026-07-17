@@ -23,14 +23,10 @@ const Upgrade = () => {
                 <h1 className="page-title">{t("pricingPage.title")}</h1>
             </div>
 
-            <div className="w-full" style={{ paddingTop: '20px' }}>
-                <div className="pricing-page-container" style={{ padding: 0, minHeight: 'auto' }}>
-                    <PricingCards onUpgradeClick={(planType) => {
-                        setSelectedPlanType(planType);
-                        setIsCheckoutOpen(true);
-                    }} />
-                </div>
-            </div>
+            <PricingCards onUpgradeClick={(planType) => {
+                setSelectedPlanType(planType);
+                setIsCheckoutOpen(true);
+            }} />
 
             <CheckoutModal 
                 isOpen={isCheckoutOpen} 

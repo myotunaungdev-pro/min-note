@@ -42,7 +42,7 @@ const PricingCards = ({ onUpgradeClick }) => {
     };
 
     return (
-        <>
+        <div className="w-full max-w-7xl mx-auto px-4">
             <div className="pricing-controls-wrapper">
                 <div className="currency-selector">
                     {['USD', 'THB', 'MMK'].map((c) => (
@@ -79,7 +79,7 @@ const PricingCards = ({ onUpgradeClick }) => {
                         <span className="pricing-card-period">{t('pricingPage.tiers.free.period')}</span>
                     </div>
                     <p className="pricing-card-desc">{t('pricingPage.tiers.free.desc')}</p>
-                    
+
                     <ul className="pricing-card-features">
                         {t('pricingPage.tiers.free.features', { returnObjects: true }).map((feature, idx) => (
                             <li key={idx} className="pricing-card-feature">
@@ -88,8 +88,8 @@ const PricingCards = ({ onUpgradeClick }) => {
                             </li>
                         ))}
                     </ul>
-                    
-                    <button 
+
+                    <button
                         className="pricing-card-btn pricing-btn-outline"
                         onClick={() => navigate('/signup')}
                     >
@@ -105,7 +105,7 @@ const PricingCards = ({ onUpgradeClick }) => {
                         <span className="pricing-card-period">{isYearly ? t('pricing.perYear') : t('pricing.perMonth')}</span>
                     </div>
                     <p className="pricing-card-desc">{t('pricingPage.tiers.pro.desc')}</p>
-                    
+
                     <ul className="pricing-card-features">
                         {t('pricingPage.tiers.pro.features', { returnObjects: true }).map((feature, idx) => (
                             <li key={idx} className="pricing-card-feature">
@@ -114,8 +114,8 @@ const PricingCards = ({ onUpgradeClick }) => {
                             </li>
                         ))}
                     </ul>
-                    
-                    <button 
+
+                    <button
                         className="pricing-card-btn pricing-btn-filled"
                         onClick={() => {
                             if (plan !== 'pro' && onUpgradeClick) {
@@ -135,7 +135,7 @@ const PricingCards = ({ onUpgradeClick }) => {
                         <span className="text-gray-400 text-sm" style={{ color: '#9ca3af', fontSize: '0.875rem' }}>{t('enterprise.helperText')}</span>
                     </div>
                     <p className="pricing-card-desc">{t('pricingPage.tiers.enterprise.desc')}</p>
-                    
+
                     <ul className="pricing-card-features">
                         {t('pricingPage.tiers.enterprise.features', { returnObjects: true }).map((feature, idx) => (
                             <li key={idx} className="pricing-card-feature">
@@ -144,8 +144,8 @@ const PricingCards = ({ onUpgradeClick }) => {
                             </li>
                         ))}
                     </ul>
-                    
-                    <button 
+
+                    <button
                         className="pricing-card-btn pricing-btn-outline"
                         onClick={() => navigate('/contact')}
                     >
@@ -154,7 +154,7 @@ const PricingCards = ({ onUpgradeClick }) => {
                 </div>
             </div>
 
-        </>
+        </div>
     );
 };
 
