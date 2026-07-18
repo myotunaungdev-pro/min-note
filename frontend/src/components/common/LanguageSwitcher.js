@@ -51,19 +51,19 @@ const LanguageSwitcher = () => {
                 <li>
                     <button
                         type="button"
-                        className={`lang-dropdown-item ${i18n.language === 'my' ? 'active' : ''}`}
-                        onClick={() => changeLang('my')}
+                        className={`lang-dropdown-item ${i18n.language === 'th' ? 'active' : ''}`}
+                        onClick={() => changeLang('th')}
                     >
-                        မြန်မာ
+                        ไทย
                     </button>
                 </li>
                 <li>
                     <button
                         type="button"
-                        className={`lang-dropdown-item ${i18n.language === 'th' ? 'active' : ''}`}
-                        onClick={() => changeLang('th')}
+                        className={`lang-dropdown-item ${i18n.language === 'my' ? 'active' : ''}`}
+                        onClick={() => changeLang('my')}
                     >
-                        ไทย
+                        မြန်မာ
                     </button>
                 </li>
             </ul>

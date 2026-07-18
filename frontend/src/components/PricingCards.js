@@ -42,7 +42,7 @@ const PricingCards = ({ onUpgradeClick }) => {
     };
 
     return (
-        <div className="w-full max-w-7xl mx-auto px-4">
+        <div className="w-full max-w-7xl mx-auto px-1">
             <div className="pricing-controls-wrapper">
                 <div className="currency-selector">
                     {['USD', 'THB', 'MMK'].map((c) => (
