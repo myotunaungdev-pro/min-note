@@ -569,3 +569,18 @@ article.reader-page.bg-theme-default {
 .note-card.bg-theme-default {
     background: rgba(30, 41, 59, 0.5) !important;
 }
+
+/* Default for Desktop (Preserves original large cards) */
+.preview-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+    gap: 1.5rem !important;
+    width: 100% !important;
+}
+
+/* Specific fix for Tablets to keep 2 columns a bit longer */
+@media (max-width: 768px) {
+    .preview-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+    }
+}

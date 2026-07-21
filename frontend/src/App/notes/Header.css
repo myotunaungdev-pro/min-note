@@ -238,7 +238,9 @@
     }
 
     .search-container {
-        max-width: 100%;
+        max-width: 480px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
 
     .header-right {

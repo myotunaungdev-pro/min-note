@@ -9,7 +9,6 @@
     /* transition: all 0.2s ease; */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
-    min-width: 0;
     display: flex;
     flex-direction: column;
 }
@@ -432,7 +431,7 @@
 .theme-cyber .note-card-wrap {
     width: 100%;
     max-width: 400px;
-    padding: 14px 6px 50px 6px;
+    padding: 14px 6px 30px 6px;
 }
 
 .theme-cyber .note-card {
@@ -832,7 +831,7 @@
 /* ---------- Fluid breakpoints ---------- */
 @media (max-width: 904px) {
     .theme-cyber .note-card-wrap {
-        padding: 10px 4px 76px 4px;
+        padding: 10px 4px 30px 4px;
     }
 
     .theme-cyber .note-actions {
