@@ -1,4 +1,6 @@
 {
+  "password_reminder": "💡 Tip: Please save your password securely in a password manager or a safe physical notebook.",
+  "verifying": "Verifying...",
   "link": {
     "visitUrl": "Visit URL:",
     "edit": "Edit",
@@ -51,7 +53,7 @@
     "A_premium__fully_localized_note_taking_experience_designed_for_productivity__Seamlessly_organize_your_thoughts_with_multi_language_support_and_a_gorgeous_dark_theme_": "A premium, fully localized note-taking experience designed for productivity. Seamlessly organize your thoughts with multi-language support and a gorgeous dark theme.",
     "Secure_Cloud_Sync": "Secure Cloud Sync",
     "Your_notes__everywhere_you_go": "Your notes, everywhere you go",
-    "Never_lose_an_idea_again__PremiumNotes_instantly_syncs_across_all_your_devices_with_military_grade_encryption_to_keep_your_personal_data_completely_private_and_secure_": "Never lose an idea again. PremiumNotes instantly syncs across all your devices with military-grade encryption to keep your personal data completely private and secure.",
+    "Never_lose_an_idea_again__PremiumNotes_instantly_syncs_across_all_your_devices_with_military_grade_encryption_to_keep_your_personal_data_completely_private_and_secure_": "Never lose an idea again. MIN NOTE instantly syncs across all your devices with military-grade encryption to keep your personal data completely private and secure.",
     "Rich_Text_Editing": "Rich Text Editing",
     "Format_exactly_how_you_think": "Format exactly how you think",
     "Use_our_premium_Quill_editor_to_add_beautiful_formatting__lists__code_blocks__and_dynamic_styling__Everything_feels_native_and_incredibly_responsive_": "Use our premium Quill editor to add beautiful formatting, lists, code blocks, and dynamic styling. Everything feels native and incredibly responsive.",
@@ -62,7 +64,7 @@
     "Access_Anywhere": "Access Anywhere",
     "Pick_up_exactly_where_you_left_off_on_your_phone__tablet__or_desktop_browser_": "Pick up exactly where you left off on your phone, tablet, or desktop browser.",
     "Loved_by_creators_worldwide": "Loved by creators worldwide",
-    "PremiumNotes_changed_how_I_organize_my_thoughts_completely__The_multi_language_support_is_unmatched_for_my_international_team_": "PremiumNotes changed how I organize my thoughts completely. The multi-language support is unmatched for my international team.",
+    "PremiumNotes_changed_how_I_organize_my_thoughts_completely__The_multi_language_support_is_unmatched_for_my_international_team_": "MIN NOTE changed how I organize my thoughts completely. The multi-language support is unmatched for my international team.",
     "Alice_Chen": "Alice Chen",
     "Product_Designer": "Product Designer",
     "The_dark_mode_aesthetic_combined_with_the_buttery_smooth_React_UI_makes_writing_a_joy_instead_of_a_chore_": "The dark mode aesthetic combined with the buttery smooth React UI makes writing a joy instead of a chore.",
@@ -180,8 +182,8 @@
     "newNoteCtrlN": "New Note (Ctrl + N)",
     "canvas": "canvas",
     "2d": "2d",
-    "replaceOriginal": "Replace Original",
-    "saveAsCopy": "Save as Copy",
+    "replaceOriginal": "Replace",
+    "saveAsCopy": "Save Copy",
     "miscKey799": "",
     "webcamCapture": "Webcam Capture",
     "capture": "Capture",
@@ -372,12 +374,12 @@
     "termsOfService": "Terms of Service",
     "cookiePolicy": "Cookie Policy",
     "aPremiumFullyLocaliz": "A premium, fully localized note-taking experience designed for productivity. Seamlessly organize your thoughts with multi-language support and a gorgeous dark theme.",
-    "neverLoseAnIdeaAgain": "Never lose an idea again. PremiumNotes instantly syncs across all your devices with military-grade encryption to keep your personal data completely private and secure.",
+    "neverLoseAnIdeaAgain": "Never lose an idea again. MIN NOTE instantly syncs across all your devices with military-grade encryption to keep your personal data completely private and secure.",
     "useOurPremiumQuillEd": "Use our premium Quill editor to add beautiful formatting, lists, code blocks, and dynamic styling. Everything feels native and incredibly responsive.",
     "createYourFreePremiu": "Create your free Premium Workspace in less than a minute. No credit card required.",
     "startTypingYourThoug": "Start typing your thoughts instantly into our gorgeous glassmorphic editor.",
     "pickUpExactlyWhereYo": "Pick up exactly where you left off on your phone, tablet, or desktop browser.",
-    "premiumNotesChangedH": "PremiumNotes changed how I organize my thoughts completely. The multi-language support is unmatched for my international team.",
+    "premiumNotesChangedH": "MIN NOTE changed how I organize my thoughts completely. The multi-language support is unmatched for my international team.",
     "theDarkModeAesthetic": "The dark mode aesthetic combined with the buttery smooth React UI makes writing a joy instead of a chore.",
     "iLoveHowFastTheSearc": "I love how fast the search works. I can find any note from 2 years ago instantly. Highly recommend upgrading to Pro.",
     "joinThousandsOfProfe": "Join thousands of professionals capturing their best ideas securely in the cloud.",
@@ -501,7 +503,7 @@
   },
   "featuresPage": {
     "heroTitle": "Powerful Features for Modern Thinkers",
-    "heroSubtitle": "Experience a seamless blend of aesthetics and productivity. PremiumNotes offers cutting-edge tools designed to elevate your workflow.",
+    "heroSubtitle": "Experience a seamless blend of aesthetics and productivity. MIN NOTE offers cutting-edge tools designed to elevate your workflow.",
     "themeTitle": "Custom Note Themes",
     "themeDesc": "Personalize your workspace with our exclusive <1>Cyber</1> and <3>Minimal</3> card designs. Choose a layout that perfectly resonates with your creative energy.",
     "i18nTitle": "Seamless Localization",
@@ -574,7 +576,7 @@
   "checkout": {
     "errors": {
       "fillAll": "Please fill in all fields",
-      "invalidCard": "Please enter valid test card details",
+      "invalidCard": "Please enter valid card details",
       "failed": "Payment failed"
     },
     "title": "Upgrade to Pro",
@@ -585,7 +587,7 @@
     "payNow": "Pay Now",
     "processing": "Processing Payment...",
     "successTitle": "Payment Successful!",
-    "successDesc": "Welcome to PremiumNotes Pro."
+    "successDesc": "Welcome to MIN NOTE Pro."
   },
   "billing": {
     "manageSubscription": "Manage Subscription",

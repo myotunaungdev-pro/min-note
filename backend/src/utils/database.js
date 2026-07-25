@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export const connectDB = async () => {
     try {
-        const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/premium_notes';
+        const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/min-note';
         
         await mongoose.connect(mongoURI);
         console.log('🍃 MongoDB Connected smoothly via Mongoose');

@@ -6,9 +6,9 @@ import myTranslation from './locales/my.json';
 import thTranslation from './locales/th.json';
 
 const resources = {
-  en: { translation: enTranslation },
-  my: { translation: myTranslation },
-  th: { translation: thTranslation }
+    en: { translation: enTranslation },
+    my: { translation: myTranslation },
+    th: { translation: thTranslation }
 };
 
 const getSavedLanguage = () => {
@@ -20,17 +20,17 @@ const getSavedLanguage = () => {
 };
 
 i18n
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: getSavedLanguage(), 
-    fallbackLng: "en",
-    interpolation: {
-      escapeValue: false
-    },
-    react: {
-      useSuspense: false
-    }
-  });
+    .use(initReactI18next)
+    .init({
+        resources,
+        lng: getSavedLanguage(),
+        fallbackLng: "en",
+        interpolation: {
+            escapeValue: false
+        },
+        react: {
+            useSuspense: false
+        }
+    });
 
 export default i18n;

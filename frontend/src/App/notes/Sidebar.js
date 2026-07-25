@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { APP_NAME } from '../../utils/constants';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setActiveView, toggleSidebar, setSidebarCollapsed } from '../store/notesSlice';
@@ -108,9 +109,9 @@ const Sidebar = () => {
             <div className="sidebar-header">
                 <div className="logo-container">
                     <div className="logo-icon">
-                        <i className="bi bi-lightning-charge-fill"></i>
+                        <i className="bi bi-journal-richtext"></i>
                     </div>
-                    {!sidebarCollapsed && <span className="logo-text">{t("notes.header.myNotes")}</span>}
+                    {!sidebarCollapsed && <span className="logo-text">{APP_NAME}</span>}
                 </div>
                 <button className="toggle-btn" onClick={() => dispatch(toggleSidebar())} data-tooltip-id="global-tooltip" data-tooltip-content={t("notes.toggleSidebarCtrl")}>
                     <i className={`bi ${sidebarCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'}`}></i>

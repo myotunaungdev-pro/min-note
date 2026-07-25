@@ -12,7 +12,7 @@ export const sendEmail = async (options) => {
 
     // 2. Define email options
     const mailOptions = {
-        from: `Premium Note-Taking App <${process.env.EMAIL_USER}>`,
+        from: `MIN NOTE <${process.env.EMAIL_USER}>`,
         to: options.email,
         subject: options.subject,
         html: options.message,

@@ -1,4 +1,4 @@
-# ⚡ Premium Note-Taking Application
+# ⚡ MIN NOTE
 
 A stunning, production-ready note-taking workspace built on the **MERN Stack** (MongoDB, Express, React, Node.js). Engineered with a fanatical focus on pixel-perfect UI/UX, fluid animations, and highly performant state management, this application serves as a masterclass in modern frontend architecture and premium dark-mode aesthetics.
 
@@ -58,8 +58,8 @@ Follow these instructions to get a local copy up and running.
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/myotunaungdev-pro/premium-note-taking-app.git
-cd premium-note-taking-app
+git clone https://github.com/myotunaungdev-pro/min-note.git
+cd min-note
 ```
 
 ### 2. Configure the Backend

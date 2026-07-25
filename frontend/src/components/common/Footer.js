@@ -1,4 +1,5 @@
 import React from 'react';
+import { APP_NAME } from '../../utils/constants';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -10,7 +11,7 @@ const Footer = () => {
                 <div className="footer-brand">
                     <Link to="/" className="logo" style={{ textDecoration: 'none' }}>
                         <i className="bi bi-journal-richtext"></i>
-                        <span>PremiumNotes</span>
+                        <span>{APP_NAME}</span>
                     </Link>
                     <p className="footer-desc">
                         {t("landing.hero.subtitle1")}
@@ -63,7 +64,7 @@ const Footer = () => {
             </div>
             
             <div className="footer-bottom">
-                <p>&copy; {new Date().getFullYear()} PremiumNotes. {t("landing.footer.rights")}</p>
+                <p>&copy; {new Date().getFullYear()} {APP_NAME}. {t("landing.footer.rights")}</p>
                 <div className="footer-locale">
                     {t("landing.builtWithPrecision")}
                 </div>

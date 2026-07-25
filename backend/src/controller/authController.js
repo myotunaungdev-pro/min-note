@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { v2 as cloudinary } from 'cloudinary';
 import User from '../model/user.js';
+import Note from '../model/notes.js';
 import { generateOTP } from '../utils/generateOTP.js';
 import { sendEmail } from '../utils/sendEmail.js';
 
@@ -10,10 +11,8 @@ export const signup = async (req, res) => {
         const { name, email, password } = req.body;
 
         // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: "User already exists with this email" });
-        }
+        let user = await User.findOne({ email });
+        let isNewUser = false;
 
         // Hash password
         const salt = await bcrypt.genSalt(10);
@@ -24,35 +23,118 @@ export const signup = async (req, res) => {
         const otpSalt = await bcrypt.genSalt(10);
         const hashedOtp = await bcrypt.hash(otp, otpSalt);
 
-        // Create new user (isVerified defaults to false)
-        const newUser = new User({
-            name,
-            email,
-            password: hashedPassword,
-            otp: hashedOtp,
-            otpExpires: Date.now() + 10 * 60 * 1000 // 10 minutes
-        });
+        if (user) {
+            if (user.isVerified) {
+                return res.status(400).json({ message: "User already exists with this email" });
+            }
+            // User exists but is not verified. Restart verification process.
+            user.name = name;
+            user.password = hashedPassword;
+            user.otp = hashedOtp;
+            user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+        } else {
+            // Create new user (isVerified defaults to false)
+            isNewUser = true;
+            user = new User({
+                name,
+                email,
+                password: hashedPassword,
+                otp: hashedOtp,
+                otpExpires: Date.now() + 10 * 60 * 1000 // 10 minutes
+            });
+        }
 
-        const savedUser = await newUser.save();
+        const savedUser = await user.save();
+
+        // Create sample onboarding notes
+        if (isNewUser) {
+            try {
+            const sampleNotes = [
+                {
+                    userId: savedUser._id,
+                    title: "Welcome to MIN NOTE! 🚀",
+                    content: "<h1>Welcome Aboard!</h1><p>We are thrilled to have you here.</p><p>Check out our <a href='#'>Getting Started Guide</a> to learn more about the <strong>rich text features</strong> and customization options.</p>",
+                    titleFontFamily: "",
+                    tag: "Work",
+                    tagColor: "#00d4aa",
+                    isDone: false,
+                    theme: "default",
+                    isArchived: false,
+                    isDeleted: false
+                },
+                {
+                    userId: savedUser._id,
+                    title: "နေ့စဉ်လုပ်ဆောင်ရန်များ (Daily Tasks)",
+                    content: "<h3>လုပ်ဆောင်ရမည့်အရာများ:</h3><ol><li>မနက်စာစားရန်</li><li>အလုပ်သွားရန်</li><li>လေ့ကျင့်ခန်းလုပ်ရန်</li></ol><ul><li>အစည်းအဝေးတက်ရန်</li><li>အီးမေးလ်စစ်ရန်</li></ul>",
+                    titleFontFamily: "",
+                    tag: "Personal",
+                    tagColor: "#ff9999",
+                    isDone: false,
+                    theme: "default",
+                    isArchived: false,
+                    isDeleted: false
+                },
+                {
+                    userId: savedUser._id,
+                    title: "ไอเดียโปรเจกต์ (Project Ideas) 💡",
+                    content: "<blockquote><p>\"ความคิดสร้างสรรค์เริ่มต้นที่นี่\"</p></blockquote><p><em>หัวข้อโปรเจกต์ใหม่:</em></p><p><span style=\"font-family: monospace;\">1. แอปพลิเคชันจดบันทึก</span></p><p><u>ต้องมี:</u> ระบบหลายภาษา</p>",
+                    titleFontFamily: "",
+                    tag: "Ideas",
+                    tagColor: "#99ccff",
+                    isDone: false,
+                    theme: "default",
+                    isArchived: false,
+                    isDeleted: false
+                },
+                {
+                    userId: savedUser._id,
+                    title: "Archived: Trip to Bangkok",
+                    content: "<p>This is an archived note.</p><p>แผนการเดินทางไปกรุงเทพฯ (Bangkok Trip Plan):</p><ul><li>จองตั๋วเครื่องบิน (Book flights)</li><li>จองโรงแรม (Book hotel)</li></ul>",
+                    titleFontFamily: "",
+                    tag: "Finance",
+                    tagColor: "#ffcc00",
+                    isDone: false,
+                    theme: "default",
+                    isArchived: true,
+                    isDeleted: false
+                },
+                {
+                    userId: savedUser._id,
+                    title: "ဖျက်လိုက်သော မှတ်စုဟောင်း",
+                    content: "<p>ဤမှတ်စုသည် အမှိုက်ပုံးထဲတွင် ရှိနေပါသည်။</p><p>ဖျက်လိုက်သော မှတ်စုများကို ဤနေရာတွင် ယာယီသိမ်းဆည်းထားမည်ဖြစ်သည်။ (Trashed items will stay here temporarily.)</p>",
+                    titleFontFamily: "",
+                    tag: "Health",
+                    tagColor: "#ff6666",
+                    isDone: false,
+                    theme: "default",
+                    isArchived: false,
+                    isDeleted: true
+                }
+            ];
+            await Note.insertMany(sampleNotes);
+        } catch (noteErr) {
+                console.error("Failed to insert sample notes:", noteErr);
+            }
+        }
 
         // Send OTP email
         const message = `
             <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: sans-serif;">
                 <h2 style="color: #00d4aa;">Verify Your Email Address</h2>
                 <p>Hello ${name},</p>
-                <p>Thank you for signing up for Premium Note-Taking App. Please use the following 6-digit code to verify your email address and activate your account:</p>
+                <p>Thank you for signing up for MIN NOTE. Please use the following 6-digit code to verify your email address and activate your account:</p>
                 <div style="background-color: #f3f4f6; padding: 15px; text-align: center; border-radius: 8px; margin: 20px 0;">
                     <h1 style="margin: 0; letter-spacing: 5px; color: #1f2937;">${otp}</h1>
                 </div>
                 <p>This code will expire in 10 minutes.</p>
                 <p>If you did not request this, please ignore this email.</p>
-                <p>Best regards,<br>The Premium Note-Taking App Team</p>
+                <p>Best regards,<br>The MIN NOTE Team</p>
             </div>
         `;
 
         await sendEmail({
             email: savedUser.email,
-            subject: 'Premium Note-Taking App - Email Verification OTP',
+            subject: 'MIN NOTE - Email Verification OTP',
             message
         });
 
@@ -248,19 +330,19 @@ export const forgotPassword = async (req, res) => {
             <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: sans-serif;">
                 <h2 style="color: #00d4aa;">Password Reset Request</h2>
                 <p>Hello ${user.name},</p>
-                <p>You requested a password reset for your Premium Note-Taking App account. Please use the following 6-digit code to securely reset your password:</p>
+                <p>You requested a password reset for your MIN NOTE account. Please use the following 6-digit code to securely reset your password:</p>
                 <div style="background-color: #f3f4f6; padding: 15px; text-align: center; border-radius: 8px; margin: 20px 0;">
                     <h1 style="margin: 0; letter-spacing: 5px; color: #1f2937;">${otp}</h1>
                 </div>
                 <p>This code will expire in 10 minutes.</p>
                 <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
-                <p>Best regards,<br>The Premium Note-Taking App Team</p>
+                <p>Best regards,<br>The MIN NOTE Team</p>
             </div>
         `;
 
         await sendEmail({
             email: user.email,
-            subject: 'Premium Note-Taking App - Password Reset OTP',
+            subject: 'MIN NOTE - Password Reset OTP',
             message
         });
 

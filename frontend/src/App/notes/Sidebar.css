@@ -58,25 +58,18 @@ body.is-resizing * {
 }
 
 .logo-icon {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #00d4aa 0%, #00a88a 100%);
-    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    color: #0a0f1c;
-    box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+    min-width: 24px;
+    color: #00d4aa;
 }
 
 .logo-text {
     font-size: 20px;
     font-weight: 700;
-    background: linear-gradient(135deg, #00d4aa 0%, #00fff0 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #FFFFFF;
 }
 
 .toggle-btn {

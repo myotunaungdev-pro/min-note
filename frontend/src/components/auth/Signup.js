@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { APP_NAME } from '../../utils/constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -86,7 +87,7 @@ const Signup = () => {
             <nav className="auth-nav">
                 <Link to="/" className="logo" style={{ textDecoration: 'none' }}>
                     <i className="bi bi-journal-richtext"></i>
-                    <span>PremiumNotes</span>
+                    <span>{APP_NAME}</span>
                 </Link>
                 <LanguageSwitcher />
             </nav>
@@ -155,6 +156,9 @@ const Signup = () => {
                                         </button>
                                     </div>
                                     {formErrors.password === 'empty' && <div className="validation-error">{t("auth.pleaseEnterAPassword")}</div>}
+                                    <p style={{ fontSize: '13px', color: '#9ca3af', marginTop: '8px', lineHeight: '1.4' }}>
+                                        {t('password_reminder')}
+                                    </p>
                                 </div>
 
                                 <button type="submit" className="btn-auth-submit" disabled={isLoading}>
@@ -195,7 +199,7 @@ const Signup = () => {
                                 </div>
 
                                 <button type="submit" className="btn-auth-submit" disabled={isLoading}>
-                                    {isLoading ? t("Verifying...") : t("auth.verifyLogin")}
+                                    {isLoading ? t('verifying') : t("auth.verifyLogin")}
                                 </button>
                             </form>
                             

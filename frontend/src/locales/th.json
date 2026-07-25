@@ -1,4 +1,6 @@
 {
+  "password_reminder": "💡 คำแนะนำ: โปรดบันทึกรหัสผ่านของคุณอย่างปลอดภัยในโปรแกรมจัดการรหัสผ่านหรือสมุดบันทึกที่ปลอดภัย",
+  "verifying": "กำลังยืนยัน...",
   "link": {
     "visitUrl": "ไปที่ URL:",
     "edit": "แก้ไข",
@@ -52,7 +54,7 @@
     "A_premium__fully_localized_note_taking_experience_designed_for_productivity__Seamlessly_organize_your_thoughts_with_multi_language_support_and_a_gorgeous_dark_theme_": "ประสบการณ์การจดบันทึกแบบพรีเมียมที่รองรับหลายภาษาออกแบบมาเพื่อเพิ่มผลผลิต จัดระเบียบความคิดของคุณได้อย่างราบรื่นด้วยการรองรับหลายภาษาและธีมสีเข้มที่สวยงาม",
     "Secure_Cloud_Sync": "ซิงค์คลาวด์อย่างปลอดภัย",
     "Your_notes__everywhere_you_go": "บันทึกของคุณ ในทุกที่ที่คุณไป",
-    "Never_lose_an_idea_again__PremiumNotes_instantly_syncs_across_all_your_devices_with_military_grade_encryption_to_keep_your_personal_data_completely_private_and_secure_": "ไม่พลาดทุกไอเดียอีกต่อไป PremiumNotes จะซิงค์ข้ามอุปกรณ์ทั้งหมดของคุณในทันทีด้วยการเข้ารหัสระดับทหารเพื่อให้ข้อมูลส่วนบุคคลของคุณเป็นส่วนตัวและปลอดภัยอย่างสมบูรณ์",
+    "Never_lose_an_idea_again__PremiumNotes_instantly_syncs_across_all_your_devices_with_military_grade_encryption_to_keep_your_personal_data_completely_private_and_secure_": "ไม่พลาดทุกไอเดียอีกต่อไป MIN NOTE จะซิงค์ข้ามอุปกรณ์ทั้งหมดของคุณในทันทีด้วยการเข้ารหัสระดับทหารเพื่อให้ข้อมูลส่วนบุคคลของคุณเป็นส่วนตัวและปลอดภัยอย่างสมบูรณ์",
     "Rich_Text_Editing": "การแก้ไขข้อความแบบสมบูรณ์",
     "Format_exactly_how_you_think": "จัดรูปแบบตรงตามที่คุณคิด",
     "Use_our_premium_Quill_editor_to_add_beautiful_formatting__lists__code_blocks__and_dynamic_styling__Everything_feels_native_and_incredibly_responsive_": "ใช้เครื่องมือแก้ไข Quill ระดับพรีเมียมของเราเพื่อเพิ่มการจัดรูปแบบที่สวยงาม รายการ บล็อกโค้ด และการจัดสไตล์แบบไดนามิก ทุกอย่างให้ความรู้สึกเป็นธรรมชาติและตอบสนองได้ดีอย่างไม่น่าเชื่อ",
@@ -63,7 +65,7 @@
     "Access_Anywhere": "เข้าถึงได้ทุกที่",
     "Pick_up_exactly_where_you_left_off_on_your_phone__tablet__or_desktop_browser_": "ทำต่อจากจุดที่คุณค้างไว้ในโทรศัพท์ แท็บเล็ต หรือเบราว์เซอร์เดสก์ท็อป",
     "Loved_by_creators_worldwide": "เป็นที่ชื่นชอบของครีเอเตอร์ทั่วโลก",
-    "PremiumNotes_changed_how_I_organize_my_thoughts_completely__The_multi_language_support_is_unmatched_for_my_international_team_": "PremiumNotes เปลี่ยนวิธีจัดระเบียบความคิดของฉันอย่างสิ้นเชิง การรองรับหลายภาษาไม่มีใครเทียบได้สำหรับทีมงานระดับนานาชาติของฉัน",
+    "PremiumNotes_changed_how_I_organize_my_thoughts_completely__The_multi_language_support_is_unmatched_for_my_international_team_": "MIN NOTE เปลี่ยนวิธีจัดระเบียบความคิดของฉันอย่างสิ้นเชิง การรองรับหลายภาษาไม่มีใครเทียบได้สำหรับทีมงานระดับนานาชาติของฉัน",
     "Alice_Chen": "Alice Chen",
     "Product_Designer": "นักออกแบบผลิตภัณฑ์",
     "The_dark_mode_aesthetic_combined_with_the_buttery_smooth_React_UI_makes_writing_a_joy_instead_of_a_chore_": "ความสวยงามของโหมดมืดประกอบกับ React UI ที่ลื่นไหลทำให้การเขียนเป็นเรื่องสนุกแทนที่จะเป็นงานบ้าน",
@@ -182,8 +184,8 @@
     "newNoteCtrlN": "โน้ตใหม่ (Ctrl + N)",
     "canvas": "แคนวาส",
     "2d": "2d",
-    "replaceOriginal": "แทนที่ต้นฉบับ",
-    "saveAsCopy": "บันทึกเป็นสำเนา",
+    "replaceOriginal": "แทนที่",
+    "saveAsCopy": "บันทึกสำเนา",
     "miscKey799": "",
     "webcamCapture": "ถ่ายภาพจากเว็บแคม",
     "capture": "ถ่ายภาพ",
@@ -373,12 +375,12 @@
     "termsOfService": "ข้อกำหนดในการให้บริการ",
     "cookiePolicy": "นโยบายคุกกี้",
     "aPremiumFullyLocaliz": "ประสบการณ์การจดบันทึกแบบพรีเมียมที่รองรับหลายภาษาออกแบบมาเพื่อเพิ่มผลผลิต จัดระเบียบความคิดของคุณได้อย่างราบรื่นด้วยการรองรับหลายภาษาและธีมสีเข้มที่สวยงาม",
-    "neverLoseAnIdeaAgain": "ไม่พลาดทุกไอเดียอีกต่อไป PremiumNotes จะซิงค์ข้ามอุปกรณ์ทั้งหมดของคุณในทันทีด้วยการเข้ารหัสระดับทหารเพื่อให้ข้อมูลส่วนบุคคลของคุณเป็นส่วนตัวและปลอดภัยอย่างสมบูรณ์",
+    "neverLoseAnIdeaAgain": "ไม่พลาดทุกไอเดียอีกต่อไป MIN NOTE จะซิงค์ข้ามอุปกรณ์ทั้งหมดของคุณในทันทีด้วยการเข้ารหัสระดับทหารเพื่อให้ข้อมูลส่วนบุคคลของคุณเป็นส่วนตัวและปลอดภัยอย่างสมบูรณ์",
     "useOurPremiumQuillEd": "ใช้เครื่องมือแก้ไข Quill ระดับพรีเมียมของเราเพื่อเพิ่มการจัดรูปแบบที่สวยงาม รายการ บล็อกโค้ด และการจัดสไตล์แบบไดนามิก ทุกอย่างให้ความรู้สึกเป็นธรรมชาติและตอบสนองได้ดีอย่างไม่น่าเชื่อ",
     "createYourFreePremiu": "สร้างพื้นที่ทำงานพรีเมียมฟรีในเวลาน้อยกว่าหนึ่งนาที ไม่ต้องใช้บัตรเครดิต",
     "startTypingYourThoug": "เริ่มพิมพ์ความคิดของคุณทันทีในเครื่องมือแก้ไขแบบ glassmorphic ที่สวยงามของเรา",
     "pickUpExactlyWhereYo": "ทำต่อจากจุดที่คุณค้างไว้ในโทรศัพท์ แท็บเล็ต หรือเบราว์เซอร์เดสก์ท็อป",
-    "premiumNotesChangedH": "PremiumNotes เปลี่ยนวิธีจัดระเบียบความคิดของฉันอย่างสิ้นเชิง การรองรับหลายภาษาไม่มีใครเทียบได้สำหรับทีมงานระดับนานาชาติของฉัน",
+    "premiumNotesChangedH": "MIN NOTE เปลี่ยนวิธีจัดระเบียบความคิดของฉันอย่างสิ้นเชิง การรองรับหลายภาษาไม่มีใครเทียบได้สำหรับทีมงานระดับนานาชาติของฉัน",
     "theDarkModeAesthetic": "ความสวยงามของโหมดมืดประกอบกับ React UI ที่ลื่นไหลทำให้การเขียนเป็นเรื่องสนุกแทนที่จะเป็นงานบ้าน",
     "iLoveHowFastTheSearc": "ฉันชอบที่การค้นหาทำงานได้เร็วมาก ฉันสามารถค้นหาบันทึกใดๆ เมื่อ 2 ปีที่แล้วได้ในทันที ขอแนะนำให้อัปเกรดเป็น Pro",
     "joinThousandsOfProfe": "เข้าร่วมกับผู้เชี่ยวชาญหลายพันคนที่บันทึกแนวคิดที่ดีที่สุดอย่างปลอดภัยในคลาวด์",
@@ -502,7 +504,7 @@
   },
   "featuresPage": {
     "heroTitle": "คุณสมบัติที่ทรงพลังสำหรับนักคิดยุคใหม่",
-    "heroSubtitle": "สัมผัสความสอดคล้องที่ลงตัวของความงามและประสิทธิภาพการทำงาน PremiumNotes นำเสนอเครื่องมือที่ล้ำสมัยที่ออกแบบมาเพื่อยกระดับการทำงานของคุณ",
+    "heroSubtitle": "สัมผัสความสอดคล้องที่ลงตัวของความงามและประสิทธิภาพการทำงาน MIN NOTE นำเสนอเครื่องมือที่ล้ำสมัยที่ออกแบบมาเพื่อยกระดับการทำงานของคุณ",
     "themeTitle": "ปรับแต่งธีมบันทึกย่อ",
     "themeDesc": "ปรับแต่งพื้นที่ทำงานของคุณด้วยการออกแบบการ์ด <1>Cyber</1> และ <3>Minimal</3> สุดพิเศษ เลือกลายที่เข้ากับพลังสร้างสรรค์ของคุณได้อย่างสมบูรณ์แบบ",
     "i18nTitle": "การแปลภาษาที่ราบรื่น",
@@ -575,7 +577,7 @@
   "checkout": {
     "errors": {
       "fillAll": "กรุณากรอกข้อมูลให้ครบถ้วน",
-      "invalidCard": "กรุณาระบุรายละเอียดบัตรทดสอบที่ถูกต้อง",
+      "invalidCard": "กรุณาระบุรายละเอียดบัตรที่ถูกต้อง",
       "failed": "การชำระเงินล้มเหลว"
     },
     "title": "อัปเกรดเป็นระดับโปร",
@@ -586,7 +588,7 @@
     "payNow": "ชำระเงินตอนนี้",
     "processing": "กำลังดำเนินการชำระเงิน...",
     "successTitle": "ชำระเงินสำเร็จ!",
-    "successDesc": "ยินดีต้อนรับสู่ PremiumNotes Pro"
+    "successDesc": "ยินดีต้อนรับสู่ MIN NOTE Pro"
   },
   "billing": {
     "manageSubscription": "จัดการการสมัครสมาชิก",

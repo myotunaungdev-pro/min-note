@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { APP_NAME } from '../../utils/constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -74,7 +75,7 @@ const ForgotPassword = () => {
             <nav className="auth-nav">
                 <Link to="/" className="logo" style={{ textDecoration: 'none' }}>
                     <i className="bi bi-journal-richtext"></i>
-                    <span>PremiumNotes</span>
+                    <span>{APP_NAME}</span>
                 </Link>
                 <LanguageSwitcher />
             </nav>
@@ -170,6 +171,9 @@ const ForgotPassword = () => {
                                         </button>
                                     </div>
                                     {formErrors.newPassword === 'empty' && <div className="validation-error">{t("auth.pleaseEnterANewPassw")}</div>}
+                                    <p style={{ fontSize: '13px', color: '#9ca3af', marginTop: '8px', lineHeight: '1.4' }}>
+                                        {t('password_reminder')}
+                                    </p>
                                 </div>
 
                                 <button type="submit" className="btn-auth-submit" disabled={isLoading}>

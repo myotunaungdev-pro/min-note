@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { APP_NAME } from '../../utils/constants';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -30,7 +31,7 @@ const Header = () => {
         <nav className="landing-nav">
             <Link to="/" className="logo" style={{ textDecoration: 'none' }}>
                 <i className="bi bi-journal-richtext"></i>
-                <span>PremiumNotes</span>
+                <span>{APP_NAME}</span>
             </Link>
             <div className="nav-actions">
                 <LanguageSwitcher />

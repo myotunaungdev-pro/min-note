@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { APP_NAME } from '../../utils/constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -54,7 +55,7 @@ const Login = () => {
             <nav className="auth-nav">
                 <Link to="/" className="logo" style={{ textDecoration: 'none' }}>
                     <i className="bi bi-journal-richtext"></i>
-                    <span>PremiumNotes</span>
+                    <span>{APP_NAME}</span>
                 </Link>
                 <LanguageSwitcher />
             </nav>
