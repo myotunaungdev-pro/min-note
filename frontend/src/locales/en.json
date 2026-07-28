@@ -132,6 +132,10 @@
       "selectAll": "Select All"
     },
     "card": {
+      "edit": "Edit",
+      "archive": "Archive",
+      "delete": "Trash",
+      "permanentDelete": "Delete Permanently",
       "done": "Done",
       "notDone": "Not Done",
       "pending": "Pending",

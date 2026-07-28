@@ -53,7 +53,16 @@ const NoteCard = ({ note, onDeleteRequest, onSelectToggle, cardStyle = 'default'
 
     // Removed stripHtml, safely rendering HTML directly
 
-    const handleReadNote = () => {
+    const handleReadNote = (e) => {
+        if (e && e.target) {
+            const a = e.target.closest('a');
+            if (a && a.href) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.open(a.href, '_blank', 'noopener,noreferrer');
+                return;
+            }
+        }
         dispatch(setReadingNote(note));
         dispatch(setReaderOpen(true));
     };

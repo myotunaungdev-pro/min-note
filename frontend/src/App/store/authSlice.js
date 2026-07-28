@@ -106,6 +106,22 @@ export const updateUserProfile = createAsyncThunk(
     }
 );
 
+export const fetchCurrentUser = createAsyncThunk(
+    'auth/fetchCurrentUser',
+    async (_, { rejectWithValue }) => {
+        try {
+            console.log("Fetching current user...");
+            const token = localStorage.getItem('token');
+            const response = await axiosInstance.get('/auth/me', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(getAuthErrorKey(error.response?.data?.message, 'Fetch profile failed'));
+        }
+    }
+);
+
 const loadUserFromStorage = () => {
     try {
         const serializedUser = localStorage.getItem('user');
@@ -196,6 +212,26 @@ const authSlice = createSlice({
             .addCase(updateUserProfile.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
+            })
+            // Fetch Current User
+            .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+                console.log("Fetch user success:", action.payload);
+                state.user = action.payload.user;
+                localStorage.setItem('user', JSON.stringify(action.payload.user));
+                
+                if (action.payload.user.plan) {
+                    localStorage.setItem('user_plan', action.payload.user.plan);
+                    if (action.payload.user.planType) {
+                        localStorage.setItem('user_planType', action.payload.user.planType);
+                    } else {
+                        localStorage.removeItem('user_planType');
+                    }
+                    // Dispatch a custom event to notify SubscriptionContext if needed
+                    window.dispatchEvent(new Event('storage'));
+                }
+            })
+            .addCase(fetchCurrentUser.rejected, (state, action) => {
+                console.error("Fetch user failed:", action.error);
             })
             // Forgot Password
             .addCase(forgotPassword.pending, (state) => {

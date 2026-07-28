@@ -1,53 +1,26 @@
 import React, { useState } from 'react';
-import { X, Check } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSubscription } from '../context/SubscriptionContext';
-import { processPayment } from '../services/paymentService';
+import { createCheckoutSession } from '../services/paymentService';
 import './CheckoutModal.css';
 
 const CheckoutModal = ({ isOpen, onClose, planType = 'monthly' }) => {
     const { t } = useTranslation();
-    const { upgradeToPro } = useSubscription();
-    const [cardDetails, setCardDetails] = useState({ number: '', expiry: '', cvv: '' });
-    const [status, setStatus] = useState('idle'); // idle | processing | success | error
+    const [status, setStatus] = useState('idle'); // idle | processing | error
     const [errorMsg, setErrorMsg] = useState('');
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        if (name === 'number') {
-            const onlyDigits = value.replace(/\D/g, '');
-            const formatted = onlyDigits.replace(/(.{4})/g, '$1 ').trim();
-            setCardDetails(prev => ({ ...prev, [name]: formatted }));
-        } else {
-            setCardDetails(prev => ({ ...prev, [name]: value }));
-        }
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Heavily relaxed validation for mock testing purposes
-        const cleanNumber = cardDetails.number.replace(/\s/g, '');
-        if (cleanNumber.length < 8 || cardDetails.expiry.length < 4 || cardDetails.cvv.length < 3) {
-            setStatus('error');
-            setErrorMsg(t('checkout.errors.invalidCard'));
-            return;
-        }
-
         setStatus('processing');
         setErrorMsg('');
 
         try {
-            const response = await processPayment(cardDetails);
-            if (response.success) {
-                setStatus('success');
-                upgradeToPro(planType);
-
-                // Auto close after showing success for a moment
-                setTimeout(() => {
-                    handleClose();
-                }, 2000);
+            const response = await createCheckoutSession(planType);
+            if (response.success && response.url) {
+                window.location.href = response.url;
+            } else {
+                throw new Error('Failed to retrieve checkout URL from server.');
             }
         } catch (error) {
             setStatus('error');
@@ -57,7 +30,6 @@ const CheckoutModal = ({ isOpen, onClose, planType = 'monthly' }) => {
 
     const handleClose = () => {
         setStatus('idle');
-        setCardDetails({ number: '', expiry: '', cvv: '' });
         setErrorMsg('');
         onClose();
     };
@@ -87,74 +59,26 @@ const CheckoutModal = ({ isOpen, onClose, planType = 'monthly' }) => {
                         {status === 'idle' || status === 'error' ? (
                             <>
                                 <div className="checkout-header">
-                                    <h2 className="checkout-title">{t('checkout.title')}</h2>
-                                    <p className="checkout-subtitle">{t('checkout.subtitle')}</p>
+                                    <h2 className="checkout-title">Secure Checkout</h2>
+                                    <p className="checkout-subtitle">You will be redirected to Stripe to securely complete your payment.</p>
                                 </div>
 
                                 <form className="checkout-form" onSubmit={handleSubmit}>
-                                    <div className="form-group">
-                                        <label>{t('checkout.cardNumber')}</label>
-                                        <input
-                                            type="text"
-                                            name="number"
-                                            placeholder="0000 0000 0000 0000"
-                                            className="form-input"
-                                            value={cardDetails.number}
-                                            onChange={handleInputChange}
-                                            maxLength="19"
-                                        />
-                                    </div>
-
-                                    <div className="form-row">
-                                        <div className="form-group" style={{ flex: 1 }}>
-                                            <label>{t('checkout.expiry')}</label>
-                                            <input
-                                                type="text"
-                                                name="expiry"
-                                                placeholder="MM/YY"
-                                                className="form-input"
-                                                value={cardDetails.expiry}
-                                                onChange={handleInputChange}
-                                                maxLength="5"
-                                            />
-                                        </div>
-                                        <div className="form-group" style={{ flex: 1 }}>
-                                            <label>{t('checkout.cvv')}</label>
-                                            <input
-                                                type="text"
-                                                name="cvv"
-                                                placeholder="123"
-                                                className="form-input"
-                                                value={cardDetails.cvv}
-                                                onChange={handleInputChange}
-                                                maxLength="4"
-                                            />
-                                        </div>
-                                    </div>
-
                                     {status === 'error' && (
-                                        <div style={{ color: '#ef4444', fontSize: '0.9rem', marginTop: '4px' }}>
+                                        <div style={{ color: '#ef4444', fontSize: '0.9rem', marginBottom: '15px' }}>
                                             {errorMsg}
                                         </div>
                                     )}
 
                                     <button type="submit" className="checkout-submit-btn">
-                                        {t('checkout.payNow')}
+                                        Proceed to Checkout
                                     </button>
                                 </form>
                             </>
-                        ) : status === 'processing' ? (
+                        ) : (
                             <div className="checkout-processing">
                                 <div className="cyber-spinner"></div>
-                                <h3 className="processing-text">{t('checkout.processing')}</h3>
-                            </div>
-                        ) : (
-                            <div className="checkout-success">
-                                <div className="neon-checkmark-wrapper">
-                                    <Check size={40} strokeWidth={3} className="neon-checkmark" />
-                                </div>
-                                <h3 className="success-text">{t('checkout.successTitle')}</h3>
-                                <p className="success-desc">{t('checkout.successDesc')}</p>
+                                <h3 className="processing-text">Redirecting to Stripe...</h3>
                             </div>
                         )}
                     </motion.div>

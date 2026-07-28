@@ -1,22 +1,16 @@
-export const processPayment = (cardDetails) => {
-    return new Promise((resolve, reject) => {
-        // Simulate network delay
-        setTimeout(() => {
-            if (cardDetails && cardDetails.number) {
-                // Mock success response
-                resolve({
-                    success: true,
-                    transactionId: 'txn_mock_' + Math.random().toString(36).substr(2, 9),
-                    message: 'Payment processed successfully'
-                });
-            } else {
-                reject({
-                    success: false,
-                    message: 'Invalid card details'
-                });
-            }
-        }, 2000); // 2 second delay
-    });
+import axiosInstance from '../api/axiosConfig';
+
+export const createCheckoutSession = async (planType) => {
+    try {
+        const response = await axiosInstance.post('/stripe/create-checkout-session', { planType });
+        return {
+            success: true,
+            sessionId: response.data.sessionId,
+            url: response.data.url
+        };
+    } catch (error) {
+        throw new Error(error.response?.data?.error || 'Failed to create checkout session');
+    }
 };
 
 export const cancelSubscription = () => {

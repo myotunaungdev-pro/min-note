@@ -1209,7 +1209,7 @@
 
 .theme-dynamic3d .card3d:hover .note-actions {
     opacity: 1;
-    transform: translateZ(95px) translateX(0);
+    transform: translateZ(60px) translateX(0);
 }
 
 .theme-dynamic3d .action-btn {

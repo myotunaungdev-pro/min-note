@@ -662,6 +662,13 @@ const NoteReadView = ({ note, onClose }) => {
     }, [note?.id]);
 
     const handleContentClick = (e) => {
+        const a = e.target.closest('a');
+        if (a && a.href) {
+            e.preventDefault();
+            window.open(a.href, '_blank', 'noopener,noreferrer');
+            return;
+        }
+
         if (e.target.tagName === 'IMG') {
             const src = e.target.src;
             const index = lightboxSlides.findIndex(slide => slide.src === src);

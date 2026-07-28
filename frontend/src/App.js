@@ -38,9 +38,34 @@ import { AnimatePresence } from 'framer-motion';
 
 import NotFound from './pages/public/NotFound';
 import ScrollToTop from './components/common/ScrollToTop';
+import { useDispatch } from 'react-redux';
+import { fetchCurrentUser } from './App/store/authSlice';
 
 function App() {
     const location = useLocation();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            dispatch(fetchCurrentUser());
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        if (searchParams.get('success') === 'true') {
+            const token = localStorage.getItem('token');
+            if (token) {
+                // Force sync user from backend to reflect new subscription plan
+                dispatch(fetchCurrentUser());
+            }
+            // Clean up the URL
+            window.history.replaceState({}, document.title, location.pathname);
+        } else if (searchParams.get('canceled') === 'true') {
+            window.history.replaceState({}, document.title, location.pathname);
+        }
+    }, [location.search, location.pathname, dispatch]);
     const [cardStyle, setCardStyle] = useState(() => {
         const savedStyle = localStorage.getItem('app_note_card_style');
         return savedStyle || 'default';

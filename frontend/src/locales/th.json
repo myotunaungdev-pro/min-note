@@ -129,13 +129,17 @@
       "selectAll": "เลือกทั้งหมด"
     },
     "card": {
+      "edit": "แก้ไข",
+      "archive": "เก็บถาวร",
+      "delete": "ลบ",
+      "permanentDelete": "ลบถาวร",
       "done": "เสร็จสิ้น",
       "notDone": "ยังไม่เสร็จ",
       "pending": "รอดำเนินการ",
       "doneFirst": "เสร็จสิ้นก่อน",
       "pendingFirst": "รอดำเนินการก่อน",
       "unarchive": "ยกเลิกการเก็บถาวร",
-      "restore": "คืนค่า",
+      "restore": "กู้คืน",
       "deleteForever": "ลบถาวร",
       "markIncomplete": "ทำเครื่องหมายว่ายังไม่เสร็จ",
       "markComplete": "ทำเครื่องหมายว่าเสร็จแล้ว"

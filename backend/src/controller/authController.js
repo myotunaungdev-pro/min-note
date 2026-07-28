@@ -6,12 +6,32 @@ import Note from '../model/notes.js';
 import { generateOTP } from '../utils/generateOTP.js';
 import { sendEmail } from '../utils/sendEmail.js';
 
+export const getMe = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select('-password');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        
+        const plan = user.plan || 'free';
+        const planType = user.planType || null;
+
+        res.status(200).json({ 
+            user: { ...user.toObject(), plan, planType } 
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 export const signup = async (req, res) => {
     try {
         const { name, email, password } = req.body;
+        const sanitizedEmail = email.toLowerCase().trim();
 
         // Check if user already exists
-        let user = await User.findOne({ email });
+        let user = await User.findOne({ email: sanitizedEmail });
         let isNewUser = false;
 
         // Hash password
@@ -37,7 +57,7 @@ export const signup = async (req, res) => {
             isNewUser = true;
             user = new User({
                 name,
-                email,
+                email: sanitizedEmail,
                 password: hashedPassword,
                 otp: hashedOtp,
                 otpExpires: Date.now() + 10 * 60 * 1000 // 10 minutes
@@ -45,77 +65,6 @@ export const signup = async (req, res) => {
         }
 
         const savedUser = await user.save();
-
-        // Create sample onboarding notes
-        if (isNewUser) {
-            try {
-            const sampleNotes = [
-                {
-                    userId: savedUser._id,
-                    title: "Welcome to MIN NOTE! 🚀",
-                    content: "<h1>Welcome Aboard!</h1><p>We are thrilled to have you here.</p><p>Check out our <a href='#'>Getting Started Guide</a> to learn more about the <strong>rich text features</strong> and customization options.</p>",
-                    titleFontFamily: "",
-                    tag: "Work",
-                    tagColor: "#00d4aa",
-                    isDone: false,
-                    theme: "default",
-                    isArchived: false,
-                    isDeleted: false
-                },
-                {
-                    userId: savedUser._id,
-                    title: "နေ့စဉ်လုပ်ဆောင်ရန်များ (Daily Tasks)",
-                    content: "<h3>လုပ်ဆောင်ရမည့်အရာများ:</h3><ol><li>မနက်စာစားရန်</li><li>အလုပ်သွားရန်</li><li>လေ့ကျင့်ခန်းလုပ်ရန်</li></ol><ul><li>အစည်းအဝေးတက်ရန်</li><li>အီးမေးလ်စစ်ရန်</li></ul>",
-                    titleFontFamily: "",
-                    tag: "Personal",
-                    tagColor: "#ff9999",
-                    isDone: false,
-                    theme: "default",
-                    isArchived: false,
-                    isDeleted: false
-                },
-                {
-                    userId: savedUser._id,
-                    title: "ไอเดียโปรเจกต์ (Project Ideas) 💡",
-                    content: "<blockquote><p>\"ความคิดสร้างสรรค์เริ่มต้นที่นี่\"</p></blockquote><p><em>หัวข้อโปรเจกต์ใหม่:</em></p><p><span style=\"font-family: monospace;\">1. แอปพลิเคชันจดบันทึก</span></p><p><u>ต้องมี:</u> ระบบหลายภาษา</p>",
-                    titleFontFamily: "",
-                    tag: "Ideas",
-                    tagColor: "#99ccff",
-                    isDone: false,
-                    theme: "default",
-                    isArchived: false,
-                    isDeleted: false
-                },
-                {
-                    userId: savedUser._id,
-                    title: "Archived: Trip to Bangkok",
-                    content: "<p>This is an archived note.</p><p>แผนการเดินทางไปกรุงเทพฯ (Bangkok Trip Plan):</p><ul><li>จองตั๋วเครื่องบิน (Book flights)</li><li>จองโรงแรม (Book hotel)</li></ul>",
-                    titleFontFamily: "",
-                    tag: "Finance",
-                    tagColor: "#ffcc00",
-                    isDone: false,
-                    theme: "default",
-                    isArchived: true,
-                    isDeleted: false
-                },
-                {
-                    userId: savedUser._id,
-                    title: "ဖျက်လိုက်သော မှတ်စုဟောင်း",
-                    content: "<p>ဤမှတ်စုသည် အမှိုက်ပုံးထဲတွင် ရှိနေပါသည်။</p><p>ဖျက်လိုက်သော မှတ်စုများကို ဤနေရာတွင် ယာယီသိမ်းဆည်းထားမည်ဖြစ်သည်။ (Trashed items will stay here temporarily.)</p>",
-                    titleFontFamily: "",
-                    tag: "Health",
-                    tagColor: "#ff6666",
-                    isDone: false,
-                    theme: "default",
-                    isArchived: false,
-                    isDeleted: true
-                }
-            ];
-            await Note.insertMany(sampleNotes);
-        } catch (noteErr) {
-                console.error("Failed to insert sample notes:", noteErr);
-            }
-        }
 
         // Send OTP email
         const message = `
@@ -177,6 +126,75 @@ export const verifyOTP = async (req, res) => {
         user.otpExpires = undefined;
         await user.save();
 
+        // Create sample onboarding notes upon successful verification
+        try {
+            const sampleNotes = [
+                {
+                    userId: user._id,
+                    title: "Welcome to MIN NOTE! 🚀",
+                    content: "<h1>Welcome Aboard!</h1><p>We are thrilled to have you here.</p><p>Check out our <a href='#'>Getting Started Guide</a> to learn more about the <strong>rich text features</strong> and customization options.</p>",
+                    titleFontFamily: "",
+                    tag: "Work",
+                    tagColor: "#00d4aa",
+                    isDone: false,
+                    theme: "default",
+                    isArchived: false,
+                    isDeleted: false
+                },
+                {
+                    userId: user._id,
+                    title: "နေ့စဉ်လုပ်ဆောင်ရန်များ (Daily Tasks)",
+                    content: "<h3>လုပ်ဆောင်ရမည့်အရာများ:</h3><ol><li>မနက်စာစားရန်</li><li>အလုပ်သွားရန်</li><li>လေ့ကျင့်ခန်းလုပ်ရန်</li></ol><ul><li>အစည်းအဝေးတက်ရန်</li><li>အီးမေးလ်စစ်ရန်</li></ul>",
+                    titleFontFamily: "",
+                    tag: "Personal",
+                    tagColor: "#ff9999",
+                    isDone: false,
+                    theme: "default",
+                    isArchived: false,
+                    isDeleted: false
+                },
+                {
+                    userId: user._id,
+                    title: "ไอเดียโปรเจกต์ (Project Ideas) 💡",
+                    content: "<blockquote><p>\"ความคิดสร้างสรรค์เริ่มต้นที่นี่\"</p></blockquote><p><em>หัวข้อโปรเจกต์ใหม่:</em></p><p><span style=\"font-family: monospace;\">1. แอปพลิเคชันจดบันทึก</span></p><p><u>ต้องมี:</u> ระบบหลายภาษา</p>",
+                    titleFontFamily: "",
+                    tag: "Ideas",
+                    tagColor: "#99ccff",
+                    isDone: false,
+                    theme: "default",
+                    isArchived: false,
+                    isDeleted: false
+                },
+                {
+                    userId: user._id,
+                    title: "Archived: Trip to Bangkok",
+                    content: "<p>This is an archived note.</p><p>แผนการเดินทางไปกรุงเทพฯ (Bangkok Trip Plan):</p><ul><li>จองตั๋วเครื่องบิน (Book flights)</li><li>จองโรงแรม (Book hotel)</li></ul>",
+                    titleFontFamily: "",
+                    tag: "Finance",
+                    tagColor: "#ffcc00",
+                    isDone: false,
+                    theme: "default",
+                    isArchived: true,
+                    isDeleted: false
+                },
+                {
+                    userId: user._id,
+                    title: "ဖျက်လိုက်သော မှတ်စုဟောင်း",
+                    content: "<p>ဤမှတ်စုသည် အမှိုက်ပုံးထဲတွင် ရှိနေပါသည်။</p><p>ဖျက်လိုက်သော မှတ်စုများကို ဤနေရာတွင် ယာယီသိမ်းဆည်းထားမည်ဖြစ်သည်။ (Trashed items will stay here temporarily.)</p>",
+                    titleFontFamily: "",
+                    tag: "Health",
+                    tagColor: "#ff6666",
+                    isDone: false,
+                    theme: "default",
+                    isArchived: false,
+                    isDeleted: true
+                }
+            ];
+            await Note.insertMany(sampleNotes);
+        } catch (noteErr) {
+            console.error("Failed to insert sample notes:", noteErr);
+        }
+
         // Generate token
         const token = jwt.sign(
             { id: user._id, email: user.email },
@@ -198,9 +216,10 @@ export const verifyOTP = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
+        const sanitizedEmail = email.toLowerCase().trim();
 
         // Find user by email
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: sanitizedEmail });
         if (!user) {
             return res.status(400).json({ message: "Invalid email or password" });
         }
