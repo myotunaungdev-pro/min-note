@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 const addTranslation = (file, keyPath, value) => {
     const data = JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -14,9 +15,9 @@ const addTranslation = (file, keyPath, value) => {
 };
 
 const locales = [
-    { file: 'd:/premium-note-taking-app/frontend/src/locales/en.json' },
-    { file: 'd:/premium-note-taking-app/frontend/src/locales/my.json' },
-    { file: 'd:/premium-note-taking-app/frontend/src/locales/th.json' }
+    { file: path.join(__dirname, '../src/locales/en.json') },
+    { file: path.join(__dirname, '../src/locales/my.json') },
+    { file: path.join(__dirname, '../src/locales/th.json') }
 ];
 
 const newStrings = {

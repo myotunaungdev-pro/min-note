@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 const addTranslation = (file, keyPath, value) => {
     const data = JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -14,9 +15,9 @@ const addTranslation = (file, keyPath, value) => {
 };
 
 const updates = [
-    { file: 'd:/premium-note-taking-app/frontend/src/locales/en.json', text: 'Pro Plan ✨' },
-    { file: 'd:/premium-note-taking-app/frontend/src/locales/my.json', text: 'ပရို အစီအစဉ် ✨' },
-    { file: 'd:/premium-note-taking-app/frontend/src/locales/th.json', text: 'แพ็กเกจโปร ✨' }
+    { file: path.join(__dirname, '../src/locales/en.json'), text: 'Pro Plan ✨' },
+    { file: path.join(__dirname, '../src/locales/my.json'), text: 'ပရို အစီအစဉ် ✨' },
+    { file: path.join(__dirname, '../src/locales/th.json'), text: 'แพ็กเกจโปร ✨' }
 ];
 
 updates.forEach(u => {

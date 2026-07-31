@@ -5,7 +5,7 @@ import { Check } from 'lucide-react';
 import { useSubscription } from '../context/SubscriptionContext';
 import '../pages/public/Pricing.css';
 
-const PricingCards = ({ onUpgradeClick }) => {
+const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const { plan } = useSubscription();
@@ -117,13 +117,18 @@ const PricingCards = ({ onUpgradeClick }) => {
 
                     <button
                         className="pricing-card-btn pricing-btn-filled"
+                        disabled={isUpgrading || plan === 'pro'}
                         onClick={() => {
                             if (plan !== 'pro' && onUpgradeClick) {
                                 onUpgradeClick(isYearly ? 'yearly' : 'monthly');
                             }
                         }}
                     >
-                        {plan === 'pro' ? t('pricingPage.currentPlan') : t('pricingPage.tiers.pro.button')}
+                        {plan === 'pro' 
+                            ? t('pricingPage.currentPlan') 
+                            : isUpgrading 
+                                ? 'Loading...' 
+                                : t('pricingPage.tiers.pro.button')}
                     </button>
                 </div>
 
