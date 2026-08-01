@@ -10,6 +10,7 @@ export const createCheckoutSession = async (req, res) => {
     try {
         const { planType } = req.body;
         const priceId = 'price_1Txkt3FKdcz2yKzLXlknbslP'; // Corrected Price ID
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -22,8 +23,8 @@ export const createCheckoutSession = async (req, res) => {
                     quantity: 1,
                 },
             ],
-            success_url: `${process.env.FRONTEND_URL}/?success=true`,
-            cancel_url: `${process.env.FRONTEND_URL}/?canceled=true`,
+            success_url: `${clientUrl}/payment-success`,
+            cancel_url: `${clientUrl}/upgrade?canceled=true`,
         });
 
         res.json({ sessionId: session.id, url: session.url });

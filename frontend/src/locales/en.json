@@ -241,7 +241,8 @@
     "multiSelectRange": "Multi-select (Range)",
     "selectAllVisible": "Select All Visible",
     "contentType": "content-type",
-    "confirmEnter": "Press Enter to confirm"
+    "confirmEnter": "Press Enter to confirm",
+    "loading": "Loading..."
   },
   "tags": {
     "work": "Work",
@@ -608,5 +609,13 @@
   },
   "sidebar": {
     "proPlan": "Pro Plan ✨"
+  },
+  "payment": {
+    "success": "Payment Successful",
+    "thankYou": "Thank you for upgrading!",
+    "goToWorkspace": "Go to Workspace",
+    "cancelled": "Process cancelled",
+    "welcomePro": "Welcome to MIN NOTE Pro! 🎉",
+    "captureLimits": "Capture your best ideas without limits."
   }
 }

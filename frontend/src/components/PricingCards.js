@@ -127,7 +127,7 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
                         {plan === 'pro' 
                             ? t('pricingPage.currentPlan') 
                             : isUpgrading 
-                                ? 'Loading...' 
+                                ? t('common.loading', 'Loading...') 
                                 : t('pricingPage.tiers.pro.button')}
                     </button>
                 </div>

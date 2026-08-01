@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import usePageTitle from '../../hooks/usePageTitle';
 import PricingCards from '../../components/PricingCards';
@@ -10,8 +10,17 @@ import '../../components/settings/Settings.css';
 const Upgrade = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const location = useLocation();
     const [isUpgrading, setIsUpgrading] = useState(false);
     usePageTitle("Upgrade to Pro");
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        if (searchParams.get('canceled') === 'true') {
+            toast.info(t('payment.cancelled'));
+            window.history.replaceState({}, document.title, location.pathname);
+        }
+    }, [location.search, location.pathname, t]);
 
     const handleUpgradeClick = async (planType) => {
         setIsUpgrading(true);
@@ -21,10 +30,10 @@ const Upgrade = () => {
                 window.location.href = response.url;
             } else {
                 toast.error('Failed to retrieve checkout URL from server.');
+                setIsUpgrading(false);
             }
         } catch (error) {
             toast.error(error.message || 'Checkout failed');
-        } finally {
             setIsUpgrading(false);
         }
     };

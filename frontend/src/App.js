@@ -18,6 +18,7 @@ import SystemSettings from './components/settings/SystemSettings';
 import ShortcutModal from './components/common/ShortcutModal';
 import HelpGuide from './components/help/HelpGuide';
 import Upgrade from './pages/private/Upgrade';
+import PaymentSuccess from './pages/private/PaymentSuccess';
 
 import Features from './pages/public/Features';
 import Pricing from './pages/public/Pricing';
@@ -52,20 +53,7 @@ function App() {
         }
     }, [dispatch]);
 
-    useEffect(() => {
-        const searchParams = new URLSearchParams(location.search);
-        if (searchParams.get('success') === 'true') {
-            const token = localStorage.getItem('token');
-            if (token) {
-                // Force sync user from backend to reflect new subscription plan
-                dispatch(fetchCurrentUser());
-            }
-            // Clean up the URL
-            window.history.replaceState({}, document.title, location.pathname);
-        } else if (searchParams.get('canceled') === 'true') {
-            window.history.replaceState({}, document.title, location.pathname);
-        }
-    }, [location.search, location.pathname, dispatch]);
+
     const [cardStyle, setCardStyle] = useState(() => {
         const savedStyle = localStorage.getItem('app_note_card_style');
         return savedStyle || 'default';
@@ -128,6 +116,7 @@ function App() {
                         <Route path="/system-settings" element={<SystemSettings cardStyle={cardStyle} setCardStyle={setCardStyle} />} />
                         <Route path="/help" element={<HelpGuide />} />
                         <Route path="/upgrade" element={<Upgrade />} />
+                        <Route path="/payment-success" element={<PaymentSuccess />} />
                     </Route>
 
                     {/* Catch-all 404 Route */}

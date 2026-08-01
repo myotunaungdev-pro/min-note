@@ -243,7 +243,8 @@
     "multiSelectRange": "เลือกหลายรายการ (ช่วง)",
     "selectAllVisible": "เลือกที่มองเห็นทั้งหมด",
     "contentType": "content-type",
-    "confirmEnter": "กด Enter เพื่อยืนยัน"
+    "confirmEnter": "กด Enter เพื่อยืนยัน",
+    "loading": "กำลังโหลด..."
   },
   "tags": {
     "work": "งาน",
@@ -609,5 +610,13 @@
   },
   "sidebar": {
     "proPlan": "แพ็กเกจโปร ✨"
+  },
+  "payment": {
+    "success": "ชำระเงินสำเร็จ",
+    "thankYou": "ขอบคุณสำหรับการอัปเกรด!",
+    "goToWorkspace": "ไปยังพื้นที่ทำงาน",
+    "cancelled": "ยกเลิกรายการแล้ว",
+    "welcomePro": "ยินดีต้อนรับสู่ MIN NOTE Pro! 🎉",
+    "captureLimits": "จดบันทึกไอเดียที่ดีที่สุดของคุณแบบไร้ขีดจำกัด"
   }
 }
