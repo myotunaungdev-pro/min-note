@@ -42,7 +42,7 @@ const ManageSubscriptionModal = ({ isOpen, onClose }) => {
 
     const formattedNextBillingDate = nextBillingDate 
         ? new Date(nextBillingDate).toLocaleDateString() 
-        : new Date().toLocaleDateString();
+        : 'Active';
 
     return (
         <AnimatePresence>

@@ -16,7 +16,8 @@ export const createCheckoutSession = async (req, res) => {
             payment_method_types: ['card'],
             mode: 'subscription',
             customer_email: req.user.email,
-            client_reference_id: req.user.id.toString(),
+            client_reference_id: (req.user.id || req.user._id).toString(),
+            metadata: { planType: planType || 'monthly' },
             line_items: [
                 {
                     price: priceId,
@@ -35,6 +36,7 @@ export const createCheckoutSession = async (req, res) => {
 };
 
 export const webhookHandler = async (req, res) => {
+    console.log('🟢 [WEBHOOK] Request received!');
     const sig = req.headers['stripe-signature'];
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
@@ -43,8 +45,9 @@ export const webhookHandler = async (req, res) => {
     if (webhookSecret) {
         try {
             event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+            console.log('✅ Signature verified');
         } catch (err) {
-            console.error('Webhook signature verification failed:', err.message);
+            console.error('❌ Webhook signature verification failed:', err.message);
             return res.status(400).send(`Webhook Error: ${err.message}`);
         }
     } else {
@@ -58,19 +61,52 @@ export const webhookHandler = async (req, res) => {
     }
 
     try {
+        console.log(`🔔 Webhook received: ${event.type}`);
+        
         if (event.type === 'checkout.session.completed') {
             const session = event.data.object;
             const userId = session.client_reference_id;
+            const planType = session.metadata?.planType || 'monthly';
+            
+            console.log('💰 Payment successful for session:', session.id);
+            console.log('👤 Client Reference ID (User ID):', session.client_reference_id);
 
             if (userId) {
-                await User.findByIdAndUpdate(userId, {
+                let endDate = null;
+                if (session.subscription) {
+                    try {
+                        const subscription = await stripe.subscriptions.retrieve(session.subscription);
+                        const currentPeriodEnd = subscription.current_period_end || subscription.items?.data?.[0]?.current_period_end;
+                        
+                        if (currentPeriodEnd) {
+                            endDate = new Date(currentPeriodEnd * 1000);
+                            console.log(`📅 Subscription ends on: ${endDate}`);
+                        }
+                    } catch (subErr) {
+                        console.error('❌ Failed to retrieve Stripe subscription:', subErr.message);
+                    }
+                }
+
+                const updatedUser = await User.findByIdAndUpdate(userId, {
                     plan: 'pro',
+                    planType: planType,
                     stripeCustomerId: session.customer,
                     stripeSubscriptionId: session.subscription,
-                });
+                    currentPeriodEnd: endDate
+                }, { new: true });
+                
+                if (updatedUser) {
+                    console.log(`✅ Successfully updated user ${userId} to Pro!`);
+                    console.log('Database Log:', updatedUser.plan, updatedUser.email, 'Expiry:', updatedUser.currentPeriodEnd);
+                } else {
+                    console.error(`❌ User not found in database for ID: ${userId}`);
+                }
+            } else {
+                console.error('❌ No client_reference_id found in session!');
             }
         } else if (event.type === 'customer.subscription.deleted') {
             const subscription = event.data.object;
+            console.log(`❌ Subscription deleted for sub ID: ${subscription.id}`);
             await User.findOneAndUpdate(
                 { stripeSubscriptionId: subscription.id },
                 {

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchCurrentUser } from '../../App/store/authSlice';
 import usePageTitle from '../../hooks/usePageTitle';
+import { useSubscription } from '../../context/SubscriptionContext';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 import '../../components/settings/Settings.css';
@@ -14,23 +15,64 @@ const PaymentSuccess = () => {
     const dispatch = useDispatch();
     const { width, height } = useWindowSize();
     usePageTitle(t('payment.welcomePro'));
-    
+
     // Slight delay to ensure confetti pops nicely after render
     const [showConfetti, setShowConfetti] = useState(false);
+    const { upgradeToPro } = useSubscription();
 
     useEffect(() => {
-        dispatch(fetchCurrentUser());
+        let isMounted = true;
+        let pollInterval;
+        let attempts = 0;
+
+        const verifyProStatus = async () => {
+            try {
+                const action = await dispatch(fetchCurrentUser());
+                if (fetchCurrentUser.fulfilled.match(action)) {
+                    const user = action.payload.user;
+                    if (user && user.plan === 'pro') {
+                        upgradeToPro(user.planType || 'monthly', user.currentPeriodEnd);
+                        if (pollInterval) clearInterval(pollInterval);
+                    }
+                }
+            } catch (error) {
+                console.error("State sync failed:", error);
+            }
+        };
+
+        // Slight delay before initial fetch to allow Stripe webhooks to process
+        const initialDelay = setTimeout(() => {
+            if (isMounted) {
+                verifyProStatus();
+                // Start polling every 2s for max 5 attempts if webhook is slow
+                pollInterval = setInterval(() => {
+                    attempts++;
+                    if (attempts >= 5) {
+                        clearInterval(pollInterval);
+                    } else {
+                        verifyProStatus();
+                    }
+                }, 2000);
+            }
+        }, 1500);
+
         const timer = setTimeout(() => setShowConfetti(true), 100);
-        return () => clearTimeout(timer);
-    }, [dispatch]);
+        
+        return () => {
+            isMounted = false;
+            clearTimeout(timer);
+            clearTimeout(initialDelay);
+            if (pollInterval) clearInterval(pollInterval);
+        };
+    }, [dispatch, upgradeToPro]);
 
     return (
-        <div className="settings-page" style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            minHeight: '80vh', 
+        <div className="settings-page" style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100vh',
             textAlign: 'center',
             position: 'relative',
             overflow: 'hidden'
@@ -46,7 +88,7 @@ const PaymentSuccess = () => {
                     style={{ position: 'fixed', top: 0, left: 0, zIndex: 100 }}
                 />
             )}
-            
+
             <div className="glass-card" style={{
                 background: 'linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%)',
                 backdropFilter: 'blur(16px)',
@@ -81,8 +123,8 @@ const PaymentSuccess = () => {
                         <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5ZM19 19C19 19.5523 18.5523 20 18 20H6C5.44772 20 5 19.5523 5 19V18H19V19Z" fill="url(#crownGradient)" />
                     </svg>
                 </div>
-                
-                <h1 className="page-title" style={{ 
+
+                <h1 className="page-title" style={{
                     margin: 0,
                     fontSize: '2.4rem',
                     fontWeight: '800',
@@ -94,9 +136,9 @@ const PaymentSuccess = () => {
                 }}>
                     {t('payment.welcomePro')}
                 </h1>
-                
-                <p style={{ 
-                    color: '#94a3b8', 
+
+                <p style={{
+                    color: '#94a3b8',
                     margin: 0,
                     fontSize: '1.2rem',
                     lineHeight: '1.6',
@@ -105,10 +147,10 @@ const PaymentSuccess = () => {
                 }}>
                     {t('payment.captureLimits')}
                 </p>
-                
-                <button 
-                    className="pricing-card-btn pricing-btn-filled" 
-                    style={{ 
+
+                <button
+                    className="pricing-card-btn pricing-btn-filled"
+                    style={{
                         marginTop: '1rem',
                         maxWidth: '280px',
                         width: '100%',
@@ -128,7 +170,7 @@ const PaymentSuccess = () => {
                     {t('payment.goToWorkspace')}
                 </button>
             </div>
-            
+
             <style>{`
                 @keyframes magicalSlideUp {
                     0% { 

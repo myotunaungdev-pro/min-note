@@ -23,17 +23,15 @@ export const SubscriptionProvider = ({ children }) => {
         else localStorage.removeItem('user_nextBillingDate');
     }, [plan, planType, nextBillingDate]);
 
-    const upgradeToPro = (selectedPlanType = 'monthly') => {
+    const upgradeToPro = (selectedPlanType = 'monthly', expiryDate = null) => {
         setPlan('pro');
         setPlanType(selectedPlanType);
         
-        const currentDate = new Date();
-        if (selectedPlanType === 'monthly') {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-        } else if (selectedPlanType === 'yearly') {
-            currentDate.setFullYear(currentDate.getFullYear() + 1);
+        if (expiryDate) {
+            setNextBillingDate(new Date(expiryDate).toISOString());
+        } else {
+            setNextBillingDate(null);
         }
-        setNextBillingDate(currentDate.toISOString());
     };
 
     const cancelSubscription = () => {
