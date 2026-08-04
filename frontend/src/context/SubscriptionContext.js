@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
+import { useSelector } from 'react-redux';
 
 const SubscriptionContext = createContext();
 
@@ -7,12 +8,31 @@ export const useSubscription = () => {
 };
 
 export const SubscriptionProvider = ({ children }) => {
+    const user = useSelector((state) => state.auth?.user);
+
     const [plan, setPlan] = useState(() => {
         const savedPlan = localStorage.getItem('user_plan');
         return savedPlan || 'free';
     });
     const [planType, setPlanType] = useState(() => localStorage.getItem('user_planType') || null);
     const [nextBillingDate, setNextBillingDate] = useState(() => localStorage.getItem('user_nextBillingDate') || null);
+
+    // Auto-sync with the freshest user data fetched from the backend via Redux
+    useEffect(() => {
+        if (user) {
+            setPlan(user.plan || 'free');
+            setPlanType(user.planType || null);
+            if (user.currentPeriodEnd) {
+                setNextBillingDate(new Date(user.currentPeriodEnd).toISOString());
+            } else {
+                setNextBillingDate(null);
+            }
+        } else {
+            setPlan('free');
+            setPlanType(null);
+            setNextBillingDate(null);
+        }
+    }, [user]);
 
     useEffect(() => {
         localStorage.setItem('user_plan', plan);

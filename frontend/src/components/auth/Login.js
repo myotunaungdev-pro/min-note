@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { loginUser } from '../../App/store/authSlice';
+import { loginUser, fetchCurrentUser } from '../../App/store/authSlice';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import './Auth.css';
 
@@ -43,6 +43,7 @@ const Login = () => {
 
         try {
             await dispatch(loginUser(formData)).unwrap();
+            await dispatch(fetchCurrentUser()).unwrap(); // Sync plan and dates immediately
             toast.success(t("auth.login.success"));
             navigate('/notes');
         } catch (error) {
