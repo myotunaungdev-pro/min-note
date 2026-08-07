@@ -9,7 +9,9 @@ import {
     bulkTrashNotes,
     bulkRestoreNotes
 } from '../controller/notesController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { upload, submitKPayPayment } from '../controller/paymentController.js';
+import { getManualPayments, approvePayment, rejectPayment } from '../controller/adminController.js';
+import { protect, admin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -35,5 +37,13 @@ router.put('/notes/:id', updateNote);
 
 // Delete a note by ID
 router.delete('/notes/:id', deleteNote);
+
+// Submit manual KPay payment
+router.post('/kpay-submit', protect, upload.single('slip'), submitKPayPayment);
+
+// Admin Routes
+router.get('/admin/manual-payments', protect, admin, getManualPayments);
+router.patch('/admin/manual-payments/:id/approve', protect, admin, approvePayment);
+router.patch('/admin/manual-payments/:id/reject', protect, admin, rejectPayment);
 
 export default router;

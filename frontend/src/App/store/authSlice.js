@@ -110,7 +110,6 @@ export const fetchCurrentUser = createAsyncThunk(
     'auth/fetchCurrentUser',
     async (_, { rejectWithValue }) => {
         try {
-            console.log("Fetching current user...");
             const token = localStorage.getItem('token');
             const response = await axiosInstance.get('/auth/me', {
                 headers: { Authorization: `Bearer ${token}` }
@@ -215,7 +214,6 @@ const authSlice = createSlice({
             })
             // Fetch Current User
             .addCase(fetchCurrentUser.fulfilled, (state, action) => {
-                console.log("Fetch user success:", action.payload);
                 state.user = action.payload.user;
                 localStorage.setItem('user', JSON.stringify(action.payload.user));
                 

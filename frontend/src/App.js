@@ -18,6 +18,9 @@ import SystemSettings from './components/settings/SystemSettings';
 import ShortcutModal from './components/common/ShortcutModal';
 import HelpGuide from './components/help/HelpGuide';
 import Upgrade from './pages/private/Upgrade';
+import AdminPayments from './pages/private/AdminPayments';
+import KPayCheckoutPage from './pages/private/KPayCheckoutPage';
+import KPaySuccess from './pages/private/KPaySuccess';
 import PaymentSuccess from './pages/private/PaymentSuccess';
 
 import Features from './pages/public/Features';
@@ -116,7 +119,10 @@ function App() {
                         <Route path="/system-settings" element={<SystemSettings cardStyle={cardStyle} setCardStyle={setCardStyle} />} />
                         <Route path="/help" element={<HelpGuide />} />
                         <Route path="/upgrade" element={<Upgrade />} />
+                        <Route path="/checkout/kpay" element={<KPayCheckoutPage />} />
+                        <Route path="/kpay-success" element={<KPaySuccess />} />
                         <Route path="/payment-success" element={<PaymentSuccess />} />
+                        <Route path="/admin/payments" element={<AdminPayments />} />
                     </Route>
 
                     {/* Catch-all 404 Route */}

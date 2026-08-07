@@ -1,8 +1,8 @@
 import axiosInstance from '../api/axiosConfig';
 
-export const createCheckoutSession = async (planType) => {
+export const createCheckoutSession = async (planType, currency = 'USD') => {
     try {
-        const response = await axiosInstance.post('/stripe/create-checkout-session', { planType });
+        const response = await axiosInstance.post('/stripe/create-checkout-session', { planType, currency });
         return {
             success: true,
             sessionId: response.data.sessionId,
@@ -10,6 +10,15 @@ export const createCheckoutSession = async (planType) => {
         };
     } catch (error) {
         throw new Error(error.response?.data?.error || 'Failed to create checkout session');
+    }
+};
+
+export const verifySession = async (sessionId) => {
+    try {
+        const response = await axiosInstance.post('/stripe/verify-session', { sessionId });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || 'Failed to verify session');
     }
 };
 

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchCurrentUser } from '../../App/store/authSlice';
+import { verifySession } from '../../services/paymentService';
 import usePageTitle from '../../hooks/usePageTitle';
 import { useSubscription } from '../../context/SubscriptionContext';
 import Confetti from 'react-confetti';
@@ -24,6 +25,9 @@ const PaymentSuccess = () => {
         let isMounted = true;
         let pollInterval;
         let attempts = 0;
+        
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get('session_id');
 
         const verifyProStatus = async () => {
             try {
@@ -36,15 +40,33 @@ const PaymentSuccess = () => {
                     }
                 }
             } catch (error) {
-                console.error("State sync failed:", error);
+                // Ignore silent errors
             }
         };
 
-        // Slight delay before initial fetch to allow Stripe webhooks to process
+        const checkSession = async () => {
+            if (sessionId) {
+                try {
+                    const result = await verifySession(sessionId);
+                    if (result.success && result.plan === 'pro' && isMounted) {
+                        upgradeToPro(result.planType, result.currentPeriodEnd);
+                        // Also update global store silently
+                        dispatch(fetchCurrentUser());
+                        if (pollInterval) clearInterval(pollInterval);
+                    }
+                } catch (error) {
+                    // Fallback to polling if direct verification fails
+                    verifyProStatus();
+                }
+            } else {
+                verifyProStatus();
+            }
+        };
+
         const initialDelay = setTimeout(() => {
             if (isMounted) {
-                verifyProStatus();
-                // Start polling every 2s for max 5 attempts if webhook is slow
+                checkSession();
+                
                 pollInterval = setInterval(() => {
                     attempts++;
                     if (attempts >= 5) {
@@ -54,7 +76,7 @@ const PaymentSuccess = () => {
                     }
                 }, 2000);
             }
-        }, 1500);
+        }, 500);
 
         const timer = setTimeout(() => setShowConfetti(true), 100);
         

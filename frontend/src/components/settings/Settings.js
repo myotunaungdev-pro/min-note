@@ -235,6 +235,19 @@ const Settings = () => {
                     </div>
                 </section>
 
+                {/* Admin Dashboard */}
+                {user?.isAdmin && (
+                    <section className="settings-section">
+                        <h2 className="section-title text-[#00d4aa]">Admin Controls</h2>
+                        <div className="settings-card">
+                            <p>Manage manual payments and user subscriptions.</p>
+                            <button className="btn-upgrade mt-3" style={{ background: '#1a1a1a', border: '1px solid #333' }} onClick={() => navigate('/admin/payments')}>
+                                <i className="bi bi-shield-lock me-2"></i> Admin Dashboard
+                            </button>
+                        </div>
+                    </section>
+                )}
+
                 {/* Danger Zone */}
                 <section className="settings-section danger-zone">
                     <h2 className="section-title text-danger">{t("settings.profile.dangerZone")}</h2>

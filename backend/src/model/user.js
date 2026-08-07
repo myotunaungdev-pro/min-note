@@ -57,6 +57,10 @@ const userSchema = new mongoose.Schema({
     currentPeriodEnd: {
         type: Date,
         default: null
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

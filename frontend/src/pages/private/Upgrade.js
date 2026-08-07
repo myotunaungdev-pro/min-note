@@ -22,10 +22,15 @@ const Upgrade = () => {
         }
     }, [location.search, location.pathname, t]);
 
-    const handleUpgradeClick = async (planType) => {
+    const handleUpgradeClick = async (planType, currency) => {
+        if (currency === 'MMK') {
+            navigate(`/checkout/kpay?plan=${planType}`);
+            return;
+        }
+        
         setIsUpgrading(true);
         try {
-            const response = await createCheckoutSession(planType);
+            const response = await createCheckoutSession(planType, currency);
             if (response.success && response.url) {
                 window.location.href = response.url;
             } else {

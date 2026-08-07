@@ -31,8 +31,8 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
     };
 
     const pricingData = {
-        monthly: { USD: { price: 8, symbol: '$' }, THB: { price: 299, symbol: '฿' }, MMK: { price: 25000, symbol: 'Ks' } },
-        yearly: { USD: { price: 76, symbol: '$' }, THB: { price: 2900, symbol: '฿' }, MMK: { price: 250000, symbol: 'Ks' } },
+        monthly: { USD: { price: 8, symbol: '$' }, THB: { price: 269, symbol: '฿' }, MMK: { price: '35,000', symbol: 'Ks' } },
+        yearly: { USD: { price: 76, symbol: '$' }, THB: { price: 2590, symbol: '฿' }, MMK: { price: '335,000', symbol: 'Ks' } },
         free: { USD: { price: 0, symbol: '$' }, THB: { price: 0, symbol: '฿' }, MMK: { price: 0, symbol: 'Ks' } }
     };
 
@@ -74,7 +74,7 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
                 {/* Free Tier */}
                 <div className="pricing-card">
                     <h2 className="pricing-card-name">{t('pricingPage.tiers.free.name')}</h2>
-                    <div className="pricing-card-price-container">
+                    <div className="pricing-card-price-container flex flex-col items-center">
                         <span className="pricing-card-price">{getPriceData('free')}</span>
                         <span className="pricing-card-period">{t('pricingPage.tiers.free.period')}</span>
                     </div>
@@ -100,7 +100,7 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
                 {/* Pro Tier */}
                 <div className="pricing-card featured">
                     <h2 className="pricing-card-name">{t('pricingPage.tiers.pro.name')}</h2>
-                    <div className="pricing-card-price-container">
+                    <div className="pricing-card-price-container flex flex-col items-center">
                         <span className="pricing-card-price">{isYearly ? getPriceData('yearly') : getPriceData('monthly')}</span>
                         <span className="pricing-card-period">{isYearly ? t('pricing.perYear') : t('pricing.perMonth')}</span>
                     </div>
@@ -120,7 +120,7 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
                         disabled={isUpgrading || plan === 'pro'}
                         onClick={() => {
                             if (plan !== 'pro' && onUpgradeClick) {
-                                onUpgradeClick(isYearly ? 'yearly' : 'monthly');
+                                onUpgradeClick(isYearly ? 'yearly' : 'monthly', currency);
                             }
                         }}
                     >
@@ -135,7 +135,7 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
                 {/* Enterprise Tier */}
                 <div className="pricing-card">
                     <h2 className="pricing-card-name">{t('pricingPage.tiers.enterprise.name')}</h2>
-                    <div className="pricing-card-price-container" style={{ flexDirection: 'column', alignItems: 'flex-start', gap: '8px' }}>
+                    <div className="pricing-card-price-container flex flex-col items-center">
                         <span className="pricing-card-price text-3xl md:text-4xl lg:text-3xl xl:text-4xl break-words" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)' }}>{t('pricingPage.tiers.enterprise.price')}</span>
                         <span className="text-gray-400 text-sm" style={{ color: '#9ca3af', fontSize: '0.875rem' }}>{t('enterprise.helperText')}</span>
                     </div>
