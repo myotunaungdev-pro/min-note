@@ -61,6 +61,10 @@ const userSchema = new mongoose.Schema({
     isAdmin: {
         type: Boolean,
         default: false
+    },
+    hasSeenProWelcome: {
+        type: Boolean,
+        default: true
     }
 }, {
     timestamps: true

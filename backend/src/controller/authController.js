@@ -406,3 +406,18 @@ export const resetPassword = async (req, res) => {
         res.status(500).json({ message: "Failed to reset password", error: error.message });
     }
 };
+
+export const markWelcomeSeen = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        user.hasSeenProWelcome = true;
+        await user.save();
+        res.status(200).json({ success: true, message: "Welcome marked as seen" });
+    } catch (error) {
+        console.error("markWelcomeSeen error:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};

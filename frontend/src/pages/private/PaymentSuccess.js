@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchCurrentUser } from '../../App/store/authSlice';
+import { fetchCurrentUser, markWelcomeSeen } from '../../App/store/authSlice';
 import { verifySession } from '../../services/paymentService';
 import usePageTitle from '../../hooks/usePageTitle';
 import { useSubscription } from '../../context/SubscriptionContext';
@@ -20,6 +20,11 @@ const PaymentSuccess = () => {
     // Slight delay to ensure confetti pops nicely after render
     const [showConfetti, setShowConfetti] = useState(false);
     const { upgradeToPro } = useSubscription();
+
+    useEffect(() => {
+        // Mark the welcome as seen on the backend so they don't get redirected here again
+        dispatch(markWelcomeSeen());
+    }, [dispatch]);
 
     useEffect(() => {
         let isMounted = true;

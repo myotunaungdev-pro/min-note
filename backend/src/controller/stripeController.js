@@ -1,6 +1,8 @@
 import Stripe from 'stripe';
 import User from '../model/user.js';
 import dotenv from 'dotenv';
+import { sendEmail } from '../utils/sendEmail.js';
+import { getPaymentSuccessEmailTemplate } from '../utils/emailTemplates.js';
 
 dotenv.config();
 
@@ -144,7 +146,21 @@ export const webhookHandler = async (req, res) => {
                     currentPeriodEnd: endDate
                 }, { new: true });
                 
-                if (!updatedUser) {
+                if (updatedUser) {
+                    const planTypeCapitalized = planType.charAt(0).toUpperCase() + planType.slice(1);
+                    const { html, text } = getPaymentSuccessEmailTemplate(updatedUser.name, planTypeCapitalized);
+                    
+                    try {
+                        await sendEmail({
+                            email: updatedUser.email,
+                            subject: 'Your MIN NOTE Pro Subscription is Active! / လူကြီးမင်း၏ MIN NOTE Pro အကောင့် ရရှိပါပြီ',
+                            message: html,
+                            text: text
+                        });
+                    } catch (err) {
+                        console.error('❌ Failed to send Stripe success email:', err.message);
+                    }
+                } else {
                     console.error(`❌ User not found in database for ID: ${userId}`);
                 }
             } else {

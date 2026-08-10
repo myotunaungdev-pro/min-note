@@ -1,6 +1,7 @@
 import ManualPayment from '../model/manualPayment.js';
 import User from '../model/user.js';
 import { sendEmail } from '../utils/sendEmail.js';
+import { getPaymentSuccessEmailTemplate } from '../utils/emailTemplates.js';
 
 // GET /api/admin/manual-payments
 export const getManualPayments = async (req, res) => {
@@ -53,34 +54,19 @@ export const approvePayment = async (req, res) => {
             }
             
             user.currentPeriodEnd = endDate;
+            user.hasSeenProWelcome = false;
             await user.save();
             
             // Send automated approval email
             const planTypeCapitalized = payment.planType.charAt(0).toUpperCase() + payment.planType.slice(1);
-            const emailHtml = `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-                    <h2 style="color: #00d4aa;">Your MIN NOTE Pro Subscription is Active!</h2>
-                    <p>Hello ${user.name},</p>
-                    <p>Great news! We have successfully verified your KPay payment proof.</p>
-                    <p>Your account has now been upgraded to the <strong>${planTypeCapitalized} Pro Plan</strong>.</p>
-                    <p>Thank you for choosing MIN NOTE. We hope you enjoy the premium features!</p>
-                    
-                    <hr style="border:none; border-top:1px solid #eee; margin: 20px 0;">
-                    
-                    <h2 style="color: #00d4aa;">လူကြီးမင်း၏ MIN NOTE Pro အကောင့် ရရှိပါပြီ!</h2>
-                    <p>ဝမ်းမြောက်ပါသည်! လူကြီးမင်း၏ KPay ငွေလွှဲမှတ်တမ်းကို အတည်ပြုပြီးပါပြီ။</p>
-                    <p>လူကြီးမင်း၏ အကောင့်ကို <strong>${planTypeCapitalized} Pro Plan</strong> သို့ အောင်မြင်စွာ ပြောင်းလဲပေးလိုက်ပါသည်။</p>
-                    <p>MIN NOTE ကို ရွေးချယ်တဲ့အတွက် ကျေးဇူးတင်ပါသည်။</p>
-                    
-                    <br>
-                    <p>Best regards,<br>The MIN NOTE Team</p>
-                </div>
-            `;
+            const { html, text } = getPaymentSuccessEmailTemplate(user.name, planTypeCapitalized);
+
             try {
                 await sendEmail({
                     email: user.email,
                     subject: 'Your MIN NOTE Pro Subscription is Active! / လူကြီးမင်း၏ MIN NOTE Pro အကောင့် ရရှိပါပြီ',
-                    message: emailHtml
+                    message: html,
+                    text: text
                 });
             } catch (err) {
                 console.error('Failed to send approval email:', err);

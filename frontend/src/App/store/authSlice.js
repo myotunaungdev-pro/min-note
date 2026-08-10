@@ -121,6 +121,18 @@ export const fetchCurrentUser = createAsyncThunk(
     }
 );
 
+export const markWelcomeSeen = createAsyncThunk(
+    'auth/markWelcomeSeen',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.patch('/auth/welcome-seen');
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(getAuthErrorKey(error.response?.data?.message, 'Mark welcome seen failed'));
+        }
+    }
+);
+
 const loadUserFromStorage = () => {
     try {
         const serializedUser = localStorage.getItem('user');
@@ -230,6 +242,13 @@ const authSlice = createSlice({
             })
             .addCase(fetchCurrentUser.rejected, (state, action) => {
                 console.error("Fetch user failed:", action.error);
+            })
+            // Mark Welcome Seen
+            .addCase(markWelcomeSeen.fulfilled, (state) => {
+                if (state.user) {
+                    state.user.hasSeenProWelcome = true;
+                    localStorage.setItem('user', JSON.stringify(state.user));
+                }
             })
             // Forgot Password
             .addCase(forgotPassword.pending, (state) => {
