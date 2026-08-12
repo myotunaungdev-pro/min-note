@@ -201,22 +201,22 @@
     height: 44px;
     padding: 0 20px;
 
-    background: linear-gradient(135deg, #00d4aa 0%, #00a88a 100%);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     border: none;
     border-radius: 12px;
-    color: #0a0f1c;
+    color: #ffffff;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
 
     white-space: nowrap;
 }
 
 .new-note-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 212, 170, 0.4);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
 }
 
 .new-note-btn:active {

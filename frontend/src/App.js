@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Tooltip } from 'react-tooltip';
@@ -42,19 +42,39 @@ import { AnimatePresence } from 'framer-motion';
 
 import NotFound from './pages/public/NotFound';
 import ScrollToTop from './components/common/ScrollToTop';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchCurrentUser } from './App/store/authSlice';
 
 function App() {
     const location = useLocation();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth?.user);
+    const [prevPlan, setPrevPlan] = useState(user?.plan);
 
     useEffect(() => {
+        const handleFocus = () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                dispatch(fetchCurrentUser());
+            }
+        };
+
         const token = localStorage.getItem('token');
         if (token) {
             dispatch(fetchCurrentUser());
         }
+
+        window.addEventListener('focus', handleFocus);
+        return () => window.removeEventListener('focus', handleFocus);
     }, [dispatch]);
+
+    useEffect(() => {
+        if (prevPlan && prevPlan !== 'pro' && user?.plan === 'pro') {
+            navigate('/payment-success');
+        }
+        setPrevPlan(user?.plan);
+    }, [user?.plan, prevPlan, navigate]);
 
 
     const [cardStyle, setCardStyle] = useState(() => {

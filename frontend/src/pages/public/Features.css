@@ -5,6 +5,12 @@
     color: #f1f5f9;
 }
 
+@media (max-width: 768px) {
+    .features-page-container {
+        padding: 40px 12px;
+    }
+}
+
 .features-hero {
     text-align: center;
     margin-bottom: 80px;

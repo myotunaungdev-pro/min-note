@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* theme.css - Light Theme Overrides */
 
 body.light-theme {

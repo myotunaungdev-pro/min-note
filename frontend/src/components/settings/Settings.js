@@ -238,11 +238,11 @@ const Settings = () => {
                 {/* Admin Dashboard */}
                 {user?.isAdmin && (
                     <section className="settings-section">
-                        <h2 className="section-title text-[#00d4aa]">Admin Controls</h2>
+                        <h2 className="section-title text-[#00d4aa]">{t("admin.controlsTitle")}</h2>
                         <div className="settings-card">
-                            <p>Manage manual payments and user subscriptions.</p>
+                            <p>{t("admin.controlsDesc")}</p>
                             <button className="btn-upgrade mt-3" style={{ background: '#1a1a1a', border: '1px solid #333' }} onClick={() => navigate('/admin/payments')}>
-                                <i className="bi bi-shield-lock me-2"></i> Admin Dashboard
+                                <i className="bi bi-shield-lock me-2"></i> {t("admin.dashboardBtn")}
                             </button>
                         </div>
                     </section>

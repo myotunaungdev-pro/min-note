@@ -51,7 +51,7 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
                             className={`currency-btn ${currency === c ? 'active' : ''}`}
                             onClick={() => setCurrency(c)}
                         >
-                            {c === 'USD' ? 'USD ($)' : c === 'THB' ? 'THB (฿)' : 'MMK (Ks)'}
+                            {c === 'USD' ? t('pricing.currencyUSD') : c === 'THB' ? t('pricing.currencyTHB') : t('pricing.currencyMMK')}
                         </button>
                     ))}
                 </div>

@@ -199,6 +199,10 @@
 
 /* Responsive */
 @media (max-width: 904px) {
+    .auth-main {
+        padding: 16px 8px;
+    }
+
     .auth-nav {
         padding: 16px 20px;
         flex-wrap: wrap;
@@ -215,6 +219,7 @@
     }
 
     .auth-card {
-        padding: 32px 24px;
+        padding: 32px 16px;
+        max-width: 100%;
     }
 }

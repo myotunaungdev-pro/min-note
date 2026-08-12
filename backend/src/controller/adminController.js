@@ -1,7 +1,7 @@
 import ManualPayment from '../model/manualPayment.js';
 import User from '../model/user.js';
 import { sendEmail } from '../utils/sendEmail.js';
-import { getPaymentSuccessEmailTemplate } from '../utils/emailTemplates.js';
+import { getPaymentSuccessEmailTemplate, getPaymentFailedEmailTemplate } from '../utils/emailTemplates.js';
 
 // GET /api/admin/manual-payments
 export const getManualPayments = async (req, res) => {
@@ -91,32 +91,24 @@ export const rejectPayment = async (req, res) => {
             return res.status(400).json({ error: 'Payment is already processed' });
         }
 
+        const { rejectionReason } = req.body;
+
         payment.status = 'rejected';
+        payment.rejectionReason = rejectionReason || 'Transaction could not be verified';
         await payment.save();
 
         if (payment.userId && payment.userId.email) {
-            const emailHtml = `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-                    <h2>Update regarding your MIN NOTE Payment Proof</h2>
-                    <p>Hello ${payment.userId.name || 'User'},</p>
-                    <p>We encountered an issue while verifying the payment proof you submitted.</p>
-                    <p>Unfortunately, we could not confirm the transaction. Please contact our support team or re-submit a valid screenshot of the successful KPay transfer.</p>
-                    
-                    <hr style="border:none; border-top:1px solid #eee; margin: 20px 0;">
-                    
-                    <h2>MIN NOTE ငွေပေးချေမှု အခြေအနေ</h2>
-                    <p>လူကြီးမင်း တင်သွင်းထားသော KPay ငွေလွှဲမှတ်တမ်းကို စစ်ဆေးရာတွင် အခက်အခဲရှိနေပါသည်။</p>
-                    <p>ကျေးဇူးပြု၍ မှန်ကန်သော ငွေလွှဲပြေစာအား ပြန်လည်တင်သွင်းပေးပါရန် သို့မဟုတ် Customer Support သို့ ဆက်သွယ်ပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည်။</p>
-                    
-                    <br>
-                    <p>Best regards,<br>The MIN NOTE Team</p>
-                </div>
-            `;
+            const { html, text } = getPaymentFailedEmailTemplate(
+                payment.userId.name || 'User',
+                payment.rejectionReason
+            );
+            
             try {
                 await sendEmail({
                     email: payment.userId.email,
                     subject: 'Update regarding your MIN NOTE Payment / MIN NOTE ငွေပေးချေမှု အခြေအနေ',
-                    message: emailHtml
+                    message: html,
+                    text: text
                 });
             } catch (err) {
                 console.error('Failed to send rejection email:', err);

@@ -14,6 +14,7 @@ import {
 import { bulkArchiveOnServer, bulkTrashOnServer, bulkRestoreOnServer, permanentlyDeleteFromServer } from '../store/notesThunks';
 import './Header.css';
 import { useTranslation } from 'react-i18next';
+import { Menu } from 'lucide-react';
 
 const Header = ({ onSelectAll }) => {
     const { t } = useTranslation();
@@ -207,9 +208,14 @@ const Header = ({ onSelectAll }) => {
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => e.stopPropagation()}
         >
-            <div className="header-left">
-                <button className="mobile-menu-btn w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-200 active:scale-90" onClick={() => dispatch(toggleSidebar())} data-tooltip-id="global-tooltip" data-tooltip-content={t("notes.toggleSidebarCtrl")}>
-                    <i className="bi bi-list text-3xl"></i>
+            <div className="header-left gap-3">
+                <button 
+                    className="w-11 h-11 rounded-xl bg-gray-800/80 border border-gray-700/50 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 transition-colors duration-200 active:scale-95 md:hidden" 
+                    onClick={() => dispatch(toggleSidebar())} 
+                    data-tooltip-id="global-tooltip" 
+                    data-tooltip-content={t("notes.toggleSidebarCtrl")}
+                >
+                    <Menu size={24} />
                 </button>
 
                 <h1 className="page-title">{getViewTitle()}</h1>

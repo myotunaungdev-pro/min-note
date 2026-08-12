@@ -116,7 +116,7 @@ const PaymentSuccess = () => {
                 />
             )}
 
-            <div className="glass-card" style={{
+            <div className="glass-card w-full max-w-[95%] sm:max-w-md md:max-w-lg p-4 sm:p-6 md:p-14" style={{
                 background: 'linear-gradient(145deg, #1a1a1a 0%, #0f0f0f 100%)',
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
@@ -124,9 +124,6 @@ const PaymentSuccess = () => {
                 borderTop: '1px solid rgba(16, 185, 129, 0.4)',
                 boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
                 borderRadius: '24px',
-                padding: '3.5rem 2.5rem',
-                maxWidth: '520px',
-                width: '90%',
                 zIndex: 10,
                 display: 'flex',
                 flexDirection: 'column',

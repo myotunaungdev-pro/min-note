@@ -99,3 +99,117 @@ The MIN NOTE Team
 
     return { html, text };
 };
+
+export const getPaymentFailedEmailTemplate = (userName, rejectionReason) => {
+    const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body {
+                    font-family: 'Helvetica Neue', Arial, sans-serif;
+                    background-color: #05070c;
+                    color: #ffffff;
+                    margin: 0;
+                    padding: 0;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #111111;
+                    padding: 40px;
+                    border-radius: 12px;
+                    border: 1px solid #1a1a1a;
+                }
+                h1, h2 {
+                    color: #ff4d4f;
+                    margin-top: 0;
+                }
+                p {
+                    color: #94a3b8;
+                    line-height: 1.6;
+                    font-size: 16px;
+                }
+                .strong-text {
+                    color: #ffffff;
+                    font-weight: bold;
+                }
+                .reason-box {
+                    color: #ff4d4f;
+                    padding: 12px 16px;
+                    background: rgba(255, 77, 79, 0.1);
+                    border-radius: 8px;
+                    border: 1px solid rgba(255, 77, 79, 0.2);
+                    margin: 20px 0;
+                }
+                .divider {
+                    border: none;
+                    border-top: 1px solid #222222;
+                    margin: 30px 0;
+                }
+                .footer {
+                    margin-top: 40px;
+                    font-size: 14px;
+                    color: #64748b;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h2>Update regarding your MIN NOTE Payment Proof</h2>
+                <p>Hello <span class="strong-text">${userName}</span>,</p>
+                <p>We encountered an issue while verifying the payment proof you submitted.</p>
+                <p>Unfortunately, we could not confirm the transaction for the following reason:</p>
+                
+                <div class="reason-box">
+                    <span class="strong-text">${rejectionReason}</span>
+                </div>
+                
+                <p>Please contact our support team or re-submit a valid screenshot of the successful KPay transfer.</p>
+                
+                <hr class="divider">
+                
+                <h2>MIN NOTE ငွေပေးချေမှု အခြေအနေ</h2>
+                <p>လူကြီးမင်း တင်သွင်းထားသော KPay ငွေလွှဲမှတ်တမ်းကို စစ်ဆေးရာတွင် အောက်ပါအကြောင်းအရင်းကြောင့် အခက်အခဲရှိနေပါသည်။</p>
+                
+                <div class="reason-box">
+                    <span class="strong-text">${rejectionReason}</span>
+                </div>
+                
+                <p>ကျေးဇူးပြု၍ မှန်ကန်သော ငွေလွှဲပြေစာအား ပြန်လည်တင်သွင်းပေးပါရန် သို့မဟုတ် Customer Support သို့ ဆက်သွယ်ပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည်။</p>
+                
+                <div class="footer">
+                    <p>Best regards,<br>The MIN NOTE Team</p>
+                </div>
+            </div>
+        </body>
+        </html>
+    `;
+
+    const text = `
+Update regarding your MIN NOTE Payment Proof
+
+Hello ${userName},
+
+We encountered an issue while verifying the payment proof you submitted.
+Unfortunately, we could not confirm the transaction for the following reason:
+${rejectionReason}
+
+Please contact our support team or re-submit a valid screenshot of the successful KPay transfer.
+
+--------------------------------------------------
+
+MIN NOTE ငွေပေးချေမှု အခြေအနေ
+
+လူကြီးမင်း တင်သွင်းထားသော KPay ငွေလွှဲမှတ်တမ်းကို စစ်ဆေးရာတွင် အောက်ပါအကြောင်းအရင်းကြောင့် အခက်အခဲရှိနေပါသည်။
+${rejectionReason}
+
+ကျေးဇူးပြု၍ မှန်ကန်သော ငွေလွှဲပြေစာအား ပြန်လည်တင်သွင်းပေးပါရန် သို့မဟုတ် Customer Support သို့ ဆက်သွယ်ပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည်။
+
+Best regards,
+The MIN NOTE Team
+    `;
+
+    return { html, text };
+};

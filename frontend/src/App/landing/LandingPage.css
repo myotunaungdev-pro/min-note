@@ -576,6 +576,14 @@ body.light-theme .landing-page {
         padding: 16px 20px;
     }
 
+    .hero-section {
+        padding: 80px 16px 60px;
+    }
+
+    .features-section, .how-it-works, .testimonials-section, .final-cta-section {
+        padding: 60px 16px;
+    }
+
     .hero-title {
         font-size: 48px;
     }
@@ -643,6 +651,18 @@ body.light-theme .landing-page {
     .btn-login {
         padding: 6px 12px;
         font-size: 14px;
+    }
+
+    .hero-section {
+        padding: 60px 8px 40px;
+    }
+
+    .features-section, .how-it-works, .testimonials-section, .final-cta-section {
+        padding: 40px 8px;
+    }
+
+    .public-content-wrapper {
+        padding: 0 8px;
     }
 
     .footer-grid {
