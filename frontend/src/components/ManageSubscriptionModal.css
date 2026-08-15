@@ -57,6 +57,7 @@
 .manage-footer {
     display: flex;
     justify-content: flex-end;
+    width: 100%;
 }
 
 .manage-btn-group {
@@ -121,4 +122,80 @@
     opacity: 0.7;
     cursor: not-allowed;
     transform: none;
+}
+
+.manage-sub-info.success {
+    display: flex;
+    gap: 0.75rem;
+    background-color: rgba(0, 212, 170, 0.1);
+    border: 1px solid rgba(0, 212, 170, 0.2);
+    color: #00d4aa;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.info-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.manage-btn-group-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.manage-btn-cancel-secondary {
+    background: transparent;
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    box-shadow: none;
+}
+
+.manage-btn-cancel-secondary:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+}
+
+.manage-btn-tertiary {
+    background: rgba(30, 41, 59, 0.8);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+    font-weight: 500;
+    padding: 0.875rem;
+    border-radius: 12px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.manage-btn-tertiary:hover:not(:disabled) {
+    background: rgba(51, 65, 85, 0.9);
+    color: #f8fafc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+}
+
+.manage-btn-with-desc {
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.875rem;
+}
+
+.btn-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.btn-desc {
+    font-size: 0.8rem;
+    font-weight: 400;
+    opacity: 0.85;
+    text-align: center;
 }

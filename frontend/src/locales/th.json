@@ -616,6 +616,8 @@
             }
         },
         "currentPlan": "แผนปัจจุบัน",
+        "pendingButton": "รอการอนุมัติ",
+        "pendingBanner": "คุณมีรายการ KPay ที่รอการตรวจสอบ โปรดรอให้ทีมงานของเราอนุมัติ",
         "authWarning": "กรุณาสมัครสมาชิกหรือเข้าสู่ระบบก่อนเพื่ออัปเกรด"
     },
     "checkout": {
@@ -634,6 +636,22 @@
         "successTitle": "ชำระเงินสำเร็จ!",
         "successDesc": "ยินดีต้อนรับสู่ MIN NOTE Pro"
     },
+    "subscriptionModal": {
+        "cancelWarning": "How would you like to cancel your Pro plan?",
+        "cancelAtEndBtn": "Cancel at end of current period",
+        "cancelAtEndDesc": "Keep your Pro benefits until your current plan expires.",
+        "cancelImmediateBtn": "Cancel Immediately",
+        "cancelImmediateDesc": "Lose Pro access right now. No refund will be provided.",
+        "keepPlanBtn": "Nevermind, keep my plan",
+        "resumeBtn": "Resume Pro Subscription",
+        "scheduledWarning": "Your Pro plan is scheduled to cancel on {{date}}. You can still enjoy all premium features until then.",
+        "toastScheduled": "Cancellation scheduled. Pro access remains until your current period ends.",
+        "toastImmediate": "Subscription canceled. Your account is now on the Free plan.",
+        "toastResumed": "Welcome back! Your Pro subscription has been successfully resumed.",
+        "confirmImmediateCancel": "Are you sure? You will lose Pro access immediately and no refunds will be provided.",
+        "confirmImmediateBtn": "Yes, Cancel Immediately",
+        "goBackBtn": "Go Back"
+    },
     "billing": {
         "manageSubscription": "จัดการการสมัครสมาชิก",
         "currentPlan": "แพ็กเกจปัจจุบัน",
@@ -645,7 +663,13 @@
         "cancelError": "ไม่สามารถยกเลิกการสมัครสมาชิกได้",
         "confirmCancelWarning": "การดำเนินการนี้ไม่สามารถยกเลิกได้ คุณแน่ใจหรือไม่ว่าต้องการสูญเสียสิทธิประโยชน์ระดับโปรของคุณ?",
         "keepProPlan": "คงระดับโปรไว้",
-        "yesCancel": "ใช่ ยกเลิก"
+        "yesCancel": "ใช่ ยกเลิก",
+        "cancelChoicePrompt": "โปรดเลือกวิธีที่คุณต้องการยกเลิกการสมัครสมาชิก:",
+        "cancelAtEnd": "ยกเลิกเมื่อสิ้นสุดรอบบิล",
+        "cancelImmediate": "ยกเลิกทันที (สูญเสียการเข้าถึง)",
+        "keepPlanNevermind": "ช่างมันเถอะ คงแพ็กเกจไว้",
+        "resumeSubscription": "กลับมาสมัครสมาชิกอีกครั้ง",
+        "scheduledCancelWarning": "การสมัครสมาชิกของคุณมีกำหนดจะยกเลิกในวันที่ {{date}} คุณจะยังคงใช้แพ็กเกจโปรได้จนกว่าจะถึงวันนั้น"
     },
     "sidebar": {
         "proPlan": "แพ็กเกจโปร ✨"
@@ -696,11 +720,12 @@
         "refresh": "รีเฟรช",
         "table": {
             "user": "ผู้ใช้",
-            "plan": "แผน",
+            "plan": "แพ็กเกจ",
             "amount": "จำนวนเงิน",
             "date": "วันที่",
             "slip": "สลิป",
             "status": "สถานะ",
+            "usageStatus": "สถานะการใช้งาน",
             "actions": "การกระทำ",
             "unknownUser": "ผู้ใช้ที่ไม่รู้จัก",
             "viewSlip": "ดูสลิป",
@@ -717,8 +742,9 @@
             "selectReason": "กรุณาเลือกเหตุผลการปฏิเสธ"
         },
         "rejection": {
-            "reason1": "ใบเสร็จไม่ถูกต้องหรือเป็นของปลอม",
-            "reason2": "ไม่พบรายการธุรกรรม",
+            "all": "เหตุผลทั้งหมด",
+            "reason1": "สลิปไม่ถูกต้องหรือเป็นของปลอม",
+            "reason2": "ไม่พบรายการโอนเงิน",
             "reason3": "จำนวนเงินไม่ถูกต้อง",
             "reason4": "ใบเสร็จถูกใช้งานแล้ว",
             "reason5": "ภาพไม่ชัดเจนหรือเบลอ",
@@ -745,6 +771,19 @@
             "zToA": "Z ถึง A"
         },
         "backBtn": "กลับไปที่การตั้งค่า",
-        "swipeHint": "← เลื่อนแนวนอนเพื่อดูคอลัมน์ทั้งหมด →"
+        "swipeHint": "← เลื่อนแนวนอนเพื่อดูคอลัมน์ทั้งหมด →",
+        "status": {
+            "pending": "รอดำเนินการ",
+            "approved": "อนุมัติ",
+            "rejected": "ปฏิเสธ"
+        },
+        "usageStatus": {
+            "all": "สถานะการใช้งานทั้งหมด",
+            "active": "ใช้งานอยู่",
+            "canceling": "กำลังยกเลิก",
+            "revoked": "เพิกถอนแล้ว",
+            "expired": "หมดอายุ",
+            "na": "-"
+        }
     }
 }

@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { v2 as cloudinary } from 'cloudinary';
 import User from '../model/user.js';
 import Note from '../model/notes.js';
+import ManualPayment from '../model/manualPayment.js';
 import { generateOTP } from '../utils/generateOTP.js';
 import { sendEmail } from '../utils/sendEmail.js';
 
@@ -14,11 +15,30 @@ export const getMe = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         
+        let planModified = false;
+        
+        // Lazy evaluation for expired subscriptions
+        if (user.plan === 'pro' && user.currentPeriodEnd && new Date(user.currentPeriodEnd) < new Date()) {
+            user.plan = 'free';
+            user.planType = undefined;
+            user.currentPeriodEnd = undefined;
+            user.cancelAtPeriodEnd = false;
+            planModified = true;
+        }
+
+        if (planModified) {
+            await user.save();
+        }
+
         const plan = user.plan || 'free';
         const planType = user.planType || null;
+        const cancelAtPeriodEnd = user.cancelAtPeriodEnd || false;
+
+        const pendingPayment = await ManualPayment.findOne({ userId, status: 'pending' });
+        const hasPendingPayment = !!pendingPayment;
 
         res.status(200).json({ 
-            user: { ...user.toObject(), plan, planType } 
+            user: { ...user.toObject(), plan, planType, cancelAtPeriodEnd, hasPendingPayment } 
         });
     } catch (error) {
         console.error(error);

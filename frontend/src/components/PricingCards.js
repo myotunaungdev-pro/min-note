@@ -8,7 +8,7 @@ import '../pages/public/Pricing.css';
 const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
-    const { plan } = useSubscription();
+    const { plan, hasPendingPayment } = useSubscription();
     const [isYearly, setIsYearly] = useState(false);
 
     const [currency, setCurrency] = useState(() => {
@@ -43,6 +43,12 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
 
     return (
         <div className="w-full max-w-7xl mx-auto px-1">
+            {hasPendingPayment && (
+                <div className="bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 p-4 rounded-xl mb-8 text-center text-sm font-medium">
+                    {t('pricingPage.pendingBanner')}
+                </div>
+            )}
+            
             <div className="pricing-controls-wrapper">
                 <div className="currency-selector">
                     {['USD', 'THB', 'MMK'].map((c) => (
@@ -117,18 +123,20 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
 
                     <button
                         className="pricing-card-btn pricing-btn-filled"
-                        disabled={isUpgrading || plan === 'pro'}
+                        disabled={isUpgrading || plan === 'pro' || hasPendingPayment}
                         onClick={() => {
-                            if (plan !== 'pro' && onUpgradeClick) {
+                            if (plan !== 'pro' && !hasPendingPayment && onUpgradeClick) {
                                 onUpgradeClick(isYearly ? 'yearly' : 'monthly', currency);
                             }
                         }}
                     >
                         {plan === 'pro' 
                             ? t('pricingPage.currentPlan') 
-                            : isUpgrading 
-                                ? t('common.loading', 'Loading...') 
-                                : t('pricingPage.tiers.pro.button')}
+                            : hasPendingPayment 
+                                ? t('pricingPage.pendingButton')
+                                : isUpgrading 
+                                    ? t('common.loading', 'Loading...') 
+                                    : t('pricingPage.tiers.pro.button')}
                     </button>
                 </div>
 

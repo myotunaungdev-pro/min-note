@@ -100,7 +100,23 @@ The MIN NOTE Team
     return { html, text };
 };
 
+const rejectionReasonMapping = {
+    'reason1': 'Invalid or Fake Receipt / မှားယွင်းနေသော သို့မဟုတ် အတုပြုလုပ်ထားသော ပြေစာ',
+    'reason2': 'Transaction Not Found / ငွေလွှဲမှတ်တမ်း ရှာမတွေ့ပါ',
+    'reason3': 'Incorrect Payment Amount / ငွေလွှဲပမာဏ မှားယွင်းနေပါသည်',
+    'reason4': 'Slip Already Used / ဤပြေစာကို အသုံးပြုပြီးဖြစ်ပါသည်',
+    'reason5': 'Unclear or Blurry Image / ပြေစာသည် မှုန်ဝါးနေပြီး ဖတ်မရပါ',
+    'reason6': 'Incorrect Bank/Account Number / ဘဏ် သို့မဟုတ် အကောင့်နံပါတ် မှားယွင်းနေပါသည်'
+};
+
 export const getPaymentFailedEmailTemplate = (userName, rejectionReason) => {
+    let friendlyReason = rejectionReason;
+    if (rejectionReason && rejectionReason.startsWith('custom: ')) {
+        friendlyReason = rejectionReason.replace('custom: ', '').trim();
+    } else if (rejectionReason && rejectionReasonMapping[rejectionReason]) {
+        friendlyReason = rejectionReasonMapping[rejectionReason];
+    }
+
     const html = `
         <!DOCTYPE html>
         <html>
@@ -163,7 +179,7 @@ export const getPaymentFailedEmailTemplate = (userName, rejectionReason) => {
                 <p>Unfortunately, we could not confirm the transaction for the following reason:</p>
                 
                 <div class="reason-box">
-                    <span class="strong-text">${rejectionReason}</span>
+                    <span class="strong-text">${friendlyReason}</span>
                 </div>
                 
                 <p>Please contact our support team or re-submit a valid screenshot of the successful KPay transfer.</p>
@@ -174,7 +190,7 @@ export const getPaymentFailedEmailTemplate = (userName, rejectionReason) => {
                 <p>လူကြီးမင်း တင်သွင်းထားသော KPay ငွေလွှဲမှတ်တမ်းကို စစ်ဆေးရာတွင် အောက်ပါအကြောင်းအရင်းကြောင့် အခက်အခဲရှိနေပါသည်။</p>
                 
                 <div class="reason-box">
-                    <span class="strong-text">${rejectionReason}</span>
+                    <span class="strong-text">${friendlyReason}</span>
                 </div>
                 
                 <p>ကျေးဇူးပြု၍ မှန်ကန်သော ငွေလွှဲပြေစာအား ပြန်လည်တင်သွင်းပေးပါရန် သို့မဟုတ် Customer Support သို့ ဆက်သွယ်ပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည်။</p>
@@ -194,7 +210,7 @@ Hello ${userName},
 
 We encountered an issue while verifying the payment proof you submitted.
 Unfortunately, we could not confirm the transaction for the following reason:
-${rejectionReason}
+${friendlyReason}
 
 Please contact our support team or re-submit a valid screenshot of the successful KPay transfer.
 

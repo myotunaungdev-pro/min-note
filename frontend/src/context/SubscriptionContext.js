@@ -16,6 +16,8 @@ export const SubscriptionProvider = ({ children }) => {
     });
     const [planType, setPlanType] = useState(() => localStorage.getItem('user_planType') || null);
     const [nextBillingDate, setNextBillingDate] = useState(() => localStorage.getItem('user_nextBillingDate') || null);
+    const [cancelAtPeriodEnd, setCancelAtPeriodEnd] = useState(() => localStorage.getItem('user_cancelAtPeriodEnd') === 'true');
+    const [hasPendingPayment, setHasPendingPayment] = useState(() => localStorage.getItem('user_hasPendingPayment') === 'true');
 
     // Auto-sync with the freshest user data fetched from the backend via Redux
     useEffect(() => {
@@ -27,10 +29,14 @@ export const SubscriptionProvider = ({ children }) => {
             } else {
                 setNextBillingDate(null);
             }
+            setCancelAtPeriodEnd(user.cancelAtPeriodEnd || false);
+            setHasPendingPayment(user.hasPendingPayment || false);
         } else {
             setPlan('free');
             setPlanType(null);
             setNextBillingDate(null);
+            setCancelAtPeriodEnd(false);
+            setHasPendingPayment(false);
         }
     }, [user]);
 
@@ -41,7 +47,10 @@ export const SubscriptionProvider = ({ children }) => {
         
         if (nextBillingDate) localStorage.setItem('user_nextBillingDate', nextBillingDate);
         else localStorage.removeItem('user_nextBillingDate');
-    }, [plan, planType, nextBillingDate]);
+        
+        localStorage.setItem('user_cancelAtPeriodEnd', cancelAtPeriodEnd);
+        localStorage.setItem('user_hasPendingPayment', hasPendingPayment);
+    }, [plan, planType, nextBillingDate, cancelAtPeriodEnd, hasPendingPayment]);
 
     const upgradeToPro = (selectedPlanType = 'monthly', expiryDate = null) => {
         setPlan('pro');
@@ -54,14 +63,27 @@ export const SubscriptionProvider = ({ children }) => {
         }
     };
 
-    const cancelSubscription = () => {
-        setPlan('free');
-        setPlanType(null);
-        setNextBillingDate(null);
+    const cancelSubscription = (immediate = false) => {
+        if (immediate) {
+            setPlan('free');
+            setPlanType(null);
+            setNextBillingDate(null);
+            setCancelAtPeriodEnd(false);
+        } else {
+            setCancelAtPeriodEnd(true);
+        }
+    };
+
+    const resumeSubscription = () => {
+        setCancelAtPeriodEnd(false);
+    };
+
+    const markPaymentAsPending = () => {
+        setHasPendingPayment(true);
     };
 
     return (
-        <SubscriptionContext.Provider value={{ plan, planType, nextBillingDate, upgradeToPro, cancelSubscription }}>
+        <SubscriptionContext.Provider value={{ plan, planType, nextBillingDate, cancelAtPeriodEnd, hasPendingPayment, markPaymentAsPending, upgradeToPro, cancelSubscription, resumeSubscription }}>
             {children}
         </SubscriptionContext.Provider>
     );

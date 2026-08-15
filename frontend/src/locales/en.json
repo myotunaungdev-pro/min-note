@@ -615,6 +615,8 @@
             }
         },
         "currentPlan": "Current Plan",
+        "pendingButton": "Pending Approval",
+        "pendingBanner": "You have a pending KPay transaction. Please wait for our team to approve it.",
         "authWarning": "Please sign up or log in first to upgrade"
     },
     "checkout": {
@@ -633,6 +635,22 @@
         "successTitle": "Payment Successful!",
         "successDesc": "Welcome to MIN NOTE Pro."
     },
+    "subscriptionModal": {
+        "cancelWarning": "How would you like to cancel your Pro plan?",
+        "cancelAtEndBtn": "Cancel at end of current period",
+        "cancelAtEndDesc": "Keep your Pro benefits until your current plan expires.",
+        "cancelImmediateBtn": "Cancel Immediately",
+        "cancelImmediateDesc": "Lose Pro access right now. No refund will be provided.",
+        "keepPlanBtn": "Nevermind, keep my plan",
+        "resumeBtn": "Resume Pro Subscription",
+        "scheduledWarning": "Your Pro plan is scheduled to cancel on {{date}}. You can still enjoy all premium features until then.",
+        "toastScheduled": "Cancellation scheduled. Pro access remains until your current period ends.",
+        "toastImmediate": "Subscription canceled. Your account is now on the Free plan.",
+        "toastResumed": "Welcome back! Your Pro subscription has been successfully resumed.",
+        "confirmImmediateCancel": "Are you sure? You will lose Pro access immediately and no refunds will be provided.",
+        "confirmImmediateBtn": "Yes, Cancel Immediately",
+        "goBackBtn": "Go Back"
+    },
     "billing": {
         "manageSubscription": "Manage Subscription",
         "currentPlan": "Current Plan",
@@ -644,7 +662,13 @@
         "cancelError": "Failed to cancel subscription.",
         "confirmCancelWarning": "This action cannot be undone. Are you absolutely sure you want to lose your Pro benefits?",
         "keepProPlan": "Keep Pro Plan",
-        "yesCancel": "Yes, Cancel"
+        "yesCancel": "Yes, Cancel",
+        "cancelChoicePrompt": "Please choose how you would like to cancel your subscription:",
+        "cancelAtEnd": "Cancel at End of Billing Cycle",
+        "cancelImmediate": "Cancel Immediately (Lose Access)",
+        "keepPlanNevermind": "Nevermind, keep my plan",
+        "resumeSubscription": "Resume Subscription",
+        "scheduledCancelWarning": "Your subscription is scheduled to cancel on {{date}}. You will retain Pro access until then."
     },
     "sidebar": {
         "proPlan": "Pro Plan ✨"
@@ -700,6 +724,7 @@
             "date": "Date",
             "slip": "Slip",
             "status": "Status",
+            "usageStatus": "Usage Status",
             "actions": "Actions",
             "unknownUser": "Unknown User",
             "viewSlip": "View Slip",
@@ -716,6 +741,7 @@
             "selectReason": "Please select a rejection reason"
         },
         "rejection": {
+            "all": "All Reasons",
             "reason1": "Invalid or Fake Receipt",
             "reason2": "Transaction Not Found",
             "reason3": "Incorrect Payment Amount",
@@ -744,6 +770,19 @@
             "zToA": "Z to A"
         },
         "backBtn": "Back to Settings",
-        "swipeHint": "← Swipe horizontally to view all columns →"
+        "swipeHint": "← Swipe horizontally to view all columns →",
+        "status": {
+            "pending": "Pending",
+            "approved": "Approved",
+            "rejected": "Rejected"
+        },
+        "usageStatus": {
+            "all": "All Usage Status",
+            "active": "Active",
+            "canceling": "Canceling",
+            "revoked": "Revoked",
+            "expired": "Expired",
+            "na": "-"
+        }
     }
 }

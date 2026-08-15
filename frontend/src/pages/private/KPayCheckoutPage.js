@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { X, UploadCloud, CheckCircle, QrCode, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useSubscription } from '../../context/SubscriptionContext';
 import axiosInstance from '../../api/axiosConfig';
 import usePageTitle from '../../hooks/usePageTitle';
 import '../../components/settings/Settings.css';
@@ -10,6 +11,7 @@ const KPayCheckoutPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
+    const { markPaymentAsPending } = useSubscription();
     usePageTitle(t('kpay.title'));
 
     const searchParams = new URLSearchParams(location.search);
@@ -73,6 +75,7 @@ const KPayCheckoutPage = () => {
             });
 
             if (response.data.success) {
+                markPaymentAsPending();
                 navigate('/kpay-success');
             } else {
                 setError(response.data.error || t('kpay.errorFailed'));

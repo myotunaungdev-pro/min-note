@@ -46,6 +46,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    cancelAtPeriodEnd: {
+        type: Boolean,
+        default: false
+    },
     stripeCustomerId: {
         type: String,
         default: null

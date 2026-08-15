@@ -10,21 +10,31 @@ import '../../components/settings/Settings.css';
 
 const CustomDropdown = ({ value, onChange, options, className }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = React.useRef(null);
     const selectedOption = options.find(o => o.value === value) || options[0];
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     return (
-        <div className={`relative ${className}`}>
+        <div ref={dropdownRef} className={`relative ${className}`}>
             <button 
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                onBlur={() => setTimeout(() => setIsOpen(false), 200)}
                 className="w-full flex items-center justify-between bg-[#1a1a1a] hover:bg-[#222] border border-gray-700 text-white text-sm rounded-xl focus:ring-2 focus:ring-[#00d4aa]/50 focus:border-[#00d4aa] p-3 outline-none transition-colors"
             >
                 <span>{selectedOption.label}</span>
                 <ChevronDown size={16} className={`text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
             </button>
             {isOpen && (
-                <div className="absolute z-10 w-full mt-2 bg-[#1a1a1a] border border-gray-700 rounded-xl shadow-xl overflow-hidden max-h-60 overflow-y-auto">
+                <div className="absolute z-50 w-full mt-2 bg-[#1a1a1a] border border-gray-700 rounded-xl shadow-xl overflow-hidden max-h-60 overflow-y-auto">
                     {options.map((option) => (
                         <button
                             key={option.value}
@@ -54,6 +64,8 @@ const AdminPayments = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [filterStatus, setFilterStatus] = useState('all');
     const [filterPlan, setFilterPlan] = useState('all');
+    const [filterUsageStatus, setFilterUsageStatus] = useState('all');
+    const [filterRejectReason, setFilterRejectReason] = useState('all');
     const [sortDate, setSortDate] = useState('newest');
     const [searchQuery, setSearchQuery] = useState('');
     const [lightboxImage, setLightboxImage] = useState(null);
@@ -136,8 +148,8 @@ const AdminPayments = () => {
         }
         
         const finalReason = rejectionReason === 'other' 
-            ? customRemarks 
-            : t(`admin.rejection.${rejectionReason}`);
+            ? `custom: ${customRemarks}`
+            : rejectionReason;
             
         try {
             const response = await axiosInstance.patch(`/admin/manual-payments/${selectedPaymentId}/reject`, {
@@ -153,9 +165,56 @@ const AdminPayments = () => {
         }
     };
 
+    const getFulfillmentStatus = (payment) => {
+        if (payment.status !== 'approved') return null;
+
+        const user = payment.userId;
+        if (!user) return null;
+
+        const paymentDate = new Date(payment.createdAt || payment.updatedAt);
+        let expirationDate = new Date(paymentDate);
+        if (payment.planType === 'yearly') {
+            expirationDate.setFullYear(expirationDate.getFullYear() + 1);
+        } else {
+            expirationDate.setMonth(expirationDate.getMonth() + 1);
+        }
+        
+        const isChronologicallyExpired = new Date() > expirationDate;
+
+        if (isChronologicallyExpired) {
+            return { key: 'expired', color: 'bg-gray-500/10 text-gray-400 border-gray-500/20' };
+        }
+
+        if (user.plan === 'free') {
+            return { key: 'revoked', color: 'bg-red-500/10 text-red-400 border-red-500/20' };
+        }
+
+        if (user.plan === 'pro') {
+            if (user.cancelAtPeriodEnd) {
+                return { key: 'canceling', color: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20' };
+            }
+            return { key: 'active', color: 'bg-green-500/10 text-green-400 border-green-500/20' };
+        }
+        
+        return null;
+    };
+
     const filteredPayments = payments
         .filter(p => filterStatus === 'all' ? true : p.status === filterStatus)
         .filter(p => filterPlan === 'all' ? true : p.planType === filterPlan)
+        .filter(p => {
+            if (filterUsageStatus === 'all') return true;
+            const usageStatus = getFulfillmentStatus(p);
+            if (filterUsageStatus === 'na') return !usageStatus;
+            return usageStatus && usageStatus.key === filterUsageStatus;
+        })
+        .filter(p => {
+            if (filterStatus !== 'rejected' || filterRejectReason === 'all') return true;
+            if (filterRejectReason === 'other') {
+                return p.rejectionReason === 'other' || (p.rejectionReason && p.rejectionReason.startsWith('custom:'));
+            }
+            return p.rejectionReason === filterRejectReason;
+        })
         .filter(p => {
             if (!searchQuery) return true;
             const query = searchQuery.toLowerCase();
@@ -221,26 +280,56 @@ const AdminPayments = () => {
                     <div className="flex flex-col md:flex-row items-center gap-4 justify-between w-full flex-wrap">
                         <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto flex-wrap">
                             <CustomDropdown
-                                value={filterStatus}
-                                onChange={setFilterStatus}
-                                className="min-w-[140px] w-full sm:w-auto z-20"
-                                options={[
-                                    { value: 'all', label: t('admin.filters.all', 'All Statuses') },
-                                    { value: 'pending', label: t('admin.filters.pending', 'Pending') },
-                                    { value: 'approved', label: t('admin.filters.approved', 'Approved') },
-                                    { value: 'rejected', label: t('admin.filters.rejected', 'Rejected') }
-                                ]}
-                            />
-                            <CustomDropdown
                                 value={filterPlan}
                                 onChange={setFilterPlan}
-                                className="min-w-[140px] w-full sm:w-auto z-10"
+                                className="min-w-[140px] w-full sm:w-auto z-40"
                                 options={[
                                     { value: 'all', label: t('admin.filters.allPlans', 'All Plans') },
                                     { value: 'monthly', label: t('admin.filters.monthly', 'Monthly') },
                                     { value: 'yearly', label: t('admin.filters.yearly', 'Yearly') }
                                 ]}
                             />
+                            <CustomDropdown
+                                value={filterStatus}
+                                onChange={setFilterStatus}
+                                className="min-w-[140px] w-full sm:w-auto z-30"
+                                options={[
+                                    { value: 'all', label: t('admin.filters.all', 'All Statuses') },
+                                    { value: 'pending', label: t('admin.status.pending', 'Pending') },
+                                    { value: 'approved', label: t('admin.status.approved', 'Approved') },
+                                    { value: 'rejected', label: t('admin.status.rejected', 'Rejected') }
+                                ]}
+                            />
+                            <CustomDropdown
+                                value={filterUsageStatus}
+                                onChange={setFilterUsageStatus}
+                                className="min-w-[150px] w-full sm:w-auto z-20"
+                                options={[
+                                    { value: 'all', label: t('admin.usageStatus.all', 'All Usage') },
+                                    { value: 'active', label: t('admin.usageStatus.active', 'Active') },
+                                    { value: 'canceling', label: t('admin.usageStatus.canceling', 'Canceling') },
+                                    { value: 'revoked', label: t('admin.usageStatus.revoked', 'Revoked') },
+                                    { value: 'expired', label: t('admin.usageStatus.expired', 'Expired') },
+                                    { value: 'na', label: t('admin.usageStatus.na', '-') }
+                                ]}
+                            />
+                            {filterStatus === 'rejected' && (
+                                <CustomDropdown
+                                    value={filterRejectReason}
+                                    onChange={setFilterRejectReason}
+                                    className="min-w-[180px] w-full sm:w-auto z-10"
+                                    options={[
+                                        { value: 'all', label: t('admin.rejection.all', 'All Reasons') },
+                                        { value: 'reason1', label: t('admin.rejection.reason1', 'Invalid or Fake Receipt') },
+                                        { value: 'reason2', label: t('admin.rejection.reason2', 'Transaction Not Found') },
+                                        { value: 'reason3', label: t('admin.rejection.reason3', 'Incorrect Payment Amount') },
+                                        { value: 'reason4', label: t('admin.rejection.reason4', 'Slip Already Used') },
+                                        { value: 'reason5', label: t('admin.rejection.reason5', 'Unclear or Blurry Image') },
+                                        { value: 'reason6', label: t('admin.rejection.reason6', 'Incorrect Bank/Account Number') },
+                                        { value: 'other', label: t('admin.rejection.other', 'Other / Remarks') }
+                                    ]}
+                                />
+                            )}
                         </div>
                         <div className="w-full md:w-auto">
                             <CustomDropdown
@@ -270,13 +359,14 @@ const AdminPayments = () => {
                                     <th className="px-6 py-4 whitespace-nowrap text-center">{t('admin.table.date')}</th>
                                     <th className="px-6 py-4 whitespace-nowrap text-center">{t('admin.table.slip')}</th>
                                     <th className="px-6 py-4 whitespace-nowrap text-center">{t('admin.table.status')}</th>
+                                    <th className="px-6 py-4 whitespace-nowrap text-center">{t('admin.table.usageStatus', 'Usage Status')}</th>
                                     <th className="px-6 first:pl-8 last:pr-8 py-4 whitespace-nowrap text-center">{t('admin.table.actions')}</th>
                                 </tr>
                             </thead>
                             <tbody className="block md:table-row-group divide-y divide-gray-800 md:divide-y-0 space-y-4 md:space-y-0 p-2 sm:p-4 md:p-0">
                                 {isLoading ? (
                                     <tr className="block md:table-row">
-                                        <td colSpan="7" className="block md:table-cell px-6 py-12 text-center text-gray-500">
+                                        <td colSpan="8" className="block md:table-cell px-6 py-12 text-center text-gray-500">
                                             <div className="flex justify-center mb-4">
                                                 <div className="w-8 h-8 border-2 border-[#00d4aa] border-t-transparent rounded-full animate-spin"></div>
                                             </div>
@@ -285,18 +375,18 @@ const AdminPayments = () => {
                                     </tr>
                                 ) : filteredPayments.length === 0 ? (
                                     <tr className="block md:table-row">
-                                        <td colSpan="7" className="block md:table-cell px-6 py-12 text-center text-gray-500">
+                                        <td colSpan="8" className="block md:table-cell px-6 py-12 text-center text-gray-500">
                                             {t('admin.table.noPayments')}
                                         </td>
                                     </tr>
                                 ) : (
                                     filteredPayments.map((payment) => (
                                         <tr key={payment._id} className="block md:table-row bg-gray-800/40 md:bg-transparent rounded-lg mb-4 md:mb-0 p-3 sm:p-4 md:p-0 border border-gray-700 md:border-b md:hover:bg-[#1a1a1a]/50 transition-colors">
-                                            <td className="flex justify-between items-center md:table-cell md:px-6 md:first:pl-8 md:last:pr-8 py-2 md:py-4 whitespace-nowrap md:border-none min-w-[150px] md:max-w-0 md:text-left gap-2">
+                                            <td className="flex justify-between items-center md:table-cell md:px-6 md:first:pl-8 md:last:pr-8 py-2 md:py-4 whitespace-nowrap md:border-none w-auto md:text-left gap-2">
                                                 <span className="w-24 shrink-0 text-gray-400 text-sm font-medium md:hidden">{t('admin.table.user')}:</span>
-                                                <div className="flex-1 min-w-0 text-right md:text-left truncate">
-                                                    <div className="font-medium text-white truncate">{payment.userId?.email || t('admin.table.unknownUser')}</div>
-                                                    <div className="text-xs text-gray-500 truncate">{payment.userId?.name || ''}</div>
+                                                <div className="flex-1 text-right md:text-left">
+                                                    <div className="font-medium text-white">{payment.userId?.email || t('admin.table.unknownUser')}</div>
+                                                    <div className="text-xs text-gray-500">{payment.userId?.name || ''}</div>
                                                 </div>
                                             </td>
                                             <td className="flex justify-between items-center md:table-cell md:px-6 md:first:pl-8 md:last:pr-8 py-2 md:py-4 whitespace-nowrap md:border-none md:text-center gap-2">
@@ -340,8 +430,20 @@ const AdminPayments = () => {
                                                         payment.status === 'approved' ? 'bg-green-500/10 text-green-500 border border-green-500/20' :
                                                         'bg-red-500/10 text-red-500 border border-red-500/20'
                                                     }`}>
-                                                        {payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}
+                                                        {t(`admin.status.${payment.status}`)}
                                                     </span>
+                                                </div>
+                                            </td>
+                                            <td className="flex justify-between items-center md:table-cell md:px-6 md:first:pl-8 md:last:pr-8 py-2 md:py-4 whitespace-nowrap md:border-none md:text-center gap-2">
+                                                <span className="w-24 shrink-0 text-gray-400 text-sm font-medium md:hidden">{t('admin.table.usageStatus', 'Usage Status')}:</span>
+                                                <div className="flex-1 min-w-0 text-right md:text-center truncate">
+                                                    {getFulfillmentStatus(payment) ? (
+                                                        <span className={`px-2 py-0.5 rounded text-xs font-medium border ${getFulfillmentStatus(payment).color}`}>
+                                                            {t(`admin.usageStatus.${getFulfillmentStatus(payment).key}`)}
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-gray-500">-</span>
+                                                    )}
                                                 </div>
                                             </td>
                                             <td className="flex justify-between md:justify-center items-center md:table-cell md:px-6 md:first:pl-8 md:last:pr-8 py-2 md:py-4 whitespace-nowrap md:text-center font-medium">

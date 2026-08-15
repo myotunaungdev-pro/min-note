@@ -7,7 +7,7 @@ import { getPaymentSuccessEmailTemplate, getPaymentFailedEmailTemplate } from '.
 export const getManualPayments = async (req, res) => {
     try {
         const payments = await ManualPayment.find({})
-            .populate('userId', 'email name')
+            .populate('userId', 'email name plan cancelAtPeriodEnd planType currentPeriodEnd')
             .sort({ status: -1, createdAt: -1 }); // 'pending' (p) comes after 'approved' (a), wait, sort pending first.
             
         // To strictly sort 'pending' first, we can do it in memory or use aggregation.

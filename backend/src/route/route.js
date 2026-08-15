@@ -9,7 +9,7 @@ import {
     bulkTrashNotes,
     bulkRestoreNotes
 } from '../controller/notesController.js';
-import { upload, submitKPayPayment } from '../controller/paymentController.js';
+import { upload, submitKPayPayment, cancelSubscription, resumeSubscription } from '../controller/paymentController.js';
 import { getManualPayments, approvePayment, rejectPayment } from '../controller/adminController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
@@ -40,6 +40,10 @@ router.delete('/notes/:id', deleteNote);
 
 // Submit manual KPay payment
 router.post('/kpay-submit', protect, upload.single('slip'), submitKPayPayment);
+
+// Subscription management
+router.post('/cancel-subscription', protect, cancelSubscription);
+router.post('/resume-subscription', protect, resumeSubscription);
 
 // Admin Routes
 router.get('/admin/manual-payments', protect, admin, getManualPayments);

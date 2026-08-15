@@ -22,14 +22,20 @@ export const verifySession = async (sessionId) => {
     }
 };
 
-export const cancelSubscription = () => {
-    return new Promise((resolve) => {
-        // Simulate network delay
-        setTimeout(() => {
-            resolve({
-                success: true,
-                message: 'Subscription canceled successfully'
-            });
-        }, 1500); // 1.5 second delay
-    });
+export const cancelSubscription = async (immediate = false) => {
+    try {
+        const response = await axiosInstance.post('/cancel-subscription', { immediate });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || 'Failed to cancel subscription');
+    }
+};
+
+export const resumeSubscription = async () => {
+    try {
+        const response = await axiosInstance.post('/resume-subscription');
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.error || 'Failed to resume subscription');
+    }
 };
