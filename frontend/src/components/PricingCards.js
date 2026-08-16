@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Check } from 'lucide-react';
+import { toast } from 'react-toastify';
 import { useSubscription } from '../context/SubscriptionContext';
 import '../pages/public/Pricing.css';
 
@@ -43,11 +44,6 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
 
     return (
         <div className="w-full max-w-7xl mx-auto px-1">
-            {hasPendingPayment && (
-                <div className="bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 p-4 rounded-xl mb-8 text-center text-sm font-medium">
-                    {t('pricingPage.pendingBanner')}
-                </div>
-            )}
             
             <div className="pricing-controls-wrapper">
                 <div className="currency-selector">
@@ -122,10 +118,14 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
                     </ul>
 
                     <button
-                        className="pricing-card-btn pricing-btn-filled"
-                        disabled={isUpgrading || plan === 'pro' || hasPendingPayment}
+                        className={`pricing-card-btn pricing-btn-filled ${hasPendingPayment ? 'opacity-70 cursor-not-allowed grayscale' : ''}`}
+                        disabled={isUpgrading || plan === 'pro'}
                         onClick={() => {
-                            if (plan !== 'pro' && !hasPendingPayment && onUpgradeClick) {
+                            if (hasPendingPayment) {
+                                toast.info(t('pricingPage.pendingBanner'));
+                                return;
+                            }
+                            if (plan !== 'pro' && onUpgradeClick) {
                                 onUpgradeClick(isYearly ? 'yearly' : 'monthly', currency);
                             }
                         }}

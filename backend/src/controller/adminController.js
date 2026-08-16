@@ -92,9 +92,16 @@ export const rejectPayment = async (req, res) => {
         }
 
         const { rejectionReason } = req.body;
+        const reason = rejectionReason || 'Transaction could not be verified';
+
+        payment.rejectionHistory.push({
+            slipUrl: payment.slipUrl,
+            reason: reason,
+            rejectedBy: req.user.id || req.user._id
+        });
 
         payment.status = 'rejected';
-        payment.rejectionReason = rejectionReason || 'Transaction could not be verified';
+        payment.rejectionReason = reason;
         await payment.save();
 
         if (payment.userId && payment.userId.email) {

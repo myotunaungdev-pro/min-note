@@ -516,7 +516,7 @@
         "tagsTitle": "Fluid Organization",
         "tagsDesc": "Keep your thoughts neatly categorized. Utilize beautifully color-coded Tags featuring our signature glowing UI, allowing for lightning-fast and seamless filtering.",
         "ocrTitle": "Image Text Recognition",
-        "ocrComingSoon": "Coming Soon",
+        "ocrComingSoon": "Pro Feature",
         "ocrDesc": "Supercharge your note-taking with built-in OCR. Instantly extract text from your uploaded images and seamlessly convert them into editable rich text."
     },
     "enterprise": {
@@ -581,7 +581,7 @@
                 "period": "Forever",
                 "desc": "Perfect for getting started",
                 "features": [
-                    "Up to 100 notes",
+                    "Up to 50 notes",
                     "Basic themes",
                     "Community support"
                 ],

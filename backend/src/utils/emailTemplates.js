@@ -101,20 +101,27 @@ The MIN NOTE Team
 };
 
 const rejectionReasonMapping = {
-    'reason1': 'Invalid or Fake Receipt / မှားယွင်းနေသော သို့မဟုတ် အတုပြုလုပ်ထားသော ပြေစာ',
-    'reason2': 'Transaction Not Found / ငွေလွှဲမှတ်တမ်း ရှာမတွေ့ပါ',
-    'reason3': 'Incorrect Payment Amount / ငွေလွှဲပမာဏ မှားယွင်းနေပါသည်',
-    'reason4': 'Slip Already Used / ဤပြေစာကို အသုံးပြုပြီးဖြစ်ပါသည်',
-    'reason5': 'Unclear or Blurry Image / ပြေစာသည် မှုန်ဝါးနေပြီး ဖတ်မရပါ',
-    'reason6': 'Incorrect Bank/Account Number / ဘဏ် သို့မဟုတ် အကောင့်နံပါတ် မှားယွင်းနေပါသည်'
+    'invalid_slip': { en: "Invalid or fake payment slip image", mm: "ငွေလွှဲပြေစာ ပုံမမှန်ကန်ပါ (သို့) အတုဖြစ်နေပါသည်" },
+    'not_found': { en: "Transaction could not be found", mm: "ငွေလွှဲမှတ်တမ်း ရှာမတွေ့ပါ" },
+    'incorrect_amount': { en: "Incorrect transfer amount", mm: "ငွေလွှဲပမာဏ မမှန်ကန်ပါ" },
+    'duplicate': { en: "Duplicate payment submission", mm: "ယခင်တင်ထားသော ပြေစာနှင့် ထပ်နေပါသည်" },
+    'unclear_image': { en: "Unclear or blurry image", mm: "ပြေစာသည် မှုန်ဝါးနေပြီး ဖတ်မရပါ" },
+    'wrong_account': { en: "Incorrect Bank/Account Number", mm: "ဘဏ် (သို့) အကောင့်နံပါတ် မှားယွင်းနေပါသည်" }
 };
 
 export const getPaymentFailedEmailTemplate = (userName, rejectionReason) => {
-    let friendlyReason = rejectionReason;
-    if (rejectionReason && rejectionReason.startsWith('custom: ')) {
-        friendlyReason = rejectionReason.replace('custom: ', '').trim();
-    } else if (rejectionReason && rejectionReasonMapping[rejectionReason]) {
-        friendlyReason = rejectionReasonMapping[rejectionReason];
+    let friendlyReasonEn = "Payment could not be verified";
+    let friendlyReasonMm = "ငွေပေးချေမှုကို အတည်ပြု၍ မရပါ";
+
+    if (rejectionReason) {
+        if (rejectionReason.startsWith('custom:')) {
+            const customText = rejectionReason.replace(/^custom:\s*/i, '').trim();
+            friendlyReasonEn = customText;
+            friendlyReasonMm = customText;
+        } else if (rejectionReasonMapping[rejectionReason]) {
+            friendlyReasonEn = rejectionReasonMapping[rejectionReason].en;
+            friendlyReasonMm = rejectionReasonMapping[rejectionReason].mm;
+        }
     }
 
     const html = `
@@ -179,7 +186,7 @@ export const getPaymentFailedEmailTemplate = (userName, rejectionReason) => {
                 <p>Unfortunately, we could not confirm the transaction for the following reason:</p>
                 
                 <div class="reason-box">
-                    <span class="strong-text">${friendlyReason}</span>
+                    <span class="strong-text">${friendlyReasonEn}</span>
                 </div>
                 
                 <p>Please contact our support team or re-submit a valid screenshot of the successful KPay transfer.</p>
@@ -190,7 +197,7 @@ export const getPaymentFailedEmailTemplate = (userName, rejectionReason) => {
                 <p>လူကြီးမင်း တင်သွင်းထားသော KPay ငွေလွှဲမှတ်တမ်းကို စစ်ဆေးရာတွင် အောက်ပါအကြောင်းအရင်းကြောင့် အခက်အခဲရှိနေပါသည်။</p>
                 
                 <div class="reason-box">
-                    <span class="strong-text">${friendlyReason}</span>
+                    <span class="strong-text">${friendlyReasonMm}</span>
                 </div>
                 
                 <p>ကျေးဇူးပြု၍ မှန်ကန်သော ငွေလွှဲပြေစာအား ပြန်လည်တင်သွင်းပေးပါရန် သို့မဟုတ် Customer Support သို့ ဆက်သွယ်ပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည်။</p>
@@ -210,7 +217,7 @@ Hello ${userName},
 
 We encountered an issue while verifying the payment proof you submitted.
 Unfortunately, we could not confirm the transaction for the following reason:
-${friendlyReason}
+${friendlyReasonEn}
 
 Please contact our support team or re-submit a valid screenshot of the successful KPay transfer.
 
@@ -219,7 +226,7 @@ Please contact our support team or re-submit a valid screenshot of the successfu
 MIN NOTE ငွေပေးချေမှု အခြေအနေ
 
 လူကြီးမင်း တင်သွင်းထားသော KPay ငွေလွှဲမှတ်တမ်းကို စစ်ဆေးရာတွင် အောက်ပါအကြောင်းအရင်းကြောင့် အခက်အခဲရှိနေပါသည်။
-${rejectionReason}
+${friendlyReasonMm}
 
 ကျေးဇူးပြု၍ မှန်ကန်သော ငွေလွှဲပြေစာအား ပြန်လည်တင်သွင်းပေးပါရန် သို့မဟုတ် Customer Support သို့ ဆက်သွယ်ပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည်။
 

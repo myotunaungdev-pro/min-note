@@ -320,12 +320,12 @@ const AdminPayments = () => {
                                     className="min-w-[180px] w-full sm:w-auto z-10"
                                     options={[
                                         { value: 'all', label: t('admin.rejection.all', 'All Reasons') },
-                                        { value: 'reason1', label: t('admin.rejection.reason1', 'Invalid or Fake Receipt') },
-                                        { value: 'reason2', label: t('admin.rejection.reason2', 'Transaction Not Found') },
-                                        { value: 'reason3', label: t('admin.rejection.reason3', 'Incorrect Payment Amount') },
-                                        { value: 'reason4', label: t('admin.rejection.reason4', 'Slip Already Used') },
-                                        { value: 'reason5', label: t('admin.rejection.reason5', 'Unclear or Blurry Image') },
-                                        { value: 'reason6', label: t('admin.rejection.reason6', 'Incorrect Bank/Account Number') },
+                                        { value: 'invalid_slip', label: t('admin.rejection.reason1', 'Invalid or Fake Receipt') },
+                                        { value: 'not_found', label: t('admin.rejection.reason2', 'Transaction Not Found') },
+                                        { value: 'incorrect_amount', label: t('admin.rejection.reason3', 'Incorrect Payment Amount') },
+                                        { value: 'duplicate', label: t('admin.rejection.reason4', 'Slip Already Used') },
+                                        { value: 'unclear_image', label: t('admin.rejection.reason5', 'Unclear or Blurry Image') },
+                                        { value: 'wrong_account', label: t('admin.rejection.reason6', 'Incorrect Bank/Account Number') },
                                         { value: 'other', label: t('admin.rejection.other', 'Other / Remarks') }
                                     ]}
                                 />
@@ -492,12 +492,12 @@ const AdminPayments = () => {
                                         className="w-full z-10"
                                         options={[
                                             { value: '', label: t('admin.rejection.selectReason', 'Select Reason') },
-                                            { value: 'reason1', label: t('admin.rejection.reason1', 'Invalid or Fake Receipt') },
-                                            { value: 'reason2', label: t('admin.rejection.reason2', 'Transaction Not Found') },
-                                            { value: 'reason3', label: t('admin.rejection.reason3', 'Incorrect Payment Amount') },
-                                            { value: 'reason4', label: t('admin.rejection.reason4', 'Slip Already Used') },
-                                            { value: 'reason5', label: t('admin.rejection.reason5', 'Unclear or Blurry Image') },
-                                            { value: 'reason6', label: t('admin.rejection.reason6', 'Incorrect Bank/Account Number') },
+                                            { value: 'invalid_slip', label: t('admin.rejection.reason1', 'Invalid or Fake Receipt') },
+                                            { value: 'not_found', label: t('admin.rejection.reason2', 'Transaction Not Found') },
+                                            { value: 'incorrect_amount', label: t('admin.rejection.reason3', 'Incorrect Payment Amount') },
+                                            { value: 'duplicate', label: t('admin.rejection.reason4', 'Slip Already Used') },
+                                            { value: 'unclear_image', label: t('admin.rejection.reason5', 'Unclear or Blurry Image') },
+                                            { value: 'wrong_account', label: t('admin.rejection.reason6', 'Incorrect Bank/Account Number') },
                                             { value: 'other', label: t('admin.rejection.other', 'Other / Remarks') }
                                         ]}
                                     />

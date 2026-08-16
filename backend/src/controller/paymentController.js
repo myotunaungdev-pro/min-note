@@ -46,15 +46,30 @@ export const submitKPayPayment = async (req, res) => {
 
         const amount = planType === 'yearly' ? 335000 : 35000;
 
+        // Check for existing rejected payment to handle resubmission
+        const existingRejected = await ManualPayment.findOne({ userId, status: 'rejected' });
+
+        if (existingRejected) {
+            if (existingRejected.rejectionHistory && existingRejected.rejectionHistory.length >= 5) {
+                return res.status(400).json({ error: 'Maximum retry limit reached. Please contact support.' });
+            }
+            existingRejected.planType = planType;
+            existingRejected.amount = amount;
+            existingRejected.slipUrl = file.path;
+            existingRejected.status = 'pending';
+            existingRejected.rejectionReason = null;
+            await existingRejected.save();
+            return res.status(200).json({ success: true, message: 'Payment proof resubmitted successfully' });
+        }
+
         const manualPayment = new ManualPayment({
-            userId: req.user.id || req.user._id,
+            userId,
             planType,
             amount,
             slipUrl: file.path
         });
 
         await manualPayment.save();
-
         res.status(201).json({ success: true, message: 'Payment proof submitted successfully' });
     } catch (error) {
         console.error('KPay Submit Error:', error);

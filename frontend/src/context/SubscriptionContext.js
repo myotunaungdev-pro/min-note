@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchCurrentUser } from '../App/store/authSlice';
 
 const SubscriptionContext = createContext();
 
@@ -9,6 +10,7 @@ export const useSubscription = () => {
 
 export const SubscriptionProvider = ({ children }) => {
     const user = useSelector((state) => state.auth?.user);
+    const dispatch = useDispatch();
 
     const [plan, setPlan] = useState(() => {
         const savedPlan = localStorage.getItem('user_plan');
@@ -51,6 +53,20 @@ export const SubscriptionProvider = ({ children }) => {
         localStorage.setItem('user_cancelAtPeriodEnd', cancelAtPeriodEnd);
         localStorage.setItem('user_hasPendingPayment', hasPendingPayment);
     }, [plan, planType, nextBillingDate, cancelAtPeriodEnd, hasPendingPayment]);
+
+    // Polling mechanism: if user has a pending payment, poll the server every 15 seconds
+    // to check if an Admin has approved or rejected it, so the UI updates without a refresh.
+    useEffect(() => {
+        let interval;
+        if (hasPendingPayment) {
+            interval = setInterval(() => {
+                dispatch(fetchCurrentUser());
+            }, 15000);
+        }
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [hasPendingPayment, dispatch]);
 
     const upgradeToPro = (selectedPlanType = 'monthly', expiryDate = null) => {
         setPlan('pro');

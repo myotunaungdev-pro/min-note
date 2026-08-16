@@ -1,4 +1,5 @@
 import Note from '../model/notes.js';
+import User from '../model/user.js';
 
 // Get all notes (Excluding soft-deleted ones if needed)
 export const getNotes = async (req, res) => {
@@ -26,6 +27,16 @@ export const getNoteById = async (req, res) => {
 // Create a new note
 export const createNote = async (req, res) => {
     try {
+        const user = await User.findById(req.user.id);
+        
+        // Enforce Free tier limit
+        if (!user || user.plan !== 'pro' || (user.plan === 'pro' && user.currentPeriodEnd && new Date(user.currentPeriodEnd) < new Date())) {
+            const noteCount = await Note.countDocuments({ userId: req.user.id, isDeleted: false });
+            if (noteCount >= 50) {
+                return res.status(403).json({ message: "Free plan limit reached (50 notes). Please upgrade to Pro to create unlimited notes." });
+            }
+        }
+
         // Mongoose automatically filters fields based on schema and sets default values
         const newNote = new Note({
             ...req.body,

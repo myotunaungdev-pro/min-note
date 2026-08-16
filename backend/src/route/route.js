@@ -11,7 +11,7 @@ import {
 } from '../controller/notesController.js';
 import { upload, submitKPayPayment, cancelSubscription, resumeSubscription } from '../controller/paymentController.js';
 import { getManualPayments, approvePayment, rejectPayment } from '../controller/adminController.js';
-import { protect, admin } from '../middleware/authMiddleware.js';
+import { protect, admin, requirePro } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
