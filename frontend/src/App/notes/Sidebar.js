@@ -23,6 +23,9 @@ const Sidebar = () => {
     const [sidebarWidth, setSidebarWidth] = useState(260);
     const [isResizing, setIsResizing] = useState(false);
     const [activeLightboxImage, setActiveLightboxImage] = useState(null);
+    const [acknowledgedExpiration, setAcknowledgedExpiration] = useState(() => localStorage.getItem('acknowledgedExpiration') === 'true');
+
+    const isPlanExpired = user?.plan === 'free' && user?.currentPeriodEnd && new Date(user.currentPeriodEnd) < new Date();
 
     useEffect(() => {
         const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
@@ -174,14 +177,26 @@ const Sidebar = () => {
             </nav>
 
             <div className="sidebar-footer">
-                <div className="user-profile clickable" onClick={() => navigate('/settings')} style={{ cursor: 'pointer' }}>
+                <div 
+                    className="user-profile clickable" 
+                    onClick={() => {
+                        setAcknowledgedExpiration(true);
+                        localStorage.setItem('acknowledgedExpiration', 'true');
+                        navigate('/settings');
+                    }} 
+                    style={{ cursor: 'pointer' }}
+                >
                     <div
                         className={`avatar ${user?.avatarUrl ? '' : 'initials-avatar'}`}
+                        style={{ position: 'relative', overflow: 'visible' }}
                     >
                         {user?.avatarUrl ? (
                             <img src={user.avatarUrl} alt="Avatar" className="avatar-image" />
                         ) : (
                             user?.name ? user.name.charAt(0).toUpperCase() : 'U'
+                        )}
+                        {isPlanExpired && !acknowledgedExpiration && (
+                            <span style={{ position: 'absolute', top: '-2px', right: '-2px', width: '12px', height: '12px', backgroundColor: '#ef4444', border: '2px solid #1a1a1a', borderRadius: '50%', zIndex: 10 }}></span>
                         )}
                     </div>
                     {!sidebarCollapsed && (

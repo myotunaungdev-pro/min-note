@@ -58,6 +58,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    stripePriceId: {
+        type: String,
+        default: null
+    },
     currentPeriodEnd: {
         type: Date,
         default: null
@@ -69,6 +73,10 @@ const userSchema = new mongoose.Schema({
     hasSeenProWelcome: {
         type: Boolean,
         default: true
+    },
+    hasPaymentIssue: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

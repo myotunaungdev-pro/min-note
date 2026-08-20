@@ -162,14 +162,17 @@ const Header = ({ onSelectAll }) => {
                     )}
 
                     {activeView !== 'archive' && (
-                        <button className="action-btn archive-btn" onClick={() => dispatch(bulkArchiveOnServer(selectedNoteIds))}>
+                        <button 
+                            className="action-btn archive-btn" 
+                            onClick={() => dispatch(bulkArchiveOnServer(selectedNoteIds))}
+                        >
                             <i className="bi bi-archive"></i>
                         </button>
                     )}
 
                     <button
                         className={`action-btn trash-btn ${activeView === 'trash' ? 'permanent-delete' : ''}`}
-                        onClick={handleTrashOrDelete}
+                        onClick={() => handleTrashOrDelete()}
                     >
                         {activeView === 'trash' ? (
                             <i className="bi bi-trash-fill" style={{ color: '#ef4444' }}></i>

@@ -392,6 +392,12 @@
         "footerFeaturesLink": "Features"
     },
     "settings": {
+        "billing": {
+            "cancelWarningTitle": "Subscription Canceling",
+            "cancelWarningDesc": "Your Pro plan is set to cancel at the end of your billing cycle on {{date}}. You will retain access until then.",
+            "monthly": "Monthly",
+            "yearly": "Yearly"
+        },
         "changeDesign": "Change Design",
         "language": {
             "toggle": "Toggle Language"
@@ -784,5 +790,13 @@
             "expired": "Expired",
             "na": "-"
         }
+    },
+    "banners": {
+        "planExpiredTitle": "Your Pro plan has expired",
+        "planExpiredDesc": "Renew now to unlock premium features and increase your limits.",
+        "renewNow": "Renew Now"
+    },
+    "tooltips": {
+        "renewRequired": "Pro Plan has expired. Please renew to use this feature."
     }
 }

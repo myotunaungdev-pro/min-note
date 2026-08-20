@@ -14,8 +14,17 @@ import './NotesApp.css';
 
 const NotesApp = ({ cardStyle }) => {
     const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth?.user);
     const { t, i18n } = useTranslation();
     const [noteToDelete, setNoteToDelete] = useState(null);
+
+    useEffect(() => {
+        if (user?.plan === 'pro' && user?.currentPeriodEnd && new Date(user.currentPeriodEnd) > new Date()) {
+            localStorage.removeItem('dismissedSettingsBanner');
+            localStorage.removeItem('acknowledgedExpiration');
+            localStorage.removeItem('visitedPricingFromSettings');
+        }
+    }, [user]);
 
     const { notes, activeView, searchQuery, sortBy, statusFilter, sidebarCollapsed, categoryFilter, selectedNoteIds, isModalOpen, isReaderOpen } = useSelector(
         (state) => state.notes

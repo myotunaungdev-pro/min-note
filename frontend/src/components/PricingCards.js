@@ -10,9 +10,25 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const { plan, hasPendingPayment } = useSubscription();
-    const [isYearly, setIsYearly] = useState(false);
+    const [isYearly, setIsYearly] = useState(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('canceled') === 'true') {
+            return sessionStorage.getItem('savedPlanType') === 'yearly';
+        }
+        sessionStorage.removeItem('savedPlanType');
+        return false;
+    });
 
     const [currency, setCurrency] = useState(() => {
+        const params = new URLSearchParams(window.location.search);
+        
+        if (params.get('canceled') === 'true') {
+            const savedCurrency = sessionStorage.getItem('savedCurrency');
+            if (savedCurrency) return savedCurrency;
+        } else {
+            sessionStorage.removeItem('savedCurrency');
+        }
+
         const lang = i18n.language || 'en';
         if (lang.startsWith('th')) return 'THB';
         if (lang.startsWith('my')) return 'MMK';
@@ -20,11 +36,19 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
     });
 
     useEffect(() => {
-        const lang = i18n.language || 'en';
-        let initCurr = 'USD';
-        if (lang.startsWith('th')) initCurr = 'THB';
-        else if (lang.startsWith('my')) initCurr = 'MMK';
-        setCurrency(initCurr);
+        sessionStorage.setItem('savedPlanType', isYearly ? 'yearly' : 'monthly');
+        sessionStorage.setItem('savedCurrency', currency);
+    }, [isYearly, currency]);
+
+    useEffect(() => {
+        // Only override with language default if no currency is saved
+        if (!sessionStorage.getItem('savedCurrency')) {
+            const lang = i18n.language || 'en';
+            let initCurr = 'USD';
+            if (lang.startsWith('th')) initCurr = 'THB';
+            else if (lang.startsWith('my')) initCurr = 'MMK';
+            setCurrency(initCurr);
+        }
     }, [i18n.language]);
 
     const toggleBilling = () => {

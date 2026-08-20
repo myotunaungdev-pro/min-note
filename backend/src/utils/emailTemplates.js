@@ -236,3 +236,96 @@ The MIN NOTE Team
 
     return { html, text };
 };
+
+export const getExpirationReminderTemplate = (userName) => {
+    const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body {
+                    font-family: 'Helvetica Neue', Arial, sans-serif;
+                    background-color: #05070c;
+                    color: #ffffff;
+                    margin: 0;
+                    padding: 0;
+                }
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #111111;
+                    padding: 40px;
+                    border-radius: 12px;
+                    border: 1px solid #1a1a1a;
+                }
+                h1, h2 {
+                    color: #f59e0b;
+                    margin-top: 0;
+                }
+                p {
+                    color: #94a3b8;
+                    line-height: 1.6;
+                    font-size: 16px;
+                }
+                .strong-text {
+                    color: #ffffff;
+                    font-weight: bold;
+                }
+                .divider {
+                    border: none;
+                    border-top: 1px solid #222222;
+                    margin: 30px 0;
+                }
+                .footer {
+                    margin-top: 40px;
+                    font-size: 14px;
+                    color: #64748b;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h2>Your Pro Plan Expires in 3 Days!</h2>
+                <p>Hello <span class="strong-text">${userName}</span>,</p>
+                <p>Your MIN NOTE Pro plan will expire in exactly 3 days.</p>
+                <p>To maintain uninterrupted access to unlimited notes and premium features, please log in and upload a new KPay slip or complete a Stripe payment from your dashboard.</p>
+                <p>Thank you for choosing MIN NOTE.</p>
+                
+                <hr class="divider">
+                
+                <h2>လူကြီးမင်း၏ Pro အကောင့် ၃ ရက်အတွင်း သက်တမ်းကုန်ဆုံးပါမည်!</h2>
+                <p>လူကြီးမင်း၏ MIN NOTE Pro အကောင့်သည် နောက် ၃ ရက်အကြာတွင် သက်တမ်းကုန်ဆုံးတော့မည်ဖြစ်ပါသည်။</p>
+                <p>အထူးလုပ်ဆောင်ချက်များနှင့် မှတ်စုများကို အကန့်အသတ်မရှိ ဆက်လက်အသုံးပြုနိုင်ရန် ကျေးဇူးပြု၍ မိမိ၏ အကောင့်သို့ ဝင်ရောက်ပြီး KPay ငွေလွှဲပြေစာအသစ် (သို့) Stripe ဖြင့် ငွေပေးချေမှုကို ပြုလုပ်ပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည်။</p>
+                
+                <div class="footer">
+                    <p>Best regards,<br>The MIN NOTE Team</p>
+                </div>
+            </div>
+        </body>
+        </html>
+    `;
+
+    const text = `
+Your Pro Plan Expires in 3 Days!
+
+Hello ${userName},
+
+Your MIN NOTE Pro plan will expire in exactly 3 days.
+To maintain uninterrupted access to unlimited notes and premium features, please log in and upload a new KPay slip or complete a Stripe payment from your dashboard.
+
+Thank you for choosing MIN NOTE.
+
+--------------------------------------------------
+
+လူကြီးမင်း၏ Pro အကောင့် ၃ ရက်အတွင်း သက်တမ်းကုန်ဆုံးပါမည်!
+
+လူကြီးမင်း၏ MIN NOTE Pro အကောင့်သည် နောက် ၃ ရက်အကြာတွင် သက်တမ်းကုန်ဆုံးတော့မည်ဖြစ်ပါသည်။
+အထူးလုပ်ဆောင်ချက်များနှင့် မှတ်စုများကို အကန့်အသတ်မရှိ ဆက်လက်အသုံးပြုနိုင်ရန် ကျေးဇူးပြု၍ မိမိ၏ အကောင့်သို့ ဝင်ရောက်ပြီး KPay ငွေလွှဲပြေစာအသစ် (သို့) Stripe ဖြင့် ငွေပေးချေမှုကို ပြုလုပ်ပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည်။
+
+Best regards,
+The MIN NOTE Team
+    `;
+
+    return { html, text };
+};

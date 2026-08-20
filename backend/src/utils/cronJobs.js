@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import User from '../model/user.js';
-import sendEmail from './sendEmail.js';
+import { sendEmail } from './sendEmail.js';
 import { getExpirationReminderTemplate } from './emailTemplates.js';
 
 export const startCronJobs = () => {

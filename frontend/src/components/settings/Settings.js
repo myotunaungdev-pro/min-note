@@ -18,12 +18,17 @@ const Settings = () => {
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.auth);
     const { plan } = useSubscription();
+    const isPlanExpired = user?.plan === 'free' && user?.currentPeriodEnd && new Date(user.currentPeriodEnd) < new Date();
+
+    const [isBannerDismissed, setIsBannerDismissed] = React.useState(() => localStorage.getItem('dismissedSettingsBanner') === 'true');
+    const [isPricingDotDismissed, setIsPricingDotDismissed] = React.useState(() => localStorage.getItem('visitedPricingFromSettings') === 'true');
 
     const [isEditMode, setIsEditMode] = React.useState(false);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = React.useState(false);
     const [isAvatarModalOpen, setIsAvatarModalOpen] = React.useState(false);
     const [isLightboxOpen, setIsLightboxOpen] = React.useState(false);
     const [isManageSubOpen, setIsManageSubOpen] = React.useState(false);
+    const [isPortalLoading, setIsPortalLoading] = React.useState(false);
     const fileInputRef = React.useRef(null);
 
     const [formData, setFormData] = React.useState({
@@ -113,6 +118,28 @@ const Settings = () => {
         return () => window.removeEventListener('keydown', handleSettingsKeyDown);
     }, [isLogoutModalOpen, confirmLogout]);
 
+
+    const handleStripePortalRedirect = async () => {
+        try {
+            setIsPortalLoading(true);
+            const token = localStorage.getItem('token');
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/stripe/create-portal-session`,
+                {},
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            if (response.data.url) {
+                window.location.href = response.data.url;
+            } else {
+                toast.error('Failed to create portal session');
+                setIsPortalLoading(false);
+            }
+        } catch (error) {
+            console.error('Portal Error:', error);
+            toast.error(error.response?.data?.error || 'Failed to open billing portal');
+            setIsPortalLoading(false);
+        }
+    };
 
     return (
         <div className="settings-page">
@@ -219,17 +246,101 @@ const Settings = () => {
                 {/* Subscription */}
                 <section className="settings-section">
                     <h2 className="section-title">{t("settings.profile.subscription")}</h2>
+                    
+                    {isPlanExpired && !isBannerDismissed && (
+                        <div style={{ marginBottom: '16px', padding: '12px 16px', backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#ef4444' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <i className="bi bi-exclamation-triangle-fill" style={{ fontSize: '1.25rem' }}></i>
+                                <div>
+                                    <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: 600 }}>{t('banners.planExpiredTitle')}</h4>
+                                    <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.8 }}>{t('banners.planExpiredDesc')}</p>
+                                </div>
+                            </div>
+                            <button 
+                                onClick={() => {
+                                    setIsBannerDismissed(true);
+                                    localStorage.setItem('dismissedSettingsBanner', 'true');
+                                }}
+                                style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', opacity: 0.6, fontSize: '1.1rem', padding: '4px' }}
+                                aria-label="Close"
+                            >
+                                <i className="bi bi-x-lg"></i>
+                            </button>
+                        </div>
+                    )}
+
+                    {plan === 'pro' && user?.stripeCustomerId && user?.cancelAtPeriodEnd && (
+                        <div style={{ marginBottom: '16px', padding: '12px 16px', backgroundColor: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '12px', color: '#f59e0b' }}>
+                            <i className="bi bi-info-circle-fill" style={{ fontSize: '1.25rem' }}></i>
+                            <div>
+                                <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: 600 }}>{t('settings.billing.cancelWarningTitle', 'Subscription Canceling')}</h4>
+                                <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.8 }}>
+                                    {t('settings.billing.cancelWarningDesc', 'Your Pro plan is set to cancel at the end of your billing cycle on {{date}}. You will retain access until then.', { date: new Date(user.currentPeriodEnd).toLocaleDateString() })}
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
                     <div className="settings-card subscription-card">
                         <div className="subscription-header">
                             <i className={`bi ${plan === 'pro' ? 'bi-star-fill text-warning' : 'bi-star text-muted'}`}></i>
                             <h3>{t("settings.plan.current")}</h3>
                         </div>
-                        <div className="subscription-body">
-                            <p>{plan === 'pro' ? t("billing.proPlan") : t("settings.plan.free")}</p>
+                        <div className="subscription-body" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                {plan === 'pro' ? (
+                                    <>
+                                        <p style={{ margin: 0, fontWeight: 500 }}>{t("billing.proPlan")}</p>
+                                        <span style={{ 
+                                            backgroundColor: 'rgba(59, 130, 246, 0.1)', 
+                                            color: '#3b82f6', 
+                                            padding: '2px 10px', 
+                                            borderRadius: '9999px', 
+                                            fontSize: '0.7rem', 
+                                            fontWeight: 700, 
+                                            letterSpacing: '0.5px',
+                                            textTransform: 'uppercase'
+                                        }}>
+                                            {user?.planType === 'yearly' ? t('settings.billing.yearly', 'Yearly') : t('settings.billing.monthly', 'Monthly')}
+                                        </span>
+                                    </>
+                                ) : (
+                                    <p style={{ margin: 0 }}>{t("settings.plan.free")}</p>
+                                )}
+                            </div>
                             {plan !== 'pro' ? (
-                                <button className="btn-upgrade" onClick={() => navigate('/upgrade')}>{t("settings.plan.upgrade")}</button>
+                                <button className="btn-upgrade" style={{ position: 'relative' }} onClick={() => {
+                                    setIsPricingDotDismissed(true);
+                                    localStorage.setItem('visitedPricingFromSettings', 'true');
+                                    navigate('/upgrade');
+                                }}>
+                                    {t("settings.plan.upgrade")}
+                                    {isPlanExpired && !isPricingDotDismissed && (
+                                        <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '10px', height: '10px', backgroundColor: '#ef4444', border: '2px solid #1a1a1a', borderRadius: '50%' }}></span>
+                                    )}
+                                </button>
+                            ) : user?.stripeCustomerId ? (
+                                <button className="btn-upgrade stripe-portal-btn" disabled={isPortalLoading} style={{ position: 'relative', opacity: isPortalLoading ? 0.7 : 1, cursor: isPortalLoading ? 'not-allowed' : 'pointer' }} onClick={() => {
+                                    setIsPricingDotDismissed(true);
+                                    localStorage.setItem('visitedPricingFromSettings', 'true');
+                                    handleStripePortalRedirect();
+                                }}>
+                                    {isPortalLoading ? t("common.loading", "Loading...") : t("billing.manageSubscription")}
+                                    {isPlanExpired && !isPricingDotDismissed && (
+                                        <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '10px', height: '10px', backgroundColor: '#ef4444', border: '2px solid #1a1a1a', borderRadius: '50%' }}></span>
+                                    )}
+                                </button>
                             ) : (
-                                <button className="btn-upgrade" onClick={() => setIsManageSubOpen(true)}>{t("billing.manageSubscription")}</button>
+                                <button className="btn-upgrade" style={{ position: 'relative' }} onClick={() => {
+                                    setIsPricingDotDismissed(true);
+                                    localStorage.setItem('visitedPricingFromSettings', 'true');
+                                    setIsManageSubOpen(true);
+                                }}>
+                                    {t("billing.renewPlan", "Renew Plan")}
+                                    {isPlanExpired && !isPricingDotDismissed && (
+                                        <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '10px', height: '10px', backgroundColor: '#ef4444', border: '2px solid #1a1a1a', borderRadius: '50%' }}></span>
+                                    )}
+                                </button>
                             )}
                         </div>
                     </div>

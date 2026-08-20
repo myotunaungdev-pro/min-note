@@ -51,6 +51,28 @@ export const createCheckoutSession = async (req, res) => {
     }
 };
 
+export const createPortalSession = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        
+        if (!user || !user.stripeCustomerId) {
+            return res.status(400).json({ error: 'No Stripe customer found for this user' });
+        }
+
+        const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+
+        const portalSession = await stripe.billingPortal.sessions.create({
+            customer: user.stripeCustomerId,
+            return_url: `${clientUrl}/settings`,
+        });
+
+        res.json({ url: portalSession.url });
+    } catch (error) {
+        console.error('Stripe portal error:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
 export const verifyCheckoutSession = async (req, res) => {
     try {
         const { sessionId } = req.body;
@@ -64,10 +86,12 @@ export const verifyCheckoutSession = async (req, res) => {
 
             if (userId) {
                 let endDate = null;
+                let priceId = null;
                 if (session.subscription) {
                     try {
                         const subscription = await stripe.subscriptions.retrieve(session.subscription);
                         const currentPeriodEnd = subscription.current_period_end || subscription.items?.data?.[0]?.current_period_end;
+                        priceId = subscription.items?.data?.[0]?.price?.id;
                         if (currentPeriodEnd) endDate = new Date(currentPeriodEnd * 1000);
                     } catch (subErr) {
                         console.error('Failed to retrieve subscription in verify:', subErr.message);
@@ -79,6 +103,7 @@ export const verifyCheckoutSession = async (req, res) => {
                     planType: planType,
                     stripeCustomerId: session.customer,
                     stripeSubscriptionId: session.subscription,
+                    stripePriceId: priceId,
                     currentPeriodEnd: endDate
                 });
                 
@@ -125,10 +150,12 @@ export const webhookHandler = async (req, res) => {
 
             if (userId) {
                 let endDate = null;
+                let priceId = null;
                 if (session.subscription) {
                     try {
                         const subscription = await stripe.subscriptions.retrieve(session.subscription);
                         const currentPeriodEnd = subscription.current_period_end || subscription.items?.data?.[0]?.current_period_end;
+                        priceId = subscription.items?.data?.[0]?.price?.id;
                         
                         if (currentPeriodEnd) {
                             endDate = new Date(currentPeriodEnd * 1000);
@@ -138,13 +165,22 @@ export const webhookHandler = async (req, res) => {
                     }
                 }
 
+                const existingUser = await User.findById(userId);
+                
+                // Idempotency Check: Prevent duplicate webhook processing
+                if (existingUser && existingUser.stripeSubscriptionId === session.subscription) {
+                    console.log('✅ Webhook already processed for this checkout session.');
+                    return res.json({ received: true });
+                }
+
                 const updatedUser = await User.findByIdAndUpdate(userId, {
                     plan: 'pro',
                     planType: planType,
                     stripeCustomerId: session.customer,
                     stripeSubscriptionId: session.subscription,
+                    stripePriceId: priceId,
                     currentPeriodEnd: endDate
-                }, { new: true });
+                }, { returnDocument: 'after' });
                 
                 if (updatedUser) {
                     const planTypeCapitalized = planType.charAt(0).toUpperCase() + planType.slice(1);
@@ -166,6 +202,48 @@ export const webhookHandler = async (req, res) => {
             } else {
                 console.error('❌ No client_reference_id found in session!');
             }
+        } else if (event.type === 'customer.subscription.updated') {
+            const subscription = event.data.object;
+            
+            // Stripe API Updates: current_period_end moved to items.data[0], and portal may use cancel_at instead of cancel_at_period_end
+            const isCanceling = subscription.cancel_at_period_end || subscription.cancel_at !== null;
+            const current_period_end_raw = subscription.current_period_end || subscription.items?.data?.[0]?.current_period_end;
+            
+            const cancel_at_period_end = Boolean(isCanceling);
+            const current_period_end_date = current_period_end_raw ? new Date(current_period_end_raw * 1000) : null;
+            const priceId = subscription.items?.data?.[0]?.price?.id;
+            const interval = subscription.items?.data?.[0]?.plan?.interval;
+            let planType = undefined;
+            if (interval === 'month') planType = 'monthly';
+            if (interval === 'year') planType = 'yearly';
+            
+            console.log('\n--- WEBHOOK: customer.subscription.updated ---');
+            console.log('Stripe Object Keys:', Object.keys(subscription));
+            console.log('Stripe Subscription ID:', subscription.id);
+            console.log('cancel_at_period_end (derived):', cancel_at_period_end);
+            console.log('current_period_end (raw derived):', current_period_end_raw);
+            console.log('Parsed Date:', current_period_end_date);
+            console.log('Plan Type:', planType);
+
+            const updatedUser = await User.findOneAndUpdate(
+                { stripeSubscriptionId: subscription.id },
+                {
+                    cancelAtPeriodEnd: cancel_at_period_end,
+                    ...(current_period_end_date && { currentPeriodEnd: current_period_end_date }),
+                    ...(priceId && { stripePriceId: priceId }),
+                    ...(planType && { planType: planType })
+                },
+                { returnDocument: 'after' } // Resolves Mongoose deprecation warning
+            );
+            
+            if (updatedUser) {
+                console.log(`✅ Updated User [${updatedUser.email}] in DB.`);
+                console.log(`-> DB cancelAtPeriodEnd: ${updatedUser.cancelAtPeriodEnd}`);
+                console.log(`-> DB currentPeriodEnd: ${updatedUser.currentPeriodEnd}`);
+            } else {
+                console.warn(`⚠️ Warning: No user found in DB with stripeSubscriptionId: ${subscription.id}`);
+            }
+            console.log('----------------------------------------------\n');
         } else if (event.type === 'customer.subscription.deleted') {
             const subscription = event.data.object;
             await User.findOneAndUpdate(
@@ -173,9 +251,51 @@ export const webhookHandler = async (req, res) => {
                 {
                     plan: 'free',
                     stripeSubscriptionId: null,
+                    stripePriceId: null,
                     currentPeriodEnd: null,
+                    cancelAtPeriodEnd: false,
                 }
             );
+        } else if (event.type === 'invoice.paid') {
+            const invoice = event.data.object;
+            const stripeSubscriptionId = invoice.subscription;
+            
+            if (stripeSubscriptionId) {
+                try {
+                    // Extract directly from the invoice object (no extra Stripe API call needed)
+                    const periodEndRaw = invoice.lines?.data?.[0]?.period?.end || invoice.period_end;
+                    
+                    if (periodEndRaw) {
+                        const endDate = new Date(periodEndRaw * 1000);
+                        await User.findOneAndUpdate(
+                            { stripeSubscriptionId: stripeSubscriptionId },
+                            { 
+                                currentPeriodEnd: endDate,
+                                hasPaymentIssue: false // Clear any previous issues
+                            }
+                        );
+                        console.log(`✅ Auto-renewed subscription for invoice ${invoice.id}, new end date: ${endDate}`);
+                    }
+                } catch (subErr) {
+                    console.error('❌ Failed to process invoice.paid:', subErr.message);
+                }
+            } else {
+                console.log(`ℹ️ Ignored invoice.paid for non-subscription invoice ${invoice.id}`);
+            }
+        } else if (event.type === 'invoice.payment_failed') {
+            const invoice = event.data.object;
+            const stripeSubscriptionId = invoice.subscription;
+            
+            if (stripeSubscriptionId) {
+                console.warn(`⚠️ Invoice payment failed for subscription ${stripeSubscriptionId}`);
+                await User.findOneAndUpdate(
+                    { stripeSubscriptionId: stripeSubscriptionId },
+                    { hasPaymentIssue: true }
+                );
+                console.log(`⚠️ Marked hasPaymentIssue=true for user with subscription ${stripeSubscriptionId}`);
+            } else {
+                console.warn(`⚠️ Invoice payment failed for non-subscription invoice ${invoice.id} (subscription undefined or null)`);
+            }
         }
 
         res.json({ received: true });
