@@ -31,7 +31,7 @@ export const createNote = async (req, res) => {
         
         // Enforce Free tier limit
         if (!user || user.plan !== 'pro' || (user.plan === 'pro' && user.currentPeriodEnd && new Date(user.currentPeriodEnd) < new Date())) {
-            const noteCount = await Note.countDocuments({ userId: req.user.id, isDeleted: false });
+            const noteCount = await Note.countDocuments({ userId: req.user.id });
             if (noteCount >= 50) {
                 return res.status(403).json({ message: "Free plan limit reached (50 notes). Please upgrade to Pro to create unlimited notes." });
             }

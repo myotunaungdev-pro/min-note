@@ -226,7 +226,17 @@ export const verifyOTP = async (req, res) => {
         res.status(200).json({
             message: "Email verified successfully",
             token,
-            user: { id: user._id, name: user.name, email: user.email, birthdate: user.birthdate, avatarUrl: user.avatarUrl, defaultNoteTheme: user.defaultNoteTheme }
+            user: { 
+                id: user._id, 
+                name: user.name, 
+                email: user.email, 
+                birthdate: user.birthdate, 
+                avatarUrl: user.avatarUrl, 
+                defaultNoteTheme: user.defaultNoteTheme,
+                plan: user.plan || 'free',
+                planType: user.planType || null,
+                cancelAtPeriodEnd: user.cancelAtPeriodEnd || false
+            }
         });
 
     } catch (error) {
@@ -266,7 +276,17 @@ export const login = async (req, res) => {
         res.status(200).json({
             message: "Login successful",
             token,
-            user: { id: user._id, name: user.name, email: user.email, birthdate: user.birthdate, avatarUrl: user.avatarUrl, defaultNoteTheme: user.defaultNoteTheme }
+            user: { 
+                id: user._id, 
+                name: user.name, 
+                email: user.email, 
+                birthdate: user.birthdate, 
+                avatarUrl: user.avatarUrl, 
+                defaultNoteTheme: user.defaultNoteTheme,
+                plan: user.plan || 'free',
+                planType: user.planType || null,
+                cancelAtPeriodEnd: user.cancelAtPeriodEnd || false
+            }
         });
     } catch (error) {
         res.status(500).json({ message: "Login failed", error: error.message });

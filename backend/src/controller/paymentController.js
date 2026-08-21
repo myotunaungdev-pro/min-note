@@ -37,29 +37,28 @@ export const submitKPayPayment = async (req, res) => {
         }
 
         const userId = req.user.id || req.user._id;
-
-        // Check for existing pending payment
-        const existingPending = await ManualPayment.findOne({ userId, status: 'pending' });
-        if (existingPending) {
-            return res.status(400).json({ error: 'You already have a pending payment. Please wait for approval.' });
-        }
-
         const amount = planType === 'yearly' ? 335000 : 35000;
 
-        // Check for existing rejected payment to handle resubmission
-        const existingRejected = await ManualPayment.findOne({ userId, status: 'rejected' });
+        // Check for existing payment record
+        const existingRecord = await ManualPayment.findOne({ userId }).sort({ createdAt: -1 });
 
-        if (existingRejected) {
-            if (existingRejected.rejectionHistory && existingRejected.rejectionHistory.length >= 5) {
+        if (existingRecord) {
+            if (existingRecord.status === 'pending') {
+                return res.status(400).json({ error: 'You already have a pending payment. Please wait for approval.' });
+            }
+
+            if (existingRecord.status === 'rejected' && existingRecord.rejectionHistory && existingRecord.rejectionHistory.length >= 5) {
                 return res.status(400).json({ error: 'Maximum retry limit reached. Please contact support.' });
             }
-            existingRejected.planType = planType;
-            existingRejected.amount = amount;
-            existingRejected.slipUrl = file.path;
-            existingRejected.status = 'pending';
-            existingRejected.rejectionReason = null;
-            await existingRejected.save();
-            return res.status(200).json({ success: true, message: 'Payment proof resubmitted successfully' });
+
+            existingRecord.planType = planType;
+            existingRecord.amount = amount;
+            existingRecord.slipUrl = file.path;
+            existingRecord.status = 'pending';
+            existingRecord.rejectionReason = null;
+            
+            await existingRecord.save();
+            return res.status(200).json({ success: true, message: 'Payment proof submitted successfully' });
         }
 
         const manualPayment = new ManualPayment({

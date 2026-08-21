@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Check } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 import { useSubscription } from '../context/SubscriptionContext';
 import '../pages/public/Pricing.css';
 
 const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
+    const { user } = useSelector(state => state.auth);
     const { plan, hasPendingPayment } = useSubscription();
     const [isYearly, setIsYearly] = useState(() => {
         const params = new URLSearchParams(window.location.search);
@@ -21,7 +23,7 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
 
     const [currency, setCurrency] = useState(() => {
         const params = new URLSearchParams(window.location.search);
-        
+
         if (params.get('canceled') === 'true') {
             const savedCurrency = sessionStorage.getItem('savedCurrency');
             if (savedCurrency) return savedCurrency;
@@ -68,7 +70,7 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
 
     return (
         <div className="w-full max-w-7xl mx-auto px-1">
-            
+
             <div className="pricing-controls-wrapper">
                 <div className="currency-selector">
                     {['USD', 'THB', 'MMK'].map((c) => (
@@ -143,23 +145,31 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
 
                     <button
                         className={`pricing-card-btn pricing-btn-filled ${hasPendingPayment ? 'opacity-70 cursor-not-allowed grayscale' : ''}`}
-                        disabled={isUpgrading || plan === 'pro'}
+                        disabled={isUpgrading}
                         onClick={() => {
                             if (hasPendingPayment) {
                                 toast.info(t('pricingPage.pendingBanner'));
                                 return;
                             }
-                            if (plan !== 'pro' && onUpgradeClick) {
+                            if (!user) {
+                                navigate('/signup');
+                                return;
+                            }
+                            if (user && plan === 'pro') {
+                                navigate('/notes');
+                                return;
+                            }
+                            if (user && plan !== 'pro' && onUpgradeClick) {
                                 onUpgradeClick(isYearly ? 'yearly' : 'monthly', currency);
                             }
                         }}
                     >
-                        {plan === 'pro' 
-                            ? t('pricingPage.currentPlan') 
-                            : hasPendingPayment 
+                        {user && plan === 'pro'
+                            ? t('pricingPage.currentPlan')
+                            : hasPendingPayment
                                 ? t('pricingPage.pendingButton')
-                                : isUpgrading 
-                                    ? t('common.loading', 'Loading...') 
+                                : isUpgrading
+                                    ? t('common.loading', 'Loading...')
                                     : t('pricingPage.tiers.pro.button')}
                     </button>
                 </div>

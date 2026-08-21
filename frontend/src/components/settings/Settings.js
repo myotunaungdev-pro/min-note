@@ -325,7 +325,7 @@ const Settings = () => {
                                     localStorage.setItem('visitedPricingFromSettings', 'true');
                                     handleStripePortalRedirect();
                                 }}>
-                                    {isPortalLoading ? t("common.loading", "Loading...") : t("billing.manageSubscription")}
+                                    {isPortalLoading ? t("common.loading", "Loading...") : t("settings.billing.manageSubscription", "Manage Subscription")}
                                     {isPlanExpired && !isPricingDotDismissed && (
                                         <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '10px', height: '10px', backgroundColor: '#ef4444', border: '2px solid #1a1a1a', borderRadius: '50%' }}></span>
                                     )}
@@ -336,7 +336,7 @@ const Settings = () => {
                                     localStorage.setItem('visitedPricingFromSettings', 'true');
                                     setIsManageSubOpen(true);
                                 }}>
-                                    {t("billing.renewPlan", "Renew Plan")}
+                                    {t("settings.billing.manageSubscription", "Manage Subscription")}
                                     {isPlanExpired && !isPricingDotDismissed && (
                                         <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '10px', height: '10px', backgroundColor: '#ef4444', border: '2px solid #1a1a1a', borderRadius: '50%' }}></span>
                                     )}

@@ -217,13 +217,6 @@ export const webhookHandler = async (req, res) => {
             if (interval === 'month') planType = 'monthly';
             if (interval === 'year') planType = 'yearly';
             
-            console.log('\n--- WEBHOOK: customer.subscription.updated ---');
-            console.log('Stripe Object Keys:', Object.keys(subscription));
-            console.log('Stripe Subscription ID:', subscription.id);
-            console.log('cancel_at_period_end (derived):', cancel_at_period_end);
-            console.log('current_period_end (raw derived):', current_period_end_raw);
-            console.log('Parsed Date:', current_period_end_date);
-            console.log('Plan Type:', planType);
 
             const updatedUser = await User.findOneAndUpdate(
                 { stripeSubscriptionId: subscription.id },
@@ -237,13 +230,11 @@ export const webhookHandler = async (req, res) => {
             );
             
             if (updatedUser) {
-                console.log(`✅ Updated User [${updatedUser.email}] in DB.`);
-                console.log(`-> DB cancelAtPeriodEnd: ${updatedUser.cancelAtPeriodEnd}`);
-                console.log(`-> DB currentPeriodEnd: ${updatedUser.currentPeriodEnd}`);
+                // User successfully updated
+
             } else {
                 console.warn(`⚠️ Warning: No user found in DB with stripeSubscriptionId: ${subscription.id}`);
             }
-            console.log('----------------------------------------------\n');
         } else if (event.type === 'customer.subscription.deleted') {
             const subscription = event.data.object;
             await User.findOneAndUpdate(

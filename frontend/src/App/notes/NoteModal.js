@@ -18,6 +18,7 @@ import { SOLID_COLORS, BACKGROUND_PATTERNS } from './themeConstants';
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
+import { toast } from 'react-toastify';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { ReactSketchCanvas } from 'react-sketch-canvas';
@@ -1249,12 +1250,24 @@ const NoteEditModal = () => {
         };
 
         if (editingNote) {
-            dispatch(updateNoteOnServer({ ...editingNote, ...updatedNoteData }));
+            dispatch(updateNoteOnServer({ ...editingNote, ...updatedNoteData }))
+                .unwrap()
+                .then(() => handleClose())
+                .catch((err) => {
+                    toast.error(err.message || t("notes.modal.updateError", "Failed to update note"));
+                });
         } else {
-            dispatch(addNoteToServer(noteData));
+            dispatch(addNoteToServer(noteData))
+                .unwrap()
+                .then(() => handleClose())
+                .catch((err) => {
+                    if (err.message && err.message.includes('403')) {
+                        toast.error(t("notes.modal.limitReached", "Note limit reached. Upgrade to Pro for unlimited notes."));
+                    } else {
+                        toast.error(err.message || t("notes.modal.createError", "Failed to create note"));
+                    }
+                });
         }
-
-        handleClose();
     };
 
     const handleLinkSave = (e) => {

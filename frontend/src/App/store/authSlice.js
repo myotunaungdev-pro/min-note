@@ -40,8 +40,7 @@ export const verifyOTP = createAsyncThunk(
         try {
             const response = await axiosInstance.post('/auth/verify-otp', verificationData);
             // Save token and user to local storage after successful verification
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
+            syncUserToStorage(response.data.user, response.data.token);
             return response.data;
         } catch (error) {
             return rejectWithValue(getAuthErrorKey(error.response?.data?.message, 'Verification failed'));
@@ -82,8 +81,7 @@ export const loginUser = createAsyncThunk(
         try {
             const response = await axiosInstance.post('/auth/login', userData);
             // Save token and user to local storage
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
+            syncUserToStorage(response.data.user, response.data.token);
             return response.data;
         } catch (error) {
             return rejectWithValue(getAuthErrorKey(error.response?.data?.message, 'login_failed'));
@@ -94,12 +92,17 @@ export const loginUser = createAsyncThunk(
 // Async thunk for Updating Profile
 export const updateUserProfile = createAsyncThunk(
     'auth/updateUserProfile',
-    async (userData, { rejectWithValue }) => {
+    async (userData, { getState, rejectWithValue }) => {
         try {
             const response = await axiosInstance.put('/auth/profile', userData);
+            // Merge updated fields with existing user data to preserve plan info
+            const state = getState();
+            const mergedUser = { ...state.auth.user, ...response.data.user };
+            
             // Update user in local storage
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-            return response.data;
+            syncUserToStorage(mergedUser);
+            
+            return { ...response.data, user: mergedUser };
         } catch (error) {
             return rejectWithValue(getAuthErrorKey(error.response?.data?.message, 'Profile update failed'));
         }
@@ -133,6 +136,36 @@ export const markWelcomeSeen = createAsyncThunk(
     }
 );
 
+const syncUserToStorage = (user, token) => {
+    if (token) localStorage.setItem('token', token);
+    if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('user_plan', user.plan || 'free');
+        
+        if (user.planType) localStorage.setItem('user_planType', user.planType);
+        else localStorage.removeItem('user_planType');
+        
+        if (user.currentPeriodEnd) localStorage.setItem('user_nextBillingDate', new Date(user.currentPeriodEnd).toISOString());
+        else localStorage.removeItem('user_nextBillingDate');
+        
+        localStorage.setItem('user_cancelAtPeriodEnd', user.cancelAtPeriodEnd || false);
+        localStorage.setItem('user_hasPendingPayment', user.hasPendingPayment || false);
+        
+        // Dispatch a custom event to notify SubscriptionContext
+        window.dispatchEvent(new Event('storage'));
+    }
+};
+
+const clearAuthStorage = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('user_plan');
+    localStorage.removeItem('user_planType');
+    localStorage.removeItem('user_nextBillingDate');
+    localStorage.removeItem('user_cancelAtPeriodEnd');
+    localStorage.removeItem('user_hasPendingPayment');
+};
+
 const loadUserFromStorage = () => {
     try {
         const serializedUser = localStorage.getItem('user');
@@ -158,8 +191,7 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logout: (state) => {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
+            clearAuthStorage();
             state.user = null;
             state.token = null;
             state.error = null;
@@ -227,18 +259,7 @@ const authSlice = createSlice({
             // Fetch Current User
             .addCase(fetchCurrentUser.fulfilled, (state, action) => {
                 state.user = action.payload.user;
-                localStorage.setItem('user', JSON.stringify(action.payload.user));
-                
-                if (action.payload.user.plan) {
-                    localStorage.setItem('user_plan', action.payload.user.plan);
-                    if (action.payload.user.planType) {
-                        localStorage.setItem('user_planType', action.payload.user.planType);
-                    } else {
-                        localStorage.removeItem('user_planType');
-                    }
-                    // Dispatch a custom event to notify SubscriptionContext if needed
-                    window.dispatchEvent(new Event('storage'));
-                }
+                syncUserToStorage(action.payload.user);
             })
             .addCase(fetchCurrentUser.rejected, (state, action) => {
                 console.error("Fetch user failed:", action.error);
@@ -247,7 +268,7 @@ const authSlice = createSlice({
             .addCase(markWelcomeSeen.fulfilled, (state) => {
                 if (state.user) {
                     state.user.hasSeenProWelcome = true;
-                    localStorage.setItem('user', JSON.stringify(state.user));
+                    syncUserToStorage(state.user);
                 }
             })
             // Forgot Password
