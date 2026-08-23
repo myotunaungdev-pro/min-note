@@ -794,5 +794,10 @@
   },
   "tooltips": {
     "renewRequired": "Pro Plan has expired. Please renew to use this feature."
+  },
+  "notFound": {
+    "subtitle": "Oops! Lost in Cyberspace.",
+    "description": "The page you are looking for has drifted into the digital void or never existed in the first place. Let's get you back to safe coordinates.",
+    "returnHome": "Return to Home"
   }
 }

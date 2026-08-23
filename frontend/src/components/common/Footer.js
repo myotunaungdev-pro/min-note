@@ -13,7 +13,7 @@ const Footer = () => {
                         <i className="bi bi-journal-richtext"></i>
                         <span>{APP_NAME}</span>
                     </Link>
-                    <p className="footer-desc">
+                    <p className="footer-desc w-full text-left leading-relaxed md:max-w-xs mt-4 text-balance opacity-80">
                         {t("landing.hero.subtitle1")}
                     </p>
                     <div className="social-links">

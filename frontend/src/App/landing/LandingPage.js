@@ -29,26 +29,32 @@ const LandingPage = () => {
             {/* Hero Section */}
             <section className="hero-section">
                     <div className="hero-content">
-                        <h1 className="hero-title">{t("landing.hero.title")}</h1>
-                        <p className="hero-subtitle">
-                            {t("landing.aPremiumFullyLocaliz")}
-                        </p>
-                        <Link to="/login" className="btn-get-started">
-                            {t("landing.hero.cta")}
-                            <i className="bi bi-arrow-right-short"></i>
-                        </Link>
+                        <div className="w-full px-4 md:px-8 lg:max-w-5xl mx-auto bg-transparent text-left">
+                            <h1 className="hero-title">{t("landing.hero.title")}</h1>
+                            <p className="hero-subtitle leading-relaxed">
+                                {t("landing.aPremiumFullyLocaliz")}
+                            </p>
+                            <div className="w-full flex justify-center mt-8">
+                                <Link to="/login" className="btn-get-started">
+                                    {t("landing.hero.cta")}
+                                    <i className="bi bi-arrow-right-short"></i>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
                 {/* Zig-Zag Features Section */}
                 <section className="features-section">
                     <div className="zigzag-row reveal fade-up">
-                        <div className="zigzag-text">
-                            <span className="zigzag-label">{t("landing.secureCloudSync")}</span>
-                            <h2 className="zigzag-title">{t("landing.yourNotesEverywhereY")}</h2>
-                            <p className="zigzag-desc">
-                                {t("landing.neverLoseAnIdeaAgain")}
-                            </p>
+                        <div className="zigzag-text space-y-4 w-full">
+                            <div className="w-full px-4 md:px-8 lg:max-w-5xl mx-auto bg-transparent text-left">
+                                <span className="zigzag-label">{t("landing.secureCloudSync")}</span>
+                                <h2 className="zigzag-title">{t("landing.yourNotesEverywhereY")}</h2>
+                                <p className="zigzag-desc leading-relaxed">
+                                    {t("landing.neverLoseAnIdeaAgain")}
+                                </p>
+                            </div>
                         </div>
                         <div className="zigzag-image reveal slide-right">
                             <div className="glass-placeholder">
@@ -58,12 +64,14 @@ const LandingPage = () => {
                     </div>
 
                     <div className="zigzag-row reverse reveal fade-up">
-                        <div className="zigzag-text">
-                            <span className="zigzag-label">{t("landing.richTextEditing")}</span>
-                            <h2 className="zigzag-title">{t("landing.formatExactlyHowYouT")}</h2>
-                            <p className="zigzag-desc">
-                                {t("landing.useOurPremiumQuillEd")}
-                            </p>
+                        <div className="zigzag-text space-y-4 w-full">
+                            <div className="w-full px-4 md:px-8 lg:max-w-5xl mx-auto bg-transparent text-left">
+                                <span className="zigzag-label">{t("landing.richTextEditing")}</span>
+                                <h2 className="zigzag-title">{t("landing.formatExactlyHowYouT")}</h2>
+                                <p className="zigzag-desc leading-relaxed">
+                                    {t("landing.useOurPremiumQuillEd")}
+                                </p>
+                            </div>
                         </div>
                         <div className="zigzag-image reveal slide-left">
                             <div className="glass-placeholder">
@@ -75,29 +83,33 @@ const LandingPage = () => {
 
                 {/* How It Works Section */}
                 <section className="how-it-works">
-                    <h2 className="section-title reveal fade-up">{t("landing.howItWorks")}</h2>
+                    <div className="w-full px-4 md:px-8 lg:max-w-5xl mx-auto bg-transparent text-left">
+                        <h2 className="section-title reveal fade-up">{t("landing.howItWorks")}</h2>
+                    </div>
                     <div className="steps-grid">
-                        <div className="step-card reveal fade-up" style={{ transitionDelay: '0.1s' }}>
+                        <div className="step-card reveal fade-up space-y-4" style={{ transitionDelay: '0.1s' }}>
                             <div className="step-number">1</div>
                             <h3 className="step-title">{t("auth.signup.title")}</h3>
-                            <p className="step-desc">{t("landing.createYourFreePremiu")}</p>
+                            <p className="step-desc text-left lg:text-center leading-relaxed">{t("landing.createYourFreePremiu")}</p>
                         </div>
-                        <div className="step-card reveal fade-up" style={{ transitionDelay: '0.2s' }}>
+                        <div className="step-card reveal fade-up space-y-4" style={{ transitionDelay: '0.2s' }}>
                             <div className="step-number">2</div>
                             <h3 className="step-title">{t("landing.captureIdeas")}</h3>
-                            <p className="step-desc">{t("landing.startTypingYourThoug")}</p>
+                            <p className="step-desc text-left lg:text-center leading-relaxed">{t("landing.startTypingYourThoug")}</p>
                         </div>
-                        <div className="step-card reveal fade-up" style={{ transitionDelay: '0.3s' }}>
+                        <div className="step-card reveal fade-up space-y-4" style={{ transitionDelay: '0.3s' }}>
                             <div className="step-number">3</div>
                             <h3 className="step-title">{t("landing.accessAnywhere")}</h3>
-                            <p className="step-desc">{t("landing.pickUpExactlyWhereYo")}</p>
+                            <p className="step-desc text-left lg:text-center leading-relaxed">{t("landing.pickUpExactlyWhereYo")}</p>
                         </div>
                     </div>
                 </section>
 
                 {/* Testimonials Section */}
                 <section className="testimonials-section">
-                    <h2 className="section-title reveal fade-up">{t("landing.lovedByCreatorsWorld")}</h2>
+                    <div className="w-full px-4 md:px-8 lg:max-w-5xl mx-auto bg-transparent text-left">
+                        <h2 className="section-title reveal fade-up">{t("landing.lovedByCreatorsWorld")}</h2>
+                    </div>
                     <div className="testimonials-grid">
                         <div className="testimonial-card reveal fade-up" style={{ transitionDelay: '0.1s' }}>
                             <i className="bi bi-quote testimonial-quote"></i>
@@ -143,13 +155,17 @@ const LandingPage = () => {
 
                 {/* Final CTA Section */}
                 <section className="final-cta-section reveal fade-up">
-                    <div className="final-cta-container">
-                        <h2 className="final-cta-title">{t("landing.startYourFreePremium")}</h2>
-                        <p className="final-cta-subtitle">{t("landing.joinThousandsOfProfe")}</p>
-                        <Link to="/signup" className="btn-get-started">
-                            {t("landing.signUpNow")}
-                            <i className="bi bi-arrow-right-short"></i>
-                        </Link>
+                    <div className="final-cta-container space-y-4 w-full mx-auto">
+                        <div className="w-full px-4 md:px-8 lg:max-w-5xl mx-auto bg-transparent text-left">
+                            <h2 className="final-cta-title">{t("landing.startYourFreePremium")}</h2>
+                            <p className="final-cta-subtitle leading-relaxed">{t("landing.joinThousandsOfProfe")}</p>
+                            <div className="w-full flex justify-center mt-8">
+                                <Link to="/signup" className="btn-get-started">
+                                    {t("landing.signUpNow")}
+                                    <i className="bi bi-arrow-right-short"></i>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
             </section>
         </React.Fragment>

@@ -13,6 +13,9 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
     const { user } = useSelector(state => state.auth);
     const { plan, hasPendingPayment } = useSubscription();
     const [isYearly, setIsYearly] = useState(() => {
+        const saved = localStorage.getItem('pricing_billingCycle');
+        if (saved !== null) return saved === 'yearly';
+
         const params = new URLSearchParams(window.location.search);
         if (params.get('canceled') === 'true') {
             return sessionStorage.getItem('savedPlanType') === 'yearly';
@@ -22,8 +25,10 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
     });
 
     const [currency, setCurrency] = useState(() => {
-        const params = new URLSearchParams(window.location.search);
+        const saved = localStorage.getItem('pricing_currency');
+        if (saved) return saved;
 
+        const params = new URLSearchParams(window.location.search);
         if (params.get('canceled') === 'true') {
             const savedCurrency = sessionStorage.getItem('savedCurrency');
             if (savedCurrency) return savedCurrency;
@@ -38,6 +43,9 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
     });
 
     useEffect(() => {
+        localStorage.setItem('pricing_billingCycle', isYearly ? 'yearly' : 'monthly');
+        localStorage.setItem('pricing_currency', currency);
+        
         sessionStorage.setItem('savedPlanType', isYearly ? 'yearly' : 'monthly');
         sessionStorage.setItem('savedCurrency', currency);
     }, [isYearly, currency]);
@@ -98,7 +106,7 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
                 </div>
             </div>
 
-            <div className="pricing-grid w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="pricing-grid w-full max-w-md lg:max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Free Tier */}
                 <div className="pricing-card">
                     <h2 className="pricing-card-name">{t('pricingPage.tiers.free.name')}</h2>

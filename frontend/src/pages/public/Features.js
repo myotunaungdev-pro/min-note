@@ -11,10 +11,12 @@ const Features = () => {
     return (
         <div className="features-page-container">
             <header className="features-hero">
-                <h1 className="features-hero-title">{t('featuresPage.heroTitle')}</h1>
-                <p className="features-hero-subtitle">
-                    {t('featuresPage.heroSubtitle')}
-                </p>
+                <div className="w-full px-4 md:px-8 lg:max-w-4xl mx-auto flex flex-col items-center text-center">
+                    <h1 className="features-hero-title w-full md:text-balance">{t('featuresPage.heroTitle')}</h1>
+                    <p className="features-hero-subtitle w-full md:max-w-2xl mx-auto md:text-balance">
+                        {t('featuresPage.heroSubtitle')}
+                    </p>
+                </div>
             </header>
 
             <div className="features-grid">

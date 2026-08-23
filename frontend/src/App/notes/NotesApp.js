@@ -225,8 +225,6 @@ const NotesApp = ({ cardStyle }) => {
                     dispatch(setModalOpen(false));
                 } else if (isReaderOpen) {
                     dispatch(setReaderOpen(false));
-                } else if (!sidebarCollapsed) {
-                    closeSidebar();
                 }
                 document.activeElement?.blur();
             }
