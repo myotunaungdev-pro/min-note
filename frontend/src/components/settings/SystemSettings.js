@@ -42,11 +42,20 @@ const SystemSettings = ({ cardStyle, setCardStyle }) => {
         if (!user) return;
         try {
             await dispatch(updateUserProfile({ defaultNoteTheme: themeOption })).unwrap();
-            toast.success(t("settings.defaultNoteThemeUpdated", "Default note theme updated!"));
         } catch (error) {
             toast.error(t("settings.updateThemeFailed", "Failed to update theme"));
         }
     };
+
+    const handleTagCountsChange = async () => {
+        if (!user) return;
+        try {
+            await dispatch(updateUserProfile({ showTagCounts: !user.showTagCounts })).unwrap();
+        } catch (error) {
+            toast.error(t("settings.updateFailed", "Failed to update settings"));
+        }
+    };
+
 
     return (
         <div className="settings-page">
@@ -70,6 +79,19 @@ const SystemSettings = ({ cardStyle, setCardStyle }) => {
                             <div
                                 className={`toggle-switch ${isDarkMode ? 'active' : ''}`}
                                 onClick={() => setIsDarkMode(!isDarkMode)}
+                            >
+                                <div className="toggle-knob"></div>
+                            </div>
+                        </div>
+                        <div className="preference-divider"></div>
+                        <div className="preference-item">
+                            <div className="preference-info">
+                                <i className="bi bi-tags"></i>
+                                <span>{t("settings.preferences.showTagCounts", "Show Tag Note Counts")}</span>
+                            </div>
+                            <div
+                                className={`toggle-switch ${user?.showTagCounts ? 'active' : ''}`}
+                                onClick={handleTagCountsChange}
                             >
                                 <div className="toggle-knob"></div>
                             </div>
@@ -161,7 +183,10 @@ const SystemSettings = ({ cardStyle, setCardStyle }) => {
                                         type="radio"
                                         name="theme-selection"
                                         checked={cardStyle === 'default'}
-                                        onChange={() => setCardStyle('default')}
+                                        onChange={() => {
+                                            setCardStyle('default');
+                                            setTimeout(() => setIsDesignModalOpen(false), 250);
+                                        }}
                                     />
                                     <div className="image-box">
                                         <img src="/previews/default.png" alt="Default Note" />
@@ -177,7 +202,10 @@ const SystemSettings = ({ cardStyle, setCardStyle }) => {
                                         type="radio"
                                         name="theme-selection"
                                         checked={cardStyle === 'cyber'}
-                                        onChange={() => setCardStyle('cyber')}
+                                        onChange={() => {
+                                            setCardStyle('cyber');
+                                            setTimeout(() => setIsDesignModalOpen(false), 250);
+                                        }}
                                     />
                                     <div className="image-box">
                                         <img src="/previews/cyber.png" alt="Cyber Note" />
@@ -193,7 +221,10 @@ const SystemSettings = ({ cardStyle, setCardStyle }) => {
                                         type="radio"
                                         name="theme-selection"
                                         checked={cardStyle === 'dynamic3d'}
-                                        onChange={() => setCardStyle('dynamic3d')}
+                                        onChange={() => {
+                                            setCardStyle('dynamic3d');
+                                            setTimeout(() => setIsDesignModalOpen(false), 250);
+                                        }}
                                     />
                                     <div className="image-box">
                                         <img src="/previews/dynamic.png" alt="3D Note" />

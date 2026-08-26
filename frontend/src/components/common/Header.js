@@ -3,10 +3,12 @@ import { APP_NAME } from '../../utils/constants';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
+import { useSelector } from 'react-redux';
 
 const Header = () => {
     const { t } = useTranslation();
     const [isLightMode, setIsLightMode] = useState(false);
+    const { token } = useSelector((state) => state.auth);
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
@@ -38,7 +40,11 @@ const Header = () => {
                 <button className="btn-theme-toggle" onClick={toggleTheme} aria-label="Toggle Theme">
                     <i className={`bi ${isLightMode ? 'bi-moon-stars' : 'bi-sun'}`}></i>
                 </button>
-                <Link to="/login" className="btn-login">{t("auth.login.submit")}</Link>
+                {token ? (
+                    <Link to="/notes" className="btn-login">{t("notes.header.workspace") || "Workspace"}</Link>
+                ) : (
+                    <Link to="/login" className="btn-login">{t("auth.login.submit")}</Link>
+                )}
             </div>
         </nav>
     );

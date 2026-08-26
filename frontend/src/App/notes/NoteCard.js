@@ -128,7 +128,7 @@ const NoteCard = ({ note, onDeleteRequest, onSelectToggle, cardStyle = 'default'
         } else if (cardStyle === 'dynamic3d') {
             classes += `bg-theme-${note.theme || 'default'}`;
         } else {
-            classes += `bg-theme-${note.theme || 'default'}`;
+            classes += `bg-theme-${note.theme || 'default'} theme-default`;
         }
         return classes;
     };
@@ -384,7 +384,7 @@ const NoteCard = ({ note, onDeleteRequest, onSelectToggle, cardStyle = 'default'
             </div>
 
             <div
-                className="note-card-body"
+                className="note-card-body relative overflow-hidden flex-1 [mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]"
                 onClick={handleReadNote}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {

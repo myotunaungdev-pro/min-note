@@ -244,9 +244,14 @@ const authSlice = createSlice({
                 state.error = action.payload;
             })
             // Update Profile
-            .addCase(updateUserProfile.pending, (state) => {
+            .addCase(updateUserProfile.pending, (state, action) => {
                 state.isLoading = true;
                 state.error = null;
+                // Optimistically update the user state for instant UI reaction
+                if (state.user && action.meta.arg) {
+                    state.user = { ...state.user, ...action.meta.arg };
+                    syncUserToStorage(state.user);
+                }
             })
             .addCase(updateUserProfile.fulfilled, (state, action) => {
                 state.isLoading = false;

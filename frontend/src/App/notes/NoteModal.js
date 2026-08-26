@@ -255,7 +255,7 @@ const DoodleModal = ({ imageSrc, onClose, onUpdateImage }) => {
     const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
     const presetColors = [
-        '#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e',
+        '#ef4444', '#eab308', '#f59e0b', '#84cc16', '#22c55e',
         '#06b6d4', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef',
         '#f43f5e', '#ffffff', '#94a3b8', '#475569', '#0f172a'
     ];
@@ -621,13 +621,14 @@ if (Font.constructor && Font.constructor.keys) {
 Quill.register(Font, true);
 
 export const tagOptions = [
-    { label: 'Work', color: '#00d4aa' },
-    { label: 'Personal', color: '#7c3aed' },
-    { label: 'Shopping', color: '#f59e0b' },
-    { label: 'Health', color: '#ef4444' },
-    { label: 'Ideas', color: '#3b82f6' },
-    { label: 'Finance', color: '#10b981' },
-    { label: 'Lyrics', color: '#ff477e' },
+    { label: 'Work', color: '#3B82F6' },
+    { label: 'Personal', color: '#C084FC' },
+    { label: 'Shopping', color: '#F43F8E' },
+    { label: 'Health', color: '#FF6B6B' },
+    { label: 'Ideas', color: '#FFB020' },
+    { label: 'Finance', color: '#22C55E' },
+    { label: 'Lyrics', color: '#6366F1' },
+    { label: 'Cooking', color: '#D97A4D' },
 ];
 
 const tagClassSlug = (label) => label.toLowerCase().replace(/\s+/g, '-');

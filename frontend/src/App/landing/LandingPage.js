@@ -2,11 +2,13 @@ import usePageTitle from '../../hooks/usePageTitle';
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import './LandingPage.css';
 
 const LandingPage = () => {
     usePageTitle("Home");
     const { t } = useTranslation();
+    const { token } = useSelector((state) => state.auth);
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -35,10 +37,17 @@ const LandingPage = () => {
                                 {t("landing.aPremiumFullyLocaliz")}
                             </p>
                             <div className="w-full flex justify-center mt-8">
-                                <Link to="/login" className="btn-get-started">
-                                    {t("landing.hero.cta")}
-                                    <i className="bi bi-arrow-right-short"></i>
-                                </Link>
+                                {token ? (
+                                    <Link to="/notes" className="btn-get-started">
+                                        {t("notes.header.workspace")}
+                                        <i className="bi bi-arrow-right-short"></i>
+                                    </Link>
+                                ) : (
+                                    <Link to="/login" className="btn-get-started">
+                                        {t("landing.hero.cta")}
+                                        <i className="bi bi-arrow-right-short"></i>
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </div>

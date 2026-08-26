@@ -29,11 +29,18 @@ const Sidebar = () => {
 
     useEffect(() => {
         const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
-        const updateIsMobile = () => setIsMobile(mediaQuery.matches);
-        updateIsMobile();
+        const updateIsMobile = (e) => {
+            const matches = typeof e.matches === 'boolean' ? e.matches : mediaQuery.matches;
+            setIsMobile(matches);
+            if (matches) {
+                dispatch(setSidebarCollapsed(true));
+            }
+        };
+        updateIsMobile({ matches: mediaQuery.matches });
+        
         mediaQuery.addEventListener('change', updateIsMobile);
         return () => mediaQuery.removeEventListener('change', updateIsMobile);
-    }, []);
+    }, [dispatch]);
 
     const allNotesCount = notes.filter((n) => !n.isArchived && !n.isDeleted).length;
     const archivedCount = notes.filter((n) => n.isArchived && !n.isDeleted).length;
@@ -110,7 +117,10 @@ const Sidebar = () => {
     return (
         <aside className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''} ${isResizing ? 'is-resizing' : ''}`}>
             <div className="sidebar-header">
-                <div className="logo-container">
+                <div 
+                    className="logo-container cursor-pointer hover:opacity-80 transition-opacity duration-200"
+                    onClick={() => navigate('/')}
+                >
                     <div className="logo-icon">
                         <i className="bi bi-journal-richtext"></i>
                     </div>

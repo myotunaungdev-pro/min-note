@@ -21,7 +21,7 @@ const Pricing = () => {
                 </div>
             </header>
 
-            <PricingCards onUpgradeClick={() => navigate('/signup', { state: { returnTo: 'checkout' } })} />
+            <PricingCards isLandingPage={true} onUpgradeClick={() => navigate('/signup', { state: { returnTo: 'checkout' } })} />
         </div>
     );
 };

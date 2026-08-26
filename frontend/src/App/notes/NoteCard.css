@@ -289,6 +289,26 @@
     margin-top: auto;
 }
 
+/* Container Queries for Note Card Actions (Strictly isolated to Default theme) */
+.note-card.theme-default {
+    container-type: inline-size;
+    container-name: default-card;
+    height: 250px;
+}
+
+@container default-card (max-width: 280px) {
+    .note-card.theme-default .status-btn {
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        justify-content: center;
+    }
+    
+    .note-card.theme-default .status-btn span {
+        display: none;
+    }
+}
+
 .status-btn {
     display: flex;
     align-items: center;

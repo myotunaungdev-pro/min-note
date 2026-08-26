@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { useSubscription } from '../context/SubscriptionContext';
 import '../pages/public/Pricing.css';
 
-const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
+const PricingCards = ({ onUpgradeClick, isUpgrading = false, isLandingPage = false }) => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const { user } = useSelector(state => state.auth);
@@ -163,12 +163,12 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
                                 navigate('/signup');
                                 return;
                             }
-                            if (user && plan === 'pro') {
-                                navigate('/notes');
-                                return;
-                            }
-                            if (user && plan !== 'pro' && onUpgradeClick) {
-                                onUpgradeClick(isYearly ? 'yearly' : 'monthly', currency);
+                            if (isLandingPage) {
+                                navigate('/settings');
+                            } else {
+                                if (plan !== 'pro' && onUpgradeClick) {
+                                    onUpgradeClick(isYearly ? 'yearly' : 'monthly', currency);
+                                }
                             }
                         }}
                     >
@@ -178,7 +178,9 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
                                 ? t('pricingPage.pendingButton')
                                 : isUpgrading
                                     ? t('common.loading', 'Loading...')
-                                    : t('pricingPage.tiers.pro.button')}
+                                    : user && (!plan || plan === 'free')
+                                        ? "Upgrade to Pro"
+                                        : t('pricingPage.tiers.pro.button')}
                     </button>
                 </div>
 
@@ -202,7 +204,7 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false }) => {
 
                     <button
                         className="pricing-card-btn pricing-btn-outline"
-                        onClick={() => navigate('/contact')}
+                        onClick={() => !user ? navigate('/signup') : navigate('/contact')}
                     >
                         {t('enterprise.cta')}
                     </button>

@@ -21,7 +21,7 @@ const Header = ({ onSelectAll }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
-    const { searchQuery, sortBy, statusFilter, activeView } = useSelector((state) => state.notes);
+    const { searchQuery, sortBy, statusFilter, activeView, sidebarCollapsed } = useSelector((state) => state.notes);
 
     const selectedNoteIds = useSelector(state => state.notes.selectedNoteIds);
 
@@ -42,7 +42,7 @@ const Header = ({ onSelectAll }) => {
     const statusDropdownRef = useRef(null);
 
     const mobileMenuRef = useRef(null);
-    const constraintsRef = useRef(null);
+    const isDragging = useRef(false);
 
     useEffect(() => {
         const handleScroll = (event) => {
@@ -147,11 +147,11 @@ const Header = ({ onSelectAll }) => {
     const getViewTitle = () => {
         switch (activeView) {
             case 'archive':
-                return t("notes.header.archived");
+                return t("notes.navbar.archive");
             case 'trash':
-                return t("notes.sidebar.trash");
+                return t("notes.navbar.trash");
             default:
-                return t("notes.sidebar.allNotes");
+                return t("notes.navbar.allNotes");
         }
     };
 
@@ -238,14 +238,14 @@ const Header = ({ onSelectAll }) => {
 
     return (
         <>
-            <div ref={constraintsRef} className="fixed inset-0 pointer-events-none z-40 md:hidden" />
+            {/* Drag constraints removed to prevent framer-motion centering bug */}
             <header
                 className={`app-header relative ${isScrolled ? 'scrolled' : ''}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="header-left gap-3 flex-1 min-w-0">
                     <button
-                        className="w-11 h-11 rounded-xl bg-gray-800/80 border border-gray-700/50 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 transition-colors duration-200 active:scale-95 md:hidden flex-shrink-0"
+                        className="w-11 h-11 rounded-xl bg-gray-800/80 border border-gray-700/50 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 transition-colors duration-200 active:scale-95 min-[905px]:hidden flex-shrink-0"
                         onClick={() => dispatch(toggleSidebar())}
                         data-tooltip-id="global-tooltip"
                         data-tooltip-content={t("notes.toggleSidebarCtrl")}
@@ -421,8 +421,6 @@ const Header = ({ onSelectAll }) => {
                         </ul>
                     </div>
 
-
-
                     <div className="dropdown mobile-only order-first md:order-none" ref={mobileMenuRef}>
                         <button
                             className="mobile-menu-btn transition-all duration-200 active:scale-90"
@@ -521,8 +519,8 @@ const Header = ({ onSelectAll }) => {
 
 
 
-                    {activeView === 'all' && (
-                        <button className="new-note-btn desktop-only" onClick={handleNewNote} data-tooltip-id="global-tooltip" data-tooltip-content={t("notes.newNoteCtrlN")}>
+                    {activeView === 'all' && !sidebarCollapsed && (
+                        <button className="new-note-btn hidden min-[905px]:flex" onClick={handleNewNote} data-tooltip-id="global-tooltip" data-tooltip-content={t("notes.newNoteCtrlN")}>
                             <i className="bi bi-plus-lg"></i>
                             <span>{t("notes.sidebar.newNote")}</span>
                         </button>
@@ -572,16 +570,30 @@ const Header = ({ onSelectAll }) => {
                 </div>
             </header>
 
-            {/* Mobile-Only FAB */}
+            {/* Mobile-Only Draggable FAB */}
             {activeView === 'all' && (
                 <motion.button
                     drag
-                    dragConstraints={constraintsRef}
+                    onDragStart={() => { isDragging.current = true; }}
+                    onDragEnd={() => { setTimeout(() => { isDragging.current = false; }, 150); }}
+                    dragConstraints={{
+                        left: typeof window !== 'undefined' ? -window.innerWidth + 80 : -500,
+                        right: 0,
+                        top: typeof window !== 'undefined' ? -window.innerHeight + 80 : -800,
+                        bottom: 0
+                    }}
                     dragElastic={0.1}
                     dragMomentum={false}
-                    className="fixed bottom-6 right-6 z-50 rounded-full w-14 h-14 shadow-lg flex items-center justify-center md:hidden pointer-events-auto"
+                    dragTransition={{ bounceStiffness: 120, bounceDamping: 20 }}
+                    transition={{ type: "spring", stiffness: 120, damping: 20, mass: 1.2 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}
+                    className={`fixed bottom-6 right-6 z-50 rounded-full w-14 h-14 shadow-lg flex items-center justify-center pointer-events-auto ${sidebarCollapsed ? '' : 'min-[905px]:hidden'}`}
                     style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: '#fff' }}
-                    onClick={handleNewNote}
+                    onClick={(e) => {
+                        if (isDragging.current) return;
+                        handleNewNote();
+                    }}
                 >
                     <i className="bi bi-plus-lg text-2xl"></i>
                 </motion.button>

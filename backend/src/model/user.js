@@ -74,6 +74,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    showTagCounts: {
+        type: Boolean,
+        default: false
+    },
     hasPaymentIssue: {
         type: Boolean,
         default: false

@@ -110,9 +110,7 @@ function App() {
                     </Route>
 
                     <Route element={<PublicLayout />}>
-                        <Route element={<PublicRoute />}>
-                            <Route path="/" element={<LandingPage />} />
-                        </Route>
+                        <Route path="/" element={<LandingPage />} />
                         <Route path="/features" element={<Features />} />
                         <Route path="/pricing" element={<Pricing />} />
                         <Route path="/integrations" element={<Integrations />} />

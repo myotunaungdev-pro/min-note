@@ -8,6 +8,7 @@ export const ALLOWED_TAGS = [
     'Ideas',
     'Finance',
     'Lyrics',
+    'Cooking',
 ];
 
 // Define the Schema for Notes

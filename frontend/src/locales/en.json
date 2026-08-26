@@ -121,8 +121,8 @@
       "previous30Days": "Previous 30 Days"
     },
     "sidebar": {
-      "allNotes": "All Notes",
-      "archive": "Archive",
+      "allNotes": "Main Notes",
+      "archive": "Archived Notes",
       "trash": "Trash",
       "searchPlaceholder": "Search notes...",
       "newNote": "New Note",
@@ -130,6 +130,11 @@
       "sortLatestFirst": "Latest First",
       "sortAZ": "A-Z",
       "selectAll": "Select All"
+    },
+    "navbar": {
+      "allNotes": "Main",
+      "archive": "Archive",
+      "trash": "Trash"
     },
     "card": {
       "edit": "Edit",
@@ -148,6 +153,7 @@
       "markComplete": "Mark as complete"
     },
     "header": {
+      "workspace": "Workspace",
       "archived": "Archived",
       "myNotes": "My Notes",
       "selected": "selected",
@@ -252,7 +258,8 @@
     "health": "Health",
     "ideas": "Ideas",
     "finance": "Finance",
-    "lyrics": "Lyrics"
+    "lyrics": "Lyrics",
+    "cooking": "Cooking"
   },
   "auth": {
     "123456": "123456",
@@ -427,7 +434,8 @@
     },
     "preferences": {
       "theme": "Theme",
-      "language": "Language"
+      "language": "Language",
+      "showTagCounts": "Show Tag Note Counts"
     },
     "back": "Back",
     "theme": {
@@ -495,7 +503,11 @@
     "ourAppSupportsMultip": "Our app supports multiple languages perfectly via i18next. Toggle between them effortlessly using the globe icon in the navigation.",
     "switchBetweenOurPrem": "Switch between our premium dark mode and light mode directly from the header.",
     "comingSoonTitle": "Coming Soon",
-    "comingSoonDesc": "Pro features are currently under development. We are working hard to bring you advanced capabilities and premium tools in future updates. Stay tuned!"
+    "comingSoonDesc": "Pro features are currently under development. We are working hard to bring you advanced capabilities and premium tools in future updates. Stay tuned!",
+    "heroTitle1": "Everything you need to",
+    "heroTitle2": "master your notes.",
+    "heroSubtitle": "A quick tour of what MIN NOTE can do — from your first note to your fastest shortcut.",
+    "footer": "MIN NOTE — built for people who think in notes."
   },
   "shortcuts": {
     "mobileNote": "Note: These shortcuts are designed for physical keyboards. Mobile users do not need to worry about them."

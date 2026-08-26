@@ -391,6 +391,8 @@ const NotesApp = ({ cardStyle }) => {
                         </button>
                         {tagOptions.map((tag) => {
                             const isActive = safeCategoryFilter.includes(tag.label);
+                            const tagCount = notes.filter(n => !n.isArchived && !n.isDeleted && n.tag === tag.label).length;
+                            
                             return (
                                 <button
                                     key={tag.label}
@@ -404,6 +406,11 @@ const NotesApp = ({ cardStyle }) => {
                                     }}
                                 >
                                     {t(`tags.${tag.label.toLowerCase()}`)}
+                                    {user?.showTagCounts && isActive && tagCount > 0 && (
+                                        <span className="ml-1 inline-flex items-center justify-center px-2 py-0.5 text-[10px] font-bold bg-gray-800/80 text-gray-400 rounded-full border border-gray-700/50">
+                                            {tagCount}
+                                        </span>
+                                    )}
                                     {isActive && <i className="bi bi-x chip-close-icon"></i>}
                                 </button>
                             );
@@ -427,7 +434,7 @@ const NotesApp = ({ cardStyle }) => {
                                 {Object.keys(groupedNotes).map((groupKey) => (
                                     <div className="note-group" key={groupKey}>
                                         <h3 className="note-group-header">{t(groupKey)}</h3>
-                                        <div className="preview-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px', width: '100%' }}>
+                                        <div className="preview-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 w-full">
                                             {groupedNotes[groupKey].map((note) => (
                                                 <NoteCard key={note._id} note={note} onDeleteRequest={(note) => setNoteToDelete(note)} onSelectToggle={(e) => handleNoteSelect(note._id, e)} cardStyle={cardStyle} />
                                             ))}
@@ -436,7 +443,7 @@ const NotesApp = ({ cardStyle }) => {
                                 ))}
                             </div>
                         ) : (
-                            <div className="preview-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px', width: '100%' }}>
+                            <div className="preview-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 w-full">
                                 {filteredAndSortedNotes.map((note) => (
                                     <NoteCard key={note._id} note={note} onDeleteRequest={(note) => setNoteToDelete(note)} onSelectToggle={(e) => handleNoteSelect(note._id, e)} cardStyle={cardStyle} />
                                 ))}
