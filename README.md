@@ -1,4 +1,4 @@
-# ⚡ MIN NOTE
+# ⚡ MIN NOTE Pro
 
 A stunning, production-ready premium SaaS note-taking workspace built on the **MERN Stack** (MongoDB, Express, React, Node.js). Engineered with a fanatical focus on pixel-perfect UI/UX, fluid animations, and highly performant state management, this application serves as a masterclass in modern frontend architecture, premium dark-mode aesthetics, and robust SaaS integrations.
 
@@ -9,9 +9,16 @@ A stunning, production-ready premium SaaS note-taking workspace built on the **M
 Our note-taking application is packed with robust features designed for both power users and minimalists, now elevated with powerful premium SaaS capabilities.
 
 ### 💼 Premium SaaS Experience (Free vs. Pro)
-- **Free Tier:** Experience the core of MIN NOTE with essential note-taking, rich text editing, standard themes, and basic categorization.
+- **Free Tier:** Experience the core of MIN NOTE Pro with essential note-taking, rich text editing, standard themes, and basic categorization.
 - **Pro Tier:** Unlock the ultimate productivity workspace. Pro users gain access to exclusive premium card designs, advanced OCR capabilities, unlimited note storage, and priority support. 
-- **Stripe Integration:** A seamless, highly secure subscription flow powered by Stripe. Features a fully integrated Checkout flow, dedicated webhook listeners for real-time subscription state synchronization, and bespoke Payment Success / Cancel redirection routing.
+- **Dual Payment Architecture:**
+  - **Stripe Integration:** A seamless, highly secure subscription flow powered by Stripe. Features a fully integrated Checkout flow, dedicated webhook listeners for real-time subscription state synchronization, and bespoke Payment Success / Cancel redirection routing for automated recurring payments.
+  - **KPay / Manual Banking Integration:** A custom, robust manual payment flow where users upload direct transfer receipts. Admins manage and approve these via a dedicated internal dashboard, seamlessly activating premium access without automated third-party billing.
+
+### ⚙️ Subscription Architecture & Background Jobs
+- **Automated Cron Jobs:** Custom Node-Cron jobs continuously monitor subscription lifecycles, precisely dispatching 3-day expiration reminder emails for non-auto-renewing users.
+- **Robust Auto-Downgrade & Lazy Evaluation:** Features a bulletproof auto-downgrade system that gracefully handles expired subscriptions. Combined with lazy evaluation upon user authentication, the system ensures pristine UI state synchronization and immediate access revocation when necessary.
+- **Complete Localization (i18next):** Every facet of the subscription workflow—from dynamic expiration modals to real-time toast notifications—is meticulously localized across English, Myanmar, and Thai, adapting to the user's active locale without page reloads.
 
 ### 👁️ Advanced OCR Capabilities
 - **Optical Character Recognition:** Extract text directly from images uploaded to your notes. Powered by cutting-edge OCR technology, this feature allows you to digitize physical documents, receipts, and whiteboard snapshots instantly (Pro feature).
@@ -33,10 +40,6 @@ Personalize your workspace layout instantly with beautifully crafted, interactiv
 - **Premium Glassmorphism & Animations:** Leverages `react-confetti` and custom CSS keyframes (like `magicalSlideUp`) for stunning, celebratory UI elements, particularly in the Payment Success flows.
 - **High-Performance DOM Manipulation:** 60FPS Drag-to-Resize Sidebar bypasses standard React state-driven re-renders during drag operations.
 
-### 🌐 Dynamic Localization (i18n)
-- **Multi-Language Support:** Flawlessly localizes the entire workspace across three distinct languages: **English**, **Burmese**, and **Thai**.
-- **Instant Translation:** Powered by `i18next` and `react-i18next`, language toggles apply translations dynamically across the entire UI without requiring a page reload.
-
 ---
 
 ## 🛠️ Tech Stack
@@ -55,6 +58,7 @@ Personalize your workspace layout instantly with beautifully crafted, interactiv
 - **Node.js & Express.js** (RESTful API Design)
 - **MongoDB & Mongoose** (Schema modeling, Cloud Atlas)
 - **Stripe API** (Payment processing, Subscription management, Webhooks)
+- **Node-Cron & Nodemailer** (Background task scheduling and automated email dispatching)
 
 ---
 
@@ -66,6 +70,7 @@ Follow these instructions to get a local copy up and running.
 - Node.js (v18+ recommended)
 - A running MongoDB instance or a MongoDB Atlas connection string.
 - A Stripe Developer Account (for obtaining publishable and secret keys).
+- An SMTP Email provider (e.g., Gmail, SendGrid) for automated emails.
 
 ### 1. Clone the Repository
 ```bash
@@ -83,6 +88,7 @@ Create a `.env` file in the `/backend` directory and add your required keys:
 ```env
 # Server
 PORT=8000
+CLIENT_URL=http://localhost:3000
 
 # Database
 MONGO_URI=your_mongodb_connection_string
@@ -90,7 +96,10 @@ MONGO_URI=your_mongodb_connection_string
 # Stripe Integrations
 STRIPE_SECRET_KEY=your_stripe_secret_key
 STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
-CLIENT_URL=http://localhost:3000
+
+# Email / Cron Jobs
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_email_app_password
 ```
 Boot the server:
 ```bash

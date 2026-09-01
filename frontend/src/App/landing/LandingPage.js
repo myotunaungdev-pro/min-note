@@ -39,7 +39,7 @@ const LandingPage = () => {
                             <div className="w-full flex justify-center mt-8">
                                 {token ? (
                                     <Link to="/notes" className="btn-get-started">
-                                        {t("notes.header.workspace")}
+                                        {t('landing.workspace_btn')}
                                         <i className="bi bi-arrow-right-short"></i>
                                     </Link>
                                 ) : (

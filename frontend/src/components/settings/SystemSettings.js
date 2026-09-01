@@ -87,7 +87,7 @@ const SystemSettings = ({ cardStyle, setCardStyle }) => {
                         <div className="preference-item">
                             <div className="preference-info">
                                 <i className="bi bi-tags"></i>
-                                <span>{t("settings.preferences.showTagCounts", "Show Tag Note Counts")}</span>
+                                <span>{t("settings.preferences.showTagCounts")}</span>
                             </div>
                             <div
                                 className={`toggle-switch ${user?.showTagCounts ? 'active' : ''}`}

@@ -81,6 +81,14 @@ const userSchema = new mongoose.Schema({
     hasPaymentIssue: {
         type: Boolean,
         default: false
+    },
+    hasSentExpirationReminder: {
+        type: Boolean,
+        default: false
+    },
+    isPlanExpired: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

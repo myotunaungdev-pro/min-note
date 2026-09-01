@@ -397,12 +397,16 @@
     "iLoveHowFastTheSearc": "I love how fast the search works. I can find any note from 2 years ago instantly. Highly recommend upgrading to Pro.",
     "joinThousandsOfProfe": "Join thousands of professionals capturing their best ideas securely in the cloud.",
     "builtWithPrecision": "Built with precision.",
-    "footerFeaturesLink": "Features"
+    "footerFeaturesLink": "Features",
+    "workspace_btn": "Workspace"
   },
   "settings": {
     "billing": {
       "cancelWarningTitle": "Subscription Canceling",
       "cancelWarningDesc": "Your Pro plan is set to cancel at the end of your billing cycle on {{date}}. You will retain access until then.",
+      "paymentFailedTitle": "Pro Plan Payment Failed",
+      "paymentFailedDesc": "We couldn't process your last payment. Your connected card might have insufficient funds or be expired. Please update your billing information to keep your Pro features.",
+      "updateBilling": "Update Payment Method",
       "monthly": "Monthly",
       "yearly": "Yearly",
       "manageSubscription": "Manage Subscription"
@@ -576,7 +580,8 @@
         "sync": "Advanced team collaboration",
         "support": "24/7 dedicated support"
       }
-    }
+    },
+    "upgrade_btn": "Upgrade to Pro"
   },
   "pricingPage": {
     "title": "Pricing",
@@ -631,6 +636,15 @@
     "pendingBanner": "You have a pending KPay transaction. Please wait for our team to approve it.",
     "authWarning": "Please sign up or log in first to upgrade"
   },
+  "toast": {
+    "resumeSuccess": "Welcome back! Your Pro subscription has been successfully resumed.",
+    "cancelScheduled": "Cancellation scheduled. Pro access remains until your current period ends.",
+    "cancelImmediate": "Your Pro subscription has been cancelled immediately.",
+    "cancelError": "Failed to cancel subscription.",
+    "resumeError": "Failed to resume subscription.",
+    "portalError": "Failed to create portal session.",
+    "billingPortalError": "Failed to open billing portal."
+  },
   "checkout": {
     "errors": {
       "fillAll": "Please fill in all fields",
@@ -648,6 +662,8 @@
     "successDesc": "Welcome to MIN NOTE Pro."
   },
   "subscriptionModal": {
+    "cancelingBtn": "Canceling...",
+    "resumingBtn": "Resuming...",
     "cancelWarning": "How would you like to cancel your Pro plan?",
     "cancelAtEndBtn": "Cancel at end of current period",
     "cancelAtEndDesc": "Keep your Pro benefits until your current plan expires.",

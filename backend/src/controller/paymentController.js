@@ -91,6 +91,7 @@ export const cancelSubscription = async (req, res) => {
             user.planType = null;
             user.currentPeriodEnd = null;
             user.cancelAtPeriodEnd = false;
+            user.hasSeenProWelcome = false;
         } else {
             user.cancelAtPeriodEnd = true;
         }

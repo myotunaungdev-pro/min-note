@@ -38,7 +38,11 @@ const Upgrade = () => {
                 setIsUpgrading(false);
             }
         } catch (error) {
-            toast.error(error.message || 'Checkout failed');
+            if (error.message === 'insufficient_funds' || error.message.includes('Insufficient funds')) {
+                toast.error('သင့်ကတ်ထဲတွင် ငွေလုံလောက်မှုမရှိပါ (Insufficient funds in your card. Please try again.)');
+            } else {
+                toast.error(error.message || 'Checkout failed');
+            }
             setIsUpgrading(false);
         }
     };

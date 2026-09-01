@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, AlertTriangle, CheckCircle, RefreshCcw } from 'lucide-react';
+import { X, AlertTriangle, CheckCircle, RefreshCcw, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSubscription } from '../context/SubscriptionContext';
@@ -11,16 +11,21 @@ import './ManageSubscriptionModal.css';
 const ManageSubscriptionModal = ({ isOpen, onClose }) => {
     const { t } = useTranslation();
     const { cancelSubscription: updateContextCancel, resumeSubscription: updateContextResume, cancelAtPeriodEnd, nextBillingDate } = useSubscription();
-    const [status, setStatus] = useState('idle'); // idle | processing
+
+    const [isCancelingAtEnd, setIsCancelingAtEnd] = useState(false);
+    const [isCancelingNow, setIsCancelingNow] = useState(false);
+    const [isResuming, setIsResuming] = useState(false);
+
     const [isConfirmingCancel, setIsConfirmingCancel] = useState(false);
     const [showImmediateConfirm, setShowImmediateConfirm] = useState(false);
 
+    const isProcessing = isCancelingAtEnd || isCancelingNow || isResuming;
+
     const handleClose = () => {
-        if (status === 'processing') return;
+        if (isProcessing) return;
         setIsConfirmingCancel(false);
         setShowImmediateConfirm(false);
         onClose();
-        setStatus('idle');
     };
 
     const handleCancelClick = () => {
@@ -33,37 +38,44 @@ const ManageSubscriptionModal = ({ isOpen, onClose }) => {
             return;
         }
 
-        setStatus('processing');
+        if (immediate) setIsCancelingNow(true);
+        else setIsCancelingAtEnd(true);
+
         try {
             const response = await cancelSubscription(immediate);
             if (response.success) {
                 updateContextCancel(immediate);
-                toast.success(immediate ? t('subscriptionModal.toastImmediate') : t('subscriptionModal.toastScheduled'));
+                toast.success(immediate ? t('toast.cancelImmediate') : t('toast.cancelScheduled'));
                 handleClose();
             }
         } catch (error) {
-            toast.error(t('billing.cancelError', { defaultValue: 'Failed to cancel subscription' }));
-            setStatus('idle');
+            toast.error(t('toast.cancelError'));
+        } finally {
+            await new Promise(resolve => setTimeout(resolve, 800));
+            if (immediate) setIsCancelingNow(false);
+            else setIsCancelingAtEnd(false);
         }
     };
 
     const handleResume = async () => {
-        setStatus('processing');
+        setIsResuming(true);
         try {
             const response = await resumeSubscription();
             if (response.success) {
                 updateContextResume();
-                toast.success(t('subscriptionModal.toastResumed'));
+                toast.success(t('toast.resumeSuccess'));
                 handleClose();
             }
         } catch (error) {
-            toast.error('Failed to resume subscription');
-            setStatus('idle');
+            toast.error(t('toast.resumeError'));
+        } finally {
+            await new Promise(resolve => setTimeout(resolve, 800));
+            setIsResuming(false);
         }
     };
 
-    const formattedNextBillingDate = nextBillingDate 
-        ? new Date(nextBillingDate).toLocaleDateString() 
+    const formattedNextBillingDate = nextBillingDate
+        ? new Date(nextBillingDate).toLocaleDateString()
         : 'Active';
 
     return (
@@ -85,7 +97,7 @@ const ManageSubscriptionModal = ({ isOpen, onClose }) => {
                         exit={{ opacity: 0, y: 20, scale: 0.95 }}
                         transition={{ type: "spring", damping: 25, stiffness: 300 }}
                     >
-                        <button className="checkout-close-btn" onClick={handleClose} disabled={status === 'processing'}>
+                        <button className="checkout-close-btn" onClick={handleClose} disabled={isProcessing}>
                             <X size={24} />
                         </button>
                         <div className="checkout-header">
@@ -127,13 +139,19 @@ const ManageSubscriptionModal = ({ isOpen, onClose }) => {
                                 <button
                                     className="manage-btn-keep"
                                     onClick={handleResume}
-                                    disabled={status === 'processing'}
+                                    disabled={isProcessing}
+                                    style={{ opacity: isProcessing ? 0.6 : 1, cursor: isProcessing ? 'not-allowed' : 'pointer' }}
                                 >
-                                    {status === 'processing' ? <div className="spinner-small"></div> : (
-                                        <>
-                                            <RefreshCcw size={18} style={{ marginRight: '8px' }} />
-                                            {t('subscriptionModal.resumeBtn')}
-                                        </>
+                                    {isResuming ? (
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                                            <Loader2 size={18} className="animate-spin" />
+                                            <span>{t('subscriptionModal.resumingBtn')}</span>
+                                        </div>
+                                    ) : (
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                                            <RefreshCcw size={18} />
+                                            <span>{t('subscriptionModal.resumeBtn')}</span>
+                                        </div>
                                     )}
                                 </button>
                             ) : showImmediateConfirm ? (
@@ -141,15 +159,23 @@ const ManageSubscriptionModal = ({ isOpen, onClose }) => {
                                     <button
                                         className="manage-btn-cancel manage-btn-cancel-secondary"
                                         onClick={() => handleConfirmCancel(true)}
-                                        disabled={status === 'processing'}
+                                        disabled={isProcessing}
+                                        style={{ opacity: isProcessing ? 0.6 : 1, cursor: isProcessing ? 'not-allowed' : 'pointer' }}
                                     >
-                                        {status === 'processing' ? <div className="spinner-small"></div> : t('subscriptionModal.confirmImmediateBtn')}
+                                        {isCancelingNow ? (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                                                <Loader2 size={18} className="animate-spin" />
+                                                <span>{t('subscriptionModal.cancelingBtn')}</span>
+                                            </div>
+                                        ) : (
+                                            t('subscriptionModal.confirmImmediateBtn')
+                                        )}
                                     </button>
                                     <button
                                         className="manage-btn-cancel manage-btn-tertiary"
                                         onClick={() => setShowImmediateConfirm(false)}
-                                        disabled={status === 'processing'}
-                                        style={{ marginTop: '0.5rem' }}
+                                        disabled={isProcessing}
+                                        style={{ marginTop: '0.5rem', opacity: isProcessing ? 0.6 : 1, cursor: isProcessing ? 'not-allowed' : 'pointer' }}
                                     >
                                         {t('subscriptionModal.goBackBtn')}
                                     </button>
@@ -159,9 +185,15 @@ const ManageSubscriptionModal = ({ isOpen, onClose }) => {
                                     <button
                                         className="manage-btn-keep manage-btn-with-desc"
                                         onClick={() => handleConfirmCancel(false)}
-                                        disabled={status === 'processing'}
+                                        disabled={isProcessing}
+                                        style={{ opacity: isProcessing ? 0.6 : 1, cursor: isProcessing ? 'not-allowed' : 'pointer' }}
                                     >
-                                        {status === 'processing' ? <div className="spinner-small"></div> : (
+                                        {isCancelingAtEnd ? (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', width: '100%', padding: '8px 0' }}>
+                                                <Loader2 size={18} className="animate-spin" />
+                                                <span className="btn-title" style={{ margin: 0 }}>{t('subscriptionModal.cancelingBtn')}</span>
+                                            </div>
+                                        ) : (
                                             <>
                                                 <span className="btn-title">{t('subscriptionModal.cancelAtEndBtn')}</span>
                                                 <span className="btn-desc">{t('subscriptionModal.cancelAtEndDesc')}</span>
@@ -171,9 +203,15 @@ const ManageSubscriptionModal = ({ isOpen, onClose }) => {
                                     <button
                                         className="manage-btn-cancel manage-btn-cancel-secondary manage-btn-with-desc"
                                         onClick={() => handleConfirmCancel(true)}
-                                        disabled={status === 'processing'}
+                                        disabled={isProcessing}
+                                        style={{ opacity: isProcessing ? 0.6 : 1, cursor: isProcessing ? 'not-allowed' : 'pointer', marginTop: '0.5rem' }}
                                     >
-                                        {status === 'processing' ? <div className="spinner-small"></div> : (
+                                        {isCancelingNow ? (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', width: '100%', padding: '8px 0' }}>
+                                                <Loader2 size={18} className="animate-spin" />
+                                                <span className="btn-title" style={{ margin: 0 }}>{t('subscriptionModal.cancelingBtn')}</span>
+                                            </div>
+                                        ) : (
                                             <>
                                                 <span className="btn-title">{t('subscriptionModal.cancelImmediateBtn')}</span>
                                                 <span className="btn-desc">{t('subscriptionModal.cancelImmediateDesc')}</span>
@@ -183,8 +221,8 @@ const ManageSubscriptionModal = ({ isOpen, onClose }) => {
                                     <button
                                         className="manage-btn-cancel manage-btn-tertiary"
                                         onClick={handleClose}
-                                        disabled={status === 'processing'}
-                                        style={{ marginTop: '0.5rem' }}
+                                        disabled={isProcessing}
+                                        style={{ marginTop: '0.5rem', opacity: isProcessing ? 0.6 : 1, cursor: isProcessing ? 'not-allowed' : 'pointer' }}
                                     >
                                         {t('subscriptionModal.keepPlanBtn')}
                                     </button>
@@ -193,7 +231,8 @@ const ManageSubscriptionModal = ({ isOpen, onClose }) => {
                                 <button
                                     className="manage-btn-cancel"
                                     onClick={handleCancelClick}
-                                    disabled={status === 'processing'}
+                                    disabled={isProcessing}
+                                    style={{ opacity: isProcessing ? 0.6 : 1, cursor: isProcessing ? 'not-allowed' : 'pointer' }}
                                 >
                                     {t('billing.cancelSubscriptionBtn')}
                                 </button>

@@ -55,6 +55,8 @@ export const approvePayment = async (req, res) => {
             
             user.currentPeriodEnd = endDate;
             user.hasSeenProWelcome = false;
+            user.hasSentExpirationReminder = false;
+            user.isPlanExpired = false;
             await user.save();
             
             // Send automated approval email

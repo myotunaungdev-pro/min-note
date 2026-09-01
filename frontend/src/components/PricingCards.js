@@ -179,7 +179,7 @@ const PricingCards = ({ onUpgradeClick, isUpgrading = false, isLandingPage = fal
                                 : isUpgrading
                                     ? t('common.loading', 'Loading...')
                                     : user && (!plan || plan === 'free')
-                                        ? "Upgrade to Pro"
+                                        ? t('pricing.upgrade_btn')
                                         : t('pricingPage.tiers.pro.button')}
                     </button>
                 </div>

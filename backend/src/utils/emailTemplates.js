@@ -243,6 +243,7 @@ export const getExpirationReminderTemplate = (userName) => {
         <html>
         <head>
             <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
                 body {
                     font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -252,10 +253,12 @@ export const getExpirationReminderTemplate = (userName) => {
                     padding: 0;
                 }
                 .container {
+                    width: 100%;
                     max-width: 600px;
                     margin: 0 auto;
                     background-color: #111111;
                     padding: 40px;
+
                     border-radius: 12px;
                     border: 1px solid #1a1a1a;
                 }

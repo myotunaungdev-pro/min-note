@@ -25,7 +25,7 @@ const Sidebar = () => {
     const [activeLightboxImage, setActiveLightboxImage] = useState(null);
     const [acknowledgedExpiration, setAcknowledgedExpiration] = useState(() => localStorage.getItem('acknowledgedExpiration') === 'true');
 
-    const isPlanExpired = user?.plan === 'free' && user?.currentPeriodEnd && new Date(user.currentPeriodEnd) < new Date();
+    const isPlanExpired = user?.plan === 'free' && user?.isPlanExpired === true;
 
     useEffect(() => {
         const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);

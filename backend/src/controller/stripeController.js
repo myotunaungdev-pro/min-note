@@ -47,7 +47,10 @@ export const createCheckoutSession = async (req, res) => {
         res.json({ sessionId: session.id, url: session.url });
     } catch (error) {
         console.error('Stripe checkout error:', error);
-        res.status(500).json({ error: error.message });
+        if (error.type === 'StripeCardError' || error.code === 'insufficient_funds') {
+            return res.status(402).json({ error: 'insufficient_funds', message: 'Insufficient funds in your card.' });
+        }
+        res.status(400).json({ error: error.message });
     }
 };
 
@@ -179,7 +182,8 @@ export const webhookHandler = async (req, res) => {
                     stripeCustomerId: session.customer,
                     stripeSubscriptionId: session.subscription,
                     stripePriceId: priceId,
-                    currentPeriodEnd: endDate
+                    currentPeriodEnd: endDate,
+                    isPlanExpired: false
                 }, { returnDocument: 'after' });
                 
                 if (updatedUser) {
@@ -241,10 +245,14 @@ export const webhookHandler = async (req, res) => {
                 { stripeSubscriptionId: subscription.id },
                 {
                     plan: 'free',
+                    hasSentExpirationReminder: false,
+                    currentPeriodEnd: null,
                     stripeSubscriptionId: null,
                     stripePriceId: null,
-                    currentPeriodEnd: null,
                     cancelAtPeriodEnd: false,
+                    planType: null,
+                    isPlanExpired: true,
+                    hasSeenProWelcome: false
                 }
             );
         } else if (event.type === 'invoice.paid') {
@@ -262,7 +270,9 @@ export const webhookHandler = async (req, res) => {
                             { stripeSubscriptionId: stripeSubscriptionId },
                             { 
                                 currentPeriodEnd: endDate,
-                                hasPaymentIssue: false // Clear any previous issues
+                                hasPaymentIssue: false, // Clear any previous issues
+                                hasSentExpirationReminder: false,
+                                isPlanExpired: false
                             }
                         );
                         console.log(`✅ Auto-renewed subscription for invoice ${invoice.id}, new end date: ${endDate}`);

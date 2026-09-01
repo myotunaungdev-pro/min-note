@@ -41,7 +41,7 @@ const Header = () => {
                     <i className={`bi ${isLightMode ? 'bi-moon-stars' : 'bi-sun'}`}></i>
                 </button>
                 {token ? (
-                    <Link to="/notes" className="btn-login">{t("notes.header.workspace") || "Workspace"}</Link>
+                    <Link to="/notes" className="btn-login">{t('landing.workspace_btn')}</Link>
                 ) : (
                     <Link to="/login" className="btn-login">{t("auth.login.submit")}</Link>
                 )}

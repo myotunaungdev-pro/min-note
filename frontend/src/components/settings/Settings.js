@@ -18,7 +18,7 @@ const Settings = () => {
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.auth);
     const { plan } = useSubscription();
-    const isPlanExpired = user?.plan === 'free' && user?.currentPeriodEnd && new Date(user.currentPeriodEnd) < new Date();
+    const isPlanExpired = user?.plan === 'free' && user?.isPlanExpired === true;
 
     const [isBannerDismissed, setIsBannerDismissed] = React.useState(() => localStorage.getItem('dismissedSettingsBanner') === 'true');
     const [isPricingDotDismissed, setIsPricingDotDismissed] = React.useState(() => localStorage.getItem('visitedPricingFromSettings') === 'true');
@@ -28,7 +28,7 @@ const Settings = () => {
     const [isAvatarModalOpen, setIsAvatarModalOpen] = React.useState(false);
     const [isLightboxOpen, setIsLightboxOpen] = React.useState(false);
     const [isManageSubOpen, setIsManageSubOpen] = React.useState(false);
-    const [isPortalLoading, setIsPortalLoading] = React.useState(false);
+    const [portalLoadingSource, setPortalLoadingSource] = React.useState(null);
     const fileInputRef = React.useRef(null);
 
     const [formData, setFormData] = React.useState({
@@ -119,9 +119,9 @@ const Settings = () => {
     }, [isLogoutModalOpen, confirmLogout]);
 
 
-    const handleStripePortalRedirect = async () => {
+    const handleStripePortalRedirect = async (source = null) => {
         try {
-            setIsPortalLoading(true);
+            setPortalLoadingSource(source);
             const token = localStorage.getItem('token');
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/stripe/create-portal-session`,
@@ -131,13 +131,13 @@ const Settings = () => {
             if (response.data.url) {
                 window.location.href = response.data.url;
             } else {
-                toast.error('Failed to create portal session');
-                setIsPortalLoading(false);
+                toast.error(t('toast.portalError'));
+                setPortalLoadingSource(null);
             }
         } catch (error) {
             console.error('Portal Error:', error);
-            toast.error(error.response?.data?.error || 'Failed to open billing portal');
-            setIsPortalLoading(false);
+            toast.error(error.response?.data?.error ? t(error.response.data.error) : t('toast.billingPortalError'));
+            setPortalLoadingSource(null);
         }
     };
 
@@ -248,7 +248,7 @@ const Settings = () => {
                     <h2 className="section-title">{t("settings.profile.subscription")}</h2>
                     
                     {isPlanExpired && !isBannerDismissed && (
-                        <div style={{ marginBottom: '16px', padding: '12px 16px', backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: '#ef4444' }}>
+                        <div className="flex flex-col items-start md:flex-row md:items-center md:justify-between" style={{ marginBottom: '16px', padding: '12px 16px', backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '8px', color: '#ef4444' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                 <i className="bi bi-exclamation-triangle-fill" style={{ fontSize: '1.25rem' }}></i>
                                 <div>
@@ -261,6 +261,7 @@ const Settings = () => {
                                     setIsBannerDismissed(true);
                                     localStorage.setItem('dismissedSettingsBanner', 'true');
                                 }}
+                                className="mt-4 md:mt-0 self-end md:self-auto"
                                 style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', opacity: 0.6, fontSize: '1.1rem', padding: '4px' }}
                                 aria-label="Close"
                             >
@@ -269,15 +270,54 @@ const Settings = () => {
                         </div>
                     )}
 
-                    {plan === 'pro' && user?.stripeCustomerId && user?.cancelAtPeriodEnd && (
-                        <div style={{ marginBottom: '16px', padding: '12px 16px', backgroundColor: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.2)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '12px', color: '#f59e0b' }}>
-                            <i className="bi bi-info-circle-fill" style={{ fontSize: '1.25rem' }}></i>
-                            <div>
-                                <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: 600 }}>{t('settings.billing.cancelWarningTitle', 'Subscription Canceling')}</h4>
-                                <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.8 }}>
-                                    {t('settings.billing.cancelWarningDesc', 'Your Pro plan is set to cancel at the end of your billing cycle on {{date}}. You will retain access until then.', { date: new Date(user.currentPeriodEnd).toLocaleDateString() })}
-                                </p>
+                    {plan === 'pro' && user?.stripeCustomerId && (user?.cancelAtPeriodEnd || user?.hasPaymentIssue) && (
+                        <div 
+                            className="flex flex-col items-start md:flex-row md:items-center md:justify-between"
+                            style={{ 
+                                marginBottom: '16px', 
+                                padding: '12px 16px', 
+                                backgroundColor: user?.hasPaymentIssue ? 'rgba(239, 68, 68, 0.1)' : 'rgba(245, 158, 11, 0.1)', 
+                                border: `1px solid ${user?.hasPaymentIssue ? 'rgba(239, 68, 68, 0.2)' : 'rgba(245, 158, 11, 0.2)'}`, 
+                                borderRadius: '8px', 
+                                color: user?.hasPaymentIssue ? '#ef4444' : '#f59e0b' 
+                            }}
+                        >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+                                <i className={`bi ${user?.hasPaymentIssue ? 'bi-exclamation-triangle-fill' : 'bi-info-circle-fill'}`} style={{ fontSize: '1.25rem' }}></i>
+                                <div>
+                                    <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: 600 }}>
+                                        {user?.hasPaymentIssue 
+                                            ? t('settings.billing.paymentFailedTitle', 'Payment Failed')
+                                            : t('settings.billing.cancelWarningTitle', 'Subscription Canceling')}
+                                    </h4>
+                                    <p style={{ margin: 0, fontSize: '0.75rem', opacity: 0.8 }}>
+                                        {user?.hasPaymentIssue
+                                            ? t('settings.billing.paymentFailedDesc', "We couldn't process your last invoice. Please update your billing information.")
+                                            : t('settings.billing.cancelWarningDesc', 'Your Pro plan is set to cancel at the end of your billing cycle on {{date}}. You will retain access until then.', { date: new Date(user.currentPeriodEnd).toLocaleDateString() })}
+                                    </p>
+                                </div>
                             </div>
+                            {user?.hasPaymentIssue && (
+                                <button 
+                                    onClick={() => handleStripePortalRedirect('warning-banner')}
+                                    disabled={portalLoadingSource !== null}
+                                    className="mt-4 md:mt-0"
+                                    style={{
+                                        background: 'transparent',
+                                        border: '1px solid currentColor',
+                                        color: 'inherit',
+                                        padding: '4px 12px',
+                                        borderRadius: '4px',
+                                        fontSize: '0.75rem',
+                                        fontWeight: '600',
+                                        cursor: portalLoadingSource !== null ? 'not-allowed' : 'pointer',
+                                        opacity: portalLoadingSource !== null ? 0.7 : 1,
+                                        whiteSpace: 'nowrap'
+                                    }}
+                                >
+                                    {portalLoadingSource === 'warning-banner' ? t("common.loading", "Loading...") : t('settings.billing.updateBilling', 'Update Billing')}
+                                </button>
+                            )}
                         </div>
                     )}
 
@@ -320,12 +360,12 @@ const Settings = () => {
                                     )}
                                 </button>
                             ) : user?.stripeCustomerId ? (
-                                <button className="btn-upgrade stripe-portal-btn" disabled={isPortalLoading} style={{ position: 'relative', opacity: isPortalLoading ? 0.7 : 1, cursor: isPortalLoading ? 'not-allowed' : 'pointer' }} onClick={() => {
+                                <button className="btn-upgrade stripe-portal-btn" disabled={portalLoadingSource !== null} style={{ position: 'relative', opacity: portalLoadingSource !== null ? 0.7 : 1, cursor: portalLoadingSource !== null ? 'not-allowed' : 'pointer' }} onClick={() => {
                                     setIsPricingDotDismissed(true);
                                     localStorage.setItem('visitedPricingFromSettings', 'true');
-                                    handleStripePortalRedirect();
+                                    handleStripePortalRedirect('manage-sub');
                                 }}>
-                                    {isPortalLoading ? t("common.loading", "Loading...") : t("settings.billing.manageSubscription", "Manage Subscription")}
+                                    {portalLoadingSource === 'manage-sub' ? t("common.loading", "Loading...") : t("settings.billing.manageSubscription", "Manage Subscription")}
                                     {isPlanExpired && !isPricingDotDismissed && (
                                         <span style={{ position: 'absolute', top: '-4px', right: '-4px', width: '10px', height: '10px', backgroundColor: '#ef4444', border: '2px solid #1a1a1a', borderRadius: '50%' }}></span>
                                     )}

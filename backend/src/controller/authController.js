@@ -23,6 +23,8 @@ export const getMe = async (req, res) => {
             user.planType = undefined;
             user.currentPeriodEnd = undefined;
             user.cancelAtPeriodEnd = false;
+            user.hasSeenProWelcome = false;
+            user.isPlanExpired = true;
             planModified = true;
         }
 

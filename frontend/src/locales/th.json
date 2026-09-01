@@ -118,8 +118,8 @@
       "previous30Days": "30 วันที่ผ่านมา"
     },
     "sidebar": {
-      "allNotes": "โน้ตทั้งหมด",
-      "archive": "เก็บถาวร",
+      "allNotes": "โน้ตหลัก",
+      "archive": "โน้ตที่เก็บถาวร",
       "trash": "ถังขยะ",
       "searchPlaceholder": "ค้นหาโน้ต...",
       "newNote": "โน้ตใหม่",
@@ -222,7 +222,12 @@
     "all": "ทั้งหมด",
     "helpGuide": "ความช่วยเหลือและคู่มือ",
     "couldNotAccessCamera": "ไม่สามารถเข้าถึงกล้องได้ กรุณาตรวจสอบสิทธิ์",
-    "uploadingToCloud": "กำลังอัปโหลดไปยังคลาวด์..."
+    "uploadingToCloud": "กำลังอัปโหลดไปยังคลาวด์...",
+    "navbar": {
+      "allNotes": "หลัก",
+      "archive": "เก็บถาวร",
+      "trash": "ถังขยะ"
+    }
   },
   "common": {
     "uploading": "กำลังอัปโหลด...",
@@ -255,7 +260,8 @@
     "health": "สุขภาพ",
     "ideas": "ไอเดีย",
     "finance": "การเงิน",
-    "lyrics": "เนื้อเพลง"
+    "lyrics": "เนื้อเพลง",
+    "cooking": "ทำอาหาร"
   },
   "auth": {
     "123456": "123456",
@@ -392,12 +398,16 @@
     "iLoveHowFastTheSearc": "ฉันชอบที่การค้นหาทำงานได้เร็วมาก ฉันสามารถค้นหาบันทึกใดๆ เมื่อ 2 ปีที่แล้วได้ในทันที ขอแนะนำให้อัปเกรดเป็น Pro",
     "joinThousandsOfProfe": "เข้าร่วมกับผู้เชี่ยวชาญหลายพันคนที่บันทึกแนวคิดที่ดีที่สุดอย่างปลอดภัยในคลาวด์",
     "builtWithPrecision": "สร้างด้วยความแม่นยำ",
-    "footerFeaturesLink": "คุณสมบัติ"
+    "footerFeaturesLink": "คุณสมบัติ",
+    "workspace_btn": "พื้นที่ทำงาน"
   },
   "settings": {
     "billing": {
       "cancelWarningTitle": "กำลังยกเลิกการสมัครใช้งาน",
       "cancelWarningDesc": "แผน Pro ของคุณจะถูกยกเลิกเมื่อสิ้นสุดรอบการเรียกเก็บเงินในวันที่ {{date}} คุณยังสามารถใช้งานได้จนถึงวันนั้น",
+      "paymentFailedTitle": "การชำระเงิน Pro Plan ไม่สำเร็จ",
+      "paymentFailedDesc": "เราไม่สามารถหักเงินจากบัตรของคุณได้ บัตรอาจมียอดเงินไม่เพียงพอหรือหมดอายุ โปรดอัปเดตข้อมูลการชำระเงินของคุณเพื่อใช้งาน Pro ต่อไป",
+      "updateBilling": "อัปเดตข้อมูลการชำระเงิน",
       "monthly": "รายเดือน",
       "yearly": "รายปี",
       "manageSubscription": "จัดการการสมัครสมาชิก"
@@ -429,7 +439,8 @@
     },
     "preferences": {
       "theme": "ธีม",
-      "language": "ภาษา"
+      "language": "ภาษา",
+      "showTagCounts": "แสดงจำนวนบันทึกของแท็ก"
     },
     "back": "กลับ",
     "theme": {
@@ -497,7 +508,11 @@
     "ourAppSupportsMultip": "แอปของเรารองรับหลายภาษาได้อย่างสมบูรณ์แบบผ่าน i18next สลับภาษาได้อย่างง่ายดายด้วยไอคอนรูปโลกในแถบนำทาง",
     "switchBetweenOurPrem": "สลับระหว่างโหมดมืดและโหมดสว่างระดับพรีเมียมของเราโดยตรงจากส่วนหัว",
     "comingSoonTitle": "เร็วๆ นี้",
-    "comingSoonDesc": "ฟีเจอร์ Pro กำลังอยู่ระหว่างการพัฒนา เรากำลังทำงานอย่างหนักเพื่อนำความสามารถขั้นสูงและเครื่องมือพรีเมียมมาสู่คุณในการอัปเดตในอนาคต โปรดติดตาม!"
+    "comingSoonDesc": "ฟีเจอร์ Pro กำลังอยู่ระหว่างการพัฒนา เรากำลังทำงานอย่างหนักเพื่อนำความสามารถขั้นสูงและเครื่องมือพรีเมียมมาสู่คุณในการอัปเดตในอนาคต โปรดติดตาม!",
+    "heroTitle1": "ทุกสิ่งที่คุณต้องการเพื่อ",
+    "heroTitle2": "จัดการโน้ตของคุณอย่างมืออาชีพ",
+    "heroSubtitle": "แนะนำสิ่งที่ MIN NOTE ทำได้อย่างรวดเร็ว — ตั้งแต่โน้ตแรกไปจนถึงคีย์ลัดที่เร็วที่สุดของคุณ",
+    "footer": "MIN NOTE — สร้างมาเพื่อคนที่คิดด้วยโน้ต"
   },
   "shortcuts": {
     "mobileNote": "หมายเหตุ: แป้นพิมพ์ลัดเหล่านี้ออกแบบมาสำหรับแป้นพิมพ์จริง ผู้ใช้มือถือไม่จำเป็นต้องกังวลเกี่ยวกับสิ่งเหล่านี้"
@@ -566,7 +581,8 @@
         "sync": "การทำงานร่วมกันในทีมขั้นสูง",
         "support": "การสนับสนุนตลอด 24/7"
       }
-    }
+    },
+    "upgrade_btn": "อัปเกรดเป็น Pro"
   },
   "pricingPage": {
     "title": "ราคา",
@@ -621,6 +637,15 @@
     "pendingBanner": "คุณมีรายการ KPay ที่รอการตรวจสอบ โปรดรอให้ทีมงานของเราอนุมัติ",
     "authWarning": "กรุณาสมัครสมาชิกหรือเข้าสู่ระบบก่อนเพื่ออัปเกรด"
   },
+  "toast": {
+    "resumeSuccess": "ยินดีต้อนรับกลับ! แพ็กเกจ Pro ของคุณได้รับการต่ออายุเรียบร้อยแล้ว",
+    "cancelScheduled": "กำหนดการยกเลิกเรียบร้อยแล้ว คุณยังคงสามารถใช้ฟีเจอร์ Pro ได้จนกว่าจะหมดรอบบิลปัจจุบัน",
+    "cancelImmediate": "แพ็กเกจ Pro ของคุณถูกยกเลิกทันที",
+    "cancelError": "ไม่สามารถยกเลิกการสมัครสมาชิกได้",
+    "resumeError": "ไม่สามารถต่ออายุการสมัครสมาชิกได้",
+    "portalError": "ไม่สามารถสร้างเซสชันพอร์ทัลได้",
+    "billingPortalError": "ไม่สามารถเปิดพอร์ทัลการเรียกเก็บเงินได้"
+  },
   "checkout": {
     "errors": {
       "fillAll": "กรุณากรอกข้อมูลให้ครบถ้วน",
@@ -638,14 +663,16 @@
     "successDesc": "ยินดีต้อนรับสู่ MIN NOTE Pro"
   },
   "subscriptionModal": {
+    "cancelingBtn": "กำลังยกเลิก...",
+    "resumingBtn": "กำลังดำเนินการต่อ...",
     "cancelWarning": "คุณต้องการยกเลิกแผน Pro ของคุณอย่างไร?",
     "cancelAtEndBtn": "ยกเลิกเมื่อสิ้นสุดรอบบิลปัจจุบัน",
     "cancelAtEndDesc": "รักษาสิทธิประโยชน์ Pro ของคุณจนกว่าแผนปัจจุบันจะหมดอายุ",
     "cancelImmediateBtn": "ยกเลิกทันที",
     "cancelImmediateDesc": "สูญเสียการเข้าถึง Pro ทันที จะไม่มีการคืนเงิน",
     "keepPlanBtn": "ไม่เป็นไร, คงแผนของฉันไว้",
-    "resumeBtn": "Resume Pro Subscription",
-    "scheduledWarning": "Your Pro plan is scheduled to cancel on {{date}}. You can still enjoy all premium features until then.",
+    "resumeBtn": "ดำเนินการต่อแพ็กเกจ Pro",
+    "scheduledWarning": "แพ็กเกจ Pro ของคุณมีกำหนดการยกเลิกในวันที่ {{date}} คุณยังคงสามารถใช้ฟีเจอร์พรีเมียมทั้งหมดได้จนถึงตอนนั้น",
     "toastScheduled": "Cancellation scheduled. Pro access remains until your current period ends.",
     "toastImmediate": "Subscription canceled. Your account is now on the Free plan.",
     "toastResumed": "Welcome back! Your Pro subscription has been successfully resumed.",
