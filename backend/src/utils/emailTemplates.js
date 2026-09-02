@@ -51,7 +51,7 @@ export const getPaymentSuccessEmailTemplate = (userName, planTypeCapitalized) =>
                 <p>Hello <span class="strong-text">${userName}</span>,</p>
                 <p>Great news! Your payment was successful.</p>
                 <p>Your account has now been upgraded to the <span class="strong-text">${planTypeCapitalized} Pro Plan</span>.</p>
-                <p><strong>Welcome to MIN NOTE Pro! Start exploring your Pro features today.</strong></p>
+                <p><strong>Welcome to MIN NOTE! Start exploring your Pro features today.</strong></p>
                 <p>Thank you for choosing MIN NOTE.</p>
                 
                 <hr class="divider">
@@ -59,7 +59,7 @@ export const getPaymentSuccessEmailTemplate = (userName, planTypeCapitalized) =>
                 <h2>လူကြီးမင်း၏ MIN NOTE Pro အကောင့် ရရှိပါပြီ!</h2>
                 <p>ဝမ်းမြောက်ပါသည်! ငွေပေးချေမှု အောင်မြင်ပါသည်။</p>
                 <p>လူကြီးမင်း၏ အကောင့်ကို <span class="strong-text">${planTypeCapitalized} Pro Plan</span> သို့ အောင်မြင်စွာ ပြောင်းလဲပေးလိုက်ပါသည်။</p>
-                <p><strong>MIN NOTE Pro မှ နွေးထွေးစွာ ကြိုဆိုပါသည်။ ယခုပဲ Pro Account ၏ အထူးလုပ်ဆောင်ချက်များ ကို စတင်အသုံးပြုလိုက်ပါ။</strong></p>
+                <p><strong>MIN NOTE မှ နွေးထွေးစွာ ကြိုဆိုပါသည်။ ယခုပဲ Pro Account ၏ အထူးလုပ်ဆောင်ချက်များ ကို စတင်အသုံးပြုလိုက်ပါ။</strong></p>
                 <p>MIN NOTE ကို ရွေးချယ်တဲ့အတွက် ကျေးဇူးတင်ပါသည်။</p>
                 
                 <div class="footer">
@@ -78,7 +78,7 @@ Hello ${userName},
 Great news! Your payment was successful.
 Your account has now been upgraded to the ${planTypeCapitalized} Pro Plan.
 
-Welcome to MIN NOTE Pro! Start exploring your Pro features today.
+Welcome to MIN NOTE! Start exploring your Pro features today.
 
 Thank you for choosing MIN NOTE.
 
@@ -89,7 +89,7 @@ Thank you for choosing MIN NOTE.
 ဝမ်းမြောက်ပါသည်! ငွေပေးချေမှု အောင်မြင်ပါသည်။
 လူကြီးမင်း၏ အကောင့်ကို ${planTypeCapitalized} Pro Plan သို့ အောင်မြင်စွာ ပြောင်းလဲပေးလိုက်ပါသည်။
 
-MIN NOTE Pro မှ နွေးထွေးစွာ ကြိုဆိုပါသည်။ ယခုပဲ Pro Account ၏ အထူးလုပ်ဆောင်ချက်များ ကို စတင်အသုံးပြုလိုက်ပါ။
+MIN NOTE မှ နွေးထွေးစွာ ကြိုဆိုပါသည်။ ယခုပဲ Pro Account ၏ အထူးလုပ်ဆောင်ချက်များ ကို စတင်အသုံးပြုလိုက်ပါ။
 
 MIN NOTE ကို ရွေးချယ်တဲ့အတွက် ကျေးဇူးတင်ပါသည်။
 

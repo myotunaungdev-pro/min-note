@@ -1,4 +1,4 @@
-# ⚡ MIN NOTE Pro
+# ⚡ MIN NOTE
 
 A stunning, production-ready premium SaaS note-taking workspace built on the **MERN Stack** (MongoDB, Express, React, Node.js). Engineered with a fanatical focus on pixel-perfect UI/UX, fluid animations, and highly performant state management, this application serves as a masterclass in modern frontend architecture, premium dark-mode aesthetics, and robust SaaS integrations.
 
@@ -9,7 +9,7 @@ A stunning, production-ready premium SaaS note-taking workspace built on the **M
 Our note-taking application is packed with robust features designed for both power users and minimalists, now elevated with powerful premium SaaS capabilities.
 
 ### 💼 Premium SaaS Experience (Free vs. Pro)
-- **Free Tier:** Experience the core of MIN NOTE Pro with essential note-taking, rich text editing, standard themes, and basic categorization.
+- **Free Tier:** Experience the core of MIN NOTE with essential note-taking, rich text editing, standard themes, and basic categorization.
 - **Pro Tier:** Unlock the ultimate productivity workspace. Pro users gain access to exclusive premium card designs, advanced OCR capabilities, unlimited note storage, and priority support. 
 - **Dual Payment Architecture:**
   - **Stripe Integration:** A seamless, highly secure subscription flow powered by Stripe. Features a fully integrated Checkout flow, dedicated webhook listeners for real-time subscription state synchronization, and bespoke Payment Success / Cancel redirection routing for automated recurring payments.

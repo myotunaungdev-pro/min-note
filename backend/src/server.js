@@ -15,8 +15,18 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 // Middleware
+const allowedOrigin = process.env.CLIENT_URL;
+
 app.use(cors({
-    origin: ['http://localhost:3000', process.env.FRONTEND_URL].filter(Boolean),
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        // or requests that match the allowed origin
+        if (!origin || origin === allowedOrigin) {
+            callback(null, true);
+        } else {
+            callback(new Error('CORS policy violation: Unauthorized origin'));
+        }
+    },
     credentials: true
 }));
 // Stripe Webhook needs raw body, mount before json parser

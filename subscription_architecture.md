@@ -1,4 +1,4 @@
-# MIN NOTE Pro: Subscription Architecture
+# MIN NOTE: Subscription Architecture
 
 This document provides a comprehensive overview of how the system handles subscriptions for **Stripe Users** (automated recurring payments) versus **KPay Users** (manual one-time payments).
 

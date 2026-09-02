@@ -660,7 +660,7 @@
     "payNow": "ชำระเงินตอนนี้",
     "processing": "กำลังดำเนินการชำระเงิน...",
     "successTitle": "ชำระเงินสำเร็จ!",
-    "successDesc": "ยินดีต้อนรับสู่ MIN NOTE Pro"
+    "successDesc": "ยินดีต้อนรับสู่ MIN NOTE"
   },
   "subscriptionModal": {
     "cancelingBtn": "กำลังยกเลิก...",
@@ -707,7 +707,7 @@
     "thankYou": "ขอบคุณสำหรับการอัปเกรด!",
     "goToWorkspace": "ไปยังพื้นที่ทำงาน",
     "cancelled": "ยกเลิกรายการแล้ว",
-    "welcomePro": "ยินดีต้อนรับสู่ MIN NOTE Pro! 🎉",
+    "welcomePro": "ยินดีต้อนรับสู่ MIN NOTE! 🎉",
     "captureLimits": "จดบันทึกไอเดียที่ดีที่สุดของคุณแบบไร้ขีดจำกัด"
   },
   "kpay": {
