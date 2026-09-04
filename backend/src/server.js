@@ -2,10 +2,16 @@ import dns from 'node:dns/promises';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path'; // Added for frontend static file serving
+import { fileURLToPath } from 'url'; // Added to support __dirname in ES Modules
 import router from './route/route.js';
 import authRoutes from './route/authRoutes.js';
 import { connectDB } from './utils/database.js';
 import { startCronJobs } from './utils/cronJobs.js';
+
+// Setting up __dirname for ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
@@ -19,8 +25,6 @@ const allowedOrigin = process.env.CLIENT_URL;
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        // or requests that match the allowed origin
         if (!origin || origin === allowedOrigin) {
             callback(null, true);
         } else {
@@ -29,6 +33,7 @@ app.use(cors({
     },
     credentials: true
 }));
+
 // Stripe Webhook needs raw body, mount before json parser
 import { webhookHandler } from './controller/stripeController.js';
 app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), webhookHandler);
@@ -41,6 +46,20 @@ import stripeRoutes from './route/stripeRoutes.js';
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api', router);
+
+// --- Serve Frontend Build Files ---
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../../frontend/build')));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../../frontend/build', 'index.html'));
+    });
+} else {
+    app.get('/', (req, res) => {
+        res.send('API is running...');
+    });
+}
+// ----------------------------------
 
 // Global Error Handler
 app.use((err, req, res, next) => {
