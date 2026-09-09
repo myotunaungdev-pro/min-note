@@ -1,35 +1,25 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 export const sendEmail = async (options) => {
     try {
-        // 1. Create a transporter
-        const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: parseInt(process.env.SMTP_PORT),
-            secure: process.env.SMTP_SECURE === 'true',
-            auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS
-            },
-            connectionTimeout: 10000, // 10 seconds
-            greetingTimeout: 5000,
-            socketTimeout: 15000
-        });
+        const resend = new Resend(process.env.RESEND_API_KEY);
 
-        // 2. Define email options
-        const mailOptions = {
-            from: `MIN NOTE <${process.env.EMAIL_USER}>`,
+        const { data, error } = await resend.emails.send({
+            from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
             to: options.email,
             subject: options.subject,
             html: options.message,
             text: options.text,
-        };
+        });
 
-        // 3. Send email
-        await transporter.sendMail(mailOptions);
+        if (error) {
+            console.error('Resend API Error: Failed to send email.', error);
+            return;
+        }
+
         console.log(`Email successfully sent to ${options.email}`);
     } catch (error) {
-        console.error('Nodemailer Error: Failed to send email.', error);
-        throw error;
+        console.error('Email Sending Error: Failed to send email.', error);
+        // Do not throw error to prevent crashing the signup process
     }
 };
