@@ -13,7 +13,7 @@ const isLocalhost = Boolean(
 );
 
 export function register(config) {
-    if (process.env.NODE_ENV === 'production' || true) { // Always register for testing PWA locally
+    if (process.env.NODE_ENV === 'production') { // Always register for testing PWA locally
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 const swUrl = `${process.env.PUBLIC_URL || ''}/service-worker.js`;

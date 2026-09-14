@@ -1,4 +1,4 @@
-﻿import dns from 'node:dns/promises';
+import dns from 'node:dns/promises';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -6,10 +6,12 @@ import router from './route/route.js';
 import authRoutes from './route/authRoutes.js';
 import { connectDB } from './utils/database.js';
 import { startCronJobs } from './utils/cronJobs.js';
+import { checkEnvVariables } from './config/envCheck.js';
 
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 dotenv.config();
+checkEnvVariables();
 
 const app = express();
 const PORT = process.env.PORT || 8000;

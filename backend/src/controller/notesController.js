@@ -1,131 +1,87 @@
-import Note from '../model/notes.js';
-import User from '../model/user.js';
+import { noteService } from '../services/noteService.js';
 
-// Get all notes (Excluding soft-deleted ones if needed)
 export const getNotes = async (req, res) => {
     try {
-        const notes = await Note.find({ userId: req.user.id }).sort({ createdAt: -1 }); // Sort by latest
-        res.status(200).json(notes);
+        const result = await noteService.getNotes(req.user.id);
+        res.status(200).json(result);
     } catch (err) {
         res.status(500).json({ message: "Error fetching notes", error: err.message });
     }
 };
 
-// Get a single note by ID
 export const getNoteById = async (req, res) => {
     try {
-        const note = await Note.findOne({ _id: req.params.id, userId: req.user.id });
-        if (!note) {
-            return res.status(404).json({ message: "Note not found" });
-        }
-        res.status(200).json(note);
+        const result = await noteService.getNoteById(req.params.id, req.user.id);
+        res.status(200).json(result);
     } catch (err) {
+        if (err.statusCode) {
+            return res.status(err.statusCode).json({ message: err.message });
+        }
         res.status(500).json({ message: "Error retrieving note", error: err.message });
     }
 };
 
-// Create a new note
 export const createNote = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
-        
-        // Enforce Free tier limit
-        if (!user || user.plan !== 'pro' || (user.plan === 'pro' && user.currentPeriodEnd && new Date(user.currentPeriodEnd) < new Date())) {
-            const noteCount = await Note.countDocuments({ userId: req.user.id });
-            if (noteCount >= 50) {
-                return res.status(403).json({ message: "Free plan limit reached (50 notes). Please upgrade to Pro to create unlimited notes." });
-            }
-        }
-
-        // Mongoose automatically filters fields based on schema and sets default values
-        const newNote = new Note({
-            ...req.body,
-            userId: req.user.id // Enforce ownership
-        });
-        const savedNote = await newNote.save();
-
-        // Return response format matching your frontend slice (_id instead of insertedId)
-        res.status(201).json({ message: "Note created", id: savedNote._id });
+        const result = await noteService.createNote(req.user.id, req.body);
+        res.status(201).json(result);
     } catch (err) {
+        if (err.statusCode) {
+            return res.status(err.statusCode).json({ message: err.message });
+        }
         res.status(500).json({ message: "Save failed", error: err.message });
     }
 };
 
-// Update an existing note
 export const updateNote = async (req, res) => {
     try {
-        const updatedNote = await Note.findOneAndUpdate(
-            { _id: req.params.id, userId: req.user.id },
-            { $set: req.body },
-            { returnDocument: 'after', runValidators: true }
-        );
-
-        if (!updatedNote) {
-            return res.status(404).json({ message: "Note not found or unauthorized" });
-        }
-
-        res.status(200).json({ message: "Update successful", updatedNote });
+        const result = await noteService.updateNote(req.params.id, req.user.id, req.body);
+        res.status(200).json(result);
     } catch (err) {
+        if (err.statusCode) {
+            return res.status(err.statusCode).json({ message: err.message });
+        }
         res.status(500).json({ message: "Update failed", error: err.message });
     }
 };
 
-// Delete a note permanently
 export const deleteNote = async (req, res) => {
     try {
-        const deletedNote = await Note.findOneAndDelete({ _id: req.params.id, userId: req.user.id });
-        if (!deletedNote) {
-            return res.status(404).json({ message: "Note not found or unauthorized" });
-        }
-        res.status(200).json({ message: "Deleted successful" });
+        const result = await noteService.deleteNote(req.params.id, req.user.id);
+        res.status(200).json(result);
     } catch (err) {
+        if (err.statusCode) {
+            return res.status(err.statusCode).json({ message: err.message });
+        }
         res.status(500).json({ message: "Delete failed", error: err.message });
     }
 };
 
-// 🚀 Archive
 export const bulkArchiveNotes = async (req, res) => {
     try {
-        const { ids } = req.body; // Array from frontend (example - ["id1", "id2"])
-        
-        await Note.updateMany(
-            { _id: { $in: ids }, userId: req.user.id }, 
-            { $set: { isArchived: true, isDeleted: false, updatedAt: new Date() } }
-        );
-        
-        res.status(200).json({ message: "Successfully archived selected notes" });
+        const { ids } = req.body;
+        const result = await noteService.bulkArchiveNotes(ids, req.user.id);
+        res.status(200).json(result);
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message });
     }
 };
 
-// 🚀 Trash
 export const bulkTrashNotes = async (req, res) => {
     try {
         const { ids } = req.body;
-        
-        await Note.updateMany(
-            { _id: { $in: ids }, userId: req.user.id }, 
-            { $set: { isDeleted: true, isArchived: false, updatedAt: new Date() } }
-        );
-        
-        res.status(200).json({ message: "Successfully trashed selected notes" });
+        const result = await noteService.bulkTrashNotes(ids, req.user.id);
+        res.status(200).json(result);
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message });
     }
 };
 
-// 🚀 Restore
 export const bulkRestoreNotes = async (req, res) => {
     try {
         const { ids } = req.body;
-        
-        await Note.updateMany(
-            { _id: { $in: ids }, userId: req.user.id }, 
-            { $set: { isArchived: false, isDeleted: false, updatedAt: new Date() } }
-        );
-        
-        res.status(200).json({ message: "Successfully restored selected notes" });
+        const result = await noteService.bulkRestoreNotes(ids, req.user.id);
+        res.status(200).json(result);
     } catch (error) {
         res.status(500).json({ message: "Server Error", error: error.message });
     }
