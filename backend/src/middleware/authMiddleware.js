@@ -10,7 +10,7 @@ export const protect = async (req, res, next) => {
             token = req.headers.authorization.split(' ')[1];
 
             // Verify token
-            const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_for_development');
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
             // Attach user id to request
             req.user = { id: decoded.id, email: decoded.email };
@@ -50,16 +50,18 @@ export const requirePro = async (req, res, next) => {
             return res.status(401).json({ message: 'User not found' });
         }
 
-        if (user.plan === 'pro') {
-            if (user.currentPeriodEnd && new Date(user.currentPeriodEnd) < new Date()) {
-                user.plan = 'free';
-                await user.save();
-                return res.status(403).json({ message: 'Your Pro plan has expired. Please upgrade to continue using this feature.' });
-            }
-            return next();
+        if (user.plan !== 'pro') {
+            return res.status(403).json({ message: 'Premium subscription required' });
         }
 
-        return res.status(403).json({ message: 'This feature requires a Pro subscription.' });
+        if (user.currentPeriodEnd && new Date(user.currentPeriodEnd) < new Date()) {
+            // Auto-downgrade expired users
+            user.plan = 'free';
+            await user.save();
+            return res.status(403).json({ message: 'Premium subscription required. Your Pro plan has expired.' });
+        }
+
+        next();
     } catch (error) {
         console.error('requirePro middleware error:', error.message);
         res.status(500).json({ message: 'Server Error verifying Pro status' });

@@ -71,10 +71,10 @@ const Settings = () => {
         if (file) {
             const uploadData = new FormData();
             uploadData.append('file', file);
-            uploadData.append('upload_preset', 'profile_uploads');
+            uploadData.append('upload_preset', process.env.REACT_APP_CLOUDINARY_PROFILE_PRESET);
             
             try {
-                const response = await axios.post('https://api.cloudinary.com/v1_1/daiusa7bt/image/upload', uploadData);
+                const response = await axios.post(process.env.REACT_APP_CLOUDINARY_UPLOAD_URL, uploadData);
                 const secure_url = response.data.secure_url;
                 
                 await dispatch(updateUserProfile({ avatarUrl: secure_url })).unwrap();
