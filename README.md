@@ -42,6 +42,96 @@ Personalize your workspace layout instantly with beautifully crafted, interactiv
 
 ---
 
+## 🏗️ Project Architecture & Documentation
+
+Following a massive refactoring sprint, the MIN NOTE codebase is now structurally pristine, utilizing a clean and modular architecture. We extracted all routing and layout wrappers into a dedicated `Layouts/` directory and rigorously updated all global imports.
+
+**100% Documentation Coverage:** Every single backend controller, service, middleware, and frontend component, page, store slice, and hook is meticulously documented with clean, contextual, and highly readable inline comments to ensure maximum maintainability for future developers.
+
+### Folder Tree Structure
+```text
+min-note
+├── backend
+│   ├── src
+│   │   ├── config
+│   │   │   ├── database.js
+│   │   │   └── envCheck.js
+│   │   ├── controllers
+│   │   │   ├── adminController.js
+│   │   │   ├── authController.js
+│   │   │   ├── notesController.js
+│   │   │   ├── paymentController.js
+│   │   │   └── stripeController.js
+│   │   ├── middlewares
+│   │   │   └── authMiddleware.js
+│   │   ├── models
+│   │   │   ├── manualPayment.js
+│   │   │   ├── notes.js
+│   │   │   └── user.js
+│   │   ├── routes
+│   │   │   ├── authRoutes.js
+│   │   │   ├── route.js
+│   │   │   └── stripeRoutes.js
+│   │   ├── services
+│   │   │   ├── adminService.js
+│   │   │   ├── authService.js
+│   │   │   ├── noteService.js
+│   │   │   ├── paymentService.js
+│   │   │   └── stripeService.js
+│   │   ├── tests
+│   │   ├── utils
+│   │   │   ├── cronJobs.js
+│   │   │   ├── emailTemplates.js
+│   │   │   ├── generateOTP.js
+│   │   │   └── sendEmail.js
+│   │   └── server.js
+│   ├── .env
+│   ├── .env.example
+│   ├── .gitignore
+│   ├── package-lock.json
+│   └── package.json
+├── frontend
+│   ├── public
+│   ├── scripts
+│   ├── src
+│   │   ├── api
+│   │   ├── components
+│   │   │   ├── auth
+│   │   │   ├── billing
+│   │   │   ├── common
+│   │   │   ├── help
+│   │   │   ├── notes
+│   │   │   └── settings
+│   │   ├── context
+│   │   ├── hooks
+│   │   ├── Layouts
+│   │   ├── locales
+│   │   ├── pages
+│   │   │   ├── private
+│   │   │   └── public
+│   │   ├── services
+│   │   ├── store
+│   │   ├── tests
+│   │   ├── utils
+│   │   ├── App.js
+│   │   ├── i18n.js
+│   │   ├── index.js
+│   │   ├── serviceWorkerRegistration.js
+│   │   └── theme.css
+│   ├── .env
+│   ├── .gitignore
+│   ├── config-overrides.js
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── README.md
+│   └── tailwind.config.js
+├── .gitignore
+└── README.md
+```
+
+---
+
 ## 🛠️ Tech Stack
 
 ### Frontend Engineering
