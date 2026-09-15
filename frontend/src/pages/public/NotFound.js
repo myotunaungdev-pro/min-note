@@ -6,6 +6,7 @@ import usePageTitle from '../../hooks/usePageTitle';
 import PageTransition from '../../components/common/PageTransition';
 import './NotFound.css';
 
+// Custom 404 error page displayed when a user navigates to an undefined route
 const NotFound = () => {
     usePageTitle("404 Not Found");
     const { t } = useTranslation();

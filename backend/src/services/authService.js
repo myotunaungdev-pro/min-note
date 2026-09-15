@@ -1,13 +1,14 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { v2 as cloudinary } from 'cloudinary';
-import User from '../model/user.js';
-import Note from '../model/notes.js';
-import ManualPayment from '../model/manualPayment.js';
+import User from '../models/user.js';
+import Note from '../models/notes.js';
+import ManualPayment from '../models/manualPayment.js';
 import { generateOTP } from '../utils/generateOTP.js';
 import { sendEmail } from '../utils/sendEmail.js';
 
 class AuthService {
+    // Retrieves the current authenticated user's profile and actively checks their subscription status
     async getMe(userId) {
         const user = await User.findById(userId).select('-password');
         if (!user) {
@@ -18,6 +19,7 @@ class AuthService {
         
         let planModified = false;
         
+        // Check if the user is on a Pro plan but their paid period has expired in the past
         if (user.plan === 'pro' && user.currentPeriodEnd && new Date(user.currentPeriodEnd) < new Date()) {
             user.plan = 'free';
             user.planType = undefined;
@@ -44,14 +46,17 @@ class AuthService {
         };
     }
 
+    // Handles new user registration, hashes passwords, and sends the initial OTP email
     async signup(name, email, password) {
         const sanitizedEmail = email.toLowerCase().trim();
 
         let user = await User.findOne({ email: sanitizedEmail });
         
+        // Cryptographically hash the raw password before it ever touches the database
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
+        // Generate a 6-digit OTP and hash it as well so it cannot be read if the DB is compromised
         const otp = generateOTP();
         const otpSalt = await bcrypt.genSalt(10);
         const hashedOtp = await bcrypt.hash(otp, otpSalt);
@@ -104,6 +109,7 @@ class AuthService {
         };
     }
 
+    // Validates the OTP submitted by the user during signup or after requesting a new code
     async verifyOTP(email, otp) {
         const user = await User.findOne({ email });
         if (!user) {
@@ -124,6 +130,7 @@ class AuthService {
             throw error;
         }
 
+        // Securely compare the provided plaintext OTP against the hashed version in the database
         const isMatch = await bcrypt.compare(otp, user.otp);
         if (!isMatch) {
             const error = new Error("Invalid OTP");
@@ -136,8 +143,10 @@ class AuthService {
         user.otpExpires = undefined;
         await user.save();
 
+        // Automatically generate a welcome board of notes for a newly verified user
         await this.createSampleNotes(user._id);
 
+        // Generate the primary authentication JWT valid for 7 days
         const token = jwt.sign(
             { id: user._id, email: user.email },
             process.env.JWT_SECRET,
@@ -161,6 +170,7 @@ class AuthService {
         };
     }
 
+    // Populates a new user's account with educational and localized placeholder notes
     async createSampleNotes(userId) {
         try {
             const sampleNotes = [
@@ -267,6 +277,7 @@ class AuthService {
         }
     }
 
+    // Authenticates an existing user and returns a fresh JWT
     async login(email, password) {
         const sanitizedEmail = email.toLowerCase().trim();
 
@@ -313,6 +324,7 @@ class AuthService {
         };
     }
 
+    // Handles updating user demographic data, preferences, and profile avatars
     async updateProfile(userId, updateData) {
         const { name, email, birthdate, avatarUrl, defaultNoteTheme, showTagCounts } = updateData;
         
@@ -340,6 +352,7 @@ class AuthService {
         
         if (avatarUrl !== undefined && avatarUrl !== user.avatarUrl) {
             if (user.avatarUrl) {
+                // Asynchronously delete the old image from Cloudinary to save storage space
                 this.cleanupOldAvatar(user.avatarUrl).catch(err => {
                     console.error("Cloudinary cleanup failed:", err);
                 });
@@ -363,6 +376,7 @@ class AuthService {
         };
     }
 
+    // Utility to parse a Cloudinary URL and issue a deletion request for the underlying asset
     async cleanupOldAvatar(avatarUrl) {
         try {
             cloudinary.config({
@@ -387,6 +401,7 @@ class AuthService {
         }
     }
 
+    // Initiates the password recovery flow by generating and emailing a secure OTP
     async forgotPassword(email) {
         const user = await User.findOne({ email });
 
@@ -427,6 +442,7 @@ class AuthService {
         return { message: "Password reset OTP sent to your email." };
     }
 
+    // Completes the password recovery flow by verifying the OTP and saving the new hashed password
     async resetPassword(email, otp, newPassword) {
         const user = await User.findOne({ email });
         if (!user) {
@@ -459,6 +475,7 @@ class AuthService {
         return { message: "Password reset successfully. You can now log in." };
     }
 
+    // Acknowledges that the user has seen the Pro welcome modal to prevent it from showing again
     async markWelcomeSeen(userId) {
         const user = await User.findById(userId);
         if (!user) {

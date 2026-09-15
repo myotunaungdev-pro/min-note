@@ -2,9 +2,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import usePageTitle from '../../hooks/usePageTitle';
-import PricingCards from '../../components/PricingCards';
+import PricingCards from '../../components/billing/PricingCards';
 import './Pricing.css';
 
+// Renders the public-facing pricing page, reusing the PricingCards component from the billing section
 const Pricing = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();

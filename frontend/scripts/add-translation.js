@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
+// Helper script to safely inject bulk nested JSON paths into localization files
 const addTranslation = (file, keyPath, value) => {
     const data = JSON.parse(fs.readFileSync(file, 'utf8'));
     const keys = keyPath.split('.');

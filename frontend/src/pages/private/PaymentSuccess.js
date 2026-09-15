@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchCurrentUser, markWelcomeSeen } from '../../App/store/authSlice';
+import { fetchCurrentUser, markWelcomeSeen } from '../../store/authSlice';
 import { verifySession } from '../../services/paymentService';
 import usePageTitle from '../../hooks/usePageTitle';
 import { useSubscription } from '../../context/SubscriptionContext';
@@ -10,6 +10,7 @@ import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 import '../../components/settings/Settings.css';
 
+// Confirmation page shown after a successful Stripe payment, triggering confetti and verifying Pro status
 const PaymentSuccess = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();

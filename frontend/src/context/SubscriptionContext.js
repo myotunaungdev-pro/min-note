@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCurrentUser } from '../App/store/authSlice';
+import { fetchCurrentUser } from '../store/authSlice';
 
 const SubscriptionContext = createContext();
 
@@ -8,10 +8,13 @@ export const useSubscription = () => {
     return useContext(SubscriptionContext);
 };
 
+// Context wrapper to globally expose subscription status to frontend components without prop drilling
 export const SubscriptionProvider = ({ children }) => {
+    // Select the currently authenticated user from Redux state
     const user = useSelector((state) => state.auth?.user);
     const dispatch = useDispatch();
 
+    // Local state is initialized from localStorage to prevent UI flashing before Redux hydration completes
     const [plan, setPlan] = useState(() => {
         const savedPlan = localStorage.getItem('user_plan');
         return savedPlan || 'free';
@@ -22,6 +25,7 @@ export const SubscriptionProvider = ({ children }) => {
     const [hasPendingPayment, setHasPendingPayment] = useState(() => localStorage.getItem('user_hasPendingPayment') === 'true');
 
     // Auto-sync with the freshest user data fetched from the backend via Redux
+    // This effect runs every time the Redux `user` state changes
     useEffect(() => {
         if (user) {
             setPlan(user.plan || 'free');
@@ -42,6 +46,7 @@ export const SubscriptionProvider = ({ children }) => {
         }
     }, [user]);
 
+    // Keep localStorage aggressively in sync with React state to survive hard refreshes
     useEffect(() => {
         localStorage.setItem('user_plan', plan);
         if (planType) localStorage.setItem('user_planType', planType);
@@ -68,6 +73,7 @@ export const SubscriptionProvider = ({ children }) => {
         };
     }, [hasPendingPayment, dispatch]);
 
+    // Optimistically upgrades the UI state before the server confirms the Stripe event
     const upgradeToPro = (selectedPlanType = 'monthly', expiryDate = null) => {
         setPlan('pro');
         setPlanType(selectedPlanType);
@@ -79,6 +85,7 @@ export const SubscriptionProvider = ({ children }) => {
         }
     };
 
+    // Reflects a user-initiated cancellation either immediately or at period end
     const cancelSubscription = (immediate = false) => {
         if (immediate) {
             setPlan('free');
@@ -90,10 +97,12 @@ export const SubscriptionProvider = ({ children }) => {
         }
     };
 
+    // Unmarks a pending cancellation
     const resumeSubscription = () => {
         setCancelAtPeriodEnd(false);
     };
 
+    // Flags the UI to start polling the backend for admin approval on a KPay upload
     const markPaymentAsPending = () => {
         setHasPendingPayment(true);
     };

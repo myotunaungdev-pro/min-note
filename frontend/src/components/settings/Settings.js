@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { useSubscription } from '../../context/SubscriptionContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { logout, updateUserProfile } from '../../App/store/authSlice';
+import { logout, updateUserProfile } from '../../store/authSlice';
 import Lightbox from '../common/Lightbox';
-import ManageSubscriptionModal from '../ManageSubscriptionModal';
+import ManageSubscriptionModal from '../billing/ManageSubscriptionModal';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './Settings.css';
 
+// Main profile and account settings dashboard (handles user details, avatar upload, and subscription overview)
 const Settings = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const Settings = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    // Tracks if any profile form field has been modified to enable/disable the Save button
     const isFormChanged = 
         formData.name !== (user?.name || '') ||
         formData.email !== (user?.email || '') ||
@@ -66,6 +68,7 @@ const Settings = () => {
         setIsEditMode(false);
     };
 
+    // Handles avatar image selection, uploads directly to Cloudinary, and updates the user profile with the returned URL
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -119,6 +122,7 @@ const Settings = () => {
     }, [isLogoutModalOpen, confirmLogout]);
 
 
+    // Generates a Stripe Customer Portal session on the backend and redirects the user to securely manage billing
     const handleStripePortalRedirect = async (source = null) => {
         try {
             setPortalLoadingSource(source);

@@ -4,10 +4,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { loginUser, fetchCurrentUser } from '../../App/store/authSlice';
+import { loginUser, fetchCurrentUser } from '../../store/authSlice';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import './Auth.css';
 
+// Login component handling user authentication and Redux state hydration upon success
 const Login = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ const Login = () => {
         setFormErrors({ ...formErrors, [e.target.name]: '' });
     };
 
+    // Validates credentials locally, dispatches login thunk, and immediately fetches full user profile context
     const handleSubmit = async (e) => {
         e.preventDefault();
 

@@ -5,12 +5,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Provider } from "react-redux";
-import store from "./App/store/store";
+import store from "./store/store";
 import App from "./App";
 import { SubscriptionProvider } from './context/SubscriptionContext';
 import './i18n';
 import './theme.css';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
+// The main entry point for the React application, bootstrapping the Redux store, custom contexts, and router
 
 const root = ReactDom.createRoot(document.getElementById("root"));
 root.render(

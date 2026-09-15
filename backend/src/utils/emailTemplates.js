@@ -1,3 +1,4 @@
+// Generates both HTML and plain-text templates for a successful subscription payment notification
 export const getPaymentSuccessEmailTemplate = (userName, planTypeCapitalized) => {
     const html = `
         <!DOCTYPE html>
@@ -100,6 +101,7 @@ The MIN NOTE Team
     return { html, text };
 };
 
+// Mapping of programmatic rejection codes to friendly error messages in English and Burmese
 const rejectionReasonMapping = {
     'invalid_slip': { en: "Invalid or fake payment slip image", mm: "ငွေလွှဲပြေစာ ပုံမမှန်ကန်ပါ (သို့) အတုဖြစ်နေပါသည်" },
     'not_found': { en: "Transaction could not be found", mm: "ငွေလွှဲမှတ်တမ်း ရှာမတွေ့ပါ" },
@@ -109,16 +111,20 @@ const rejectionReasonMapping = {
     'wrong_account': { en: "Incorrect Bank/Account Number", mm: "ဘဏ် (သို့) အကောင့်နံပါတ် မှားယွင်းနေပါသည်" }
 };
 
+// Generates templates for a failed manual payment, dynamically inserting the reason for rejection
 export const getPaymentFailedEmailTemplate = (userName, rejectionReason) => {
+    // Default fallback messages if no specific reason is provided
     let friendlyReasonEn = "Payment could not be verified";
     let friendlyReasonMm = "ငွေပေးချေမှုကို အတည်ပြု၍ မရပါ";
 
     if (rejectionReason) {
+        // Handle custom rejection reasons inputted directly by an admin
         if (rejectionReason.startsWith('custom:')) {
             const customText = rejectionReason.replace(/^custom:\s*/i, '').trim();
             friendlyReasonEn = customText;
             friendlyReasonMm = customText;
         } else if (rejectionReasonMapping[rejectionReason]) {
+            // Retrieve localized rejection messages from the predefined mapping
             friendlyReasonEn = rejectionReasonMapping[rejectionReason].en;
             friendlyReasonMm = rejectionReasonMapping[rejectionReason].mm;
         }
@@ -237,6 +243,7 @@ The MIN NOTE Team
     return { html, text };
 };
 
+// Generates templates for alerting a user that their subscription will expire in 3 days
 export const getExpirationReminderTemplate = (userName) => {
     const html = `
         <!DOCTYPE html>

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
+// Helper script to programmatically inject a new key-value pair into nested JSON structure
 const addTranslation = (file, keyPath, value) => {
     const data = JSON.parse(fs.readFileSync(file, 'utf8'));
     const keys = keyPath.split('.');

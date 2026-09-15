@@ -1,11 +1,13 @@
-import Note from '../model/notes.js';
-import User from '../model/user.js';
+import Note from '../models/notes.js';
+import User from '../models/user.js';
 
 class NoteService {
+    // Fetches all notes belonging to a specific user, sorted by newest first
     async getNotes(userId) {
         return await Note.find({ userId }).sort({ createdAt: -1 });
     }
 
+    // Fetches a single specific note, ensuring it actually belongs to the requesting user
     async getNoteById(noteId, userId) {
         const note = await Note.findOne({ _id: noteId, userId });
         if (!note) {
@@ -16,9 +18,11 @@ class NoteService {
         return note;
     }
 
+    // Handles the creation of a new note, enforcing plan limits for free tier users
     async createNote(userId, noteData) {
         const user = await User.findById(userId);
         
+        // Block creation if the user is not Pro (or their Pro has expired) and they hit the 50 note limit
         if (!user || user.plan !== 'pro' || (user.plan === 'pro' && user.currentPeriodEnd && new Date(user.currentPeriodEnd) < new Date())) {
             const noteCount = await Note.countDocuments({ userId });
             if (noteCount >= 50) {
@@ -36,11 +40,12 @@ class NoteService {
         return { message: "Note created", id: savedNote._id };
     }
 
+    // Handles partial or full updates to an existing note, validating against the schema
     async updateNote(noteId, userId, updateData) {
         const updatedNote = await Note.findOneAndUpdate(
             { _id: noteId, userId },
             { $set: updateData },
-            { returnDocument: 'after', runValidators: true }
+            { returnDocument: 'after', runValidators: true } // Returns the modified document, not the old one
         );
 
         if (!updatedNote) {
@@ -52,6 +57,7 @@ class NoteService {
         return { message: "Update successful", updatedNote };
     }
 
+    // Permanently deletes a note from the database (bypassing the trash bin)
     async deleteNote(noteId, userId) {
         const deletedNote = await Note.findOneAndDelete({ _id: noteId, userId });
         if (!deletedNote) {
@@ -62,6 +68,7 @@ class NoteService {
         return { message: "Deleted successful" };
     }
 
+    // Batch operation: Moves multiple selected notes to the Archive tab
     async bulkArchiveNotes(ids, userId) {
         await Note.updateMany(
             { _id: { $in: ids }, userId }, 
@@ -70,6 +77,7 @@ class NoteService {
         return { message: "Successfully archived selected notes" };
     }
 
+    // Batch operation: Soft-deletes multiple selected notes, moving them to the Trash tab
     async bulkTrashNotes(ids, userId) {
         await Note.updateMany(
             { _id: { $in: ids }, userId }, 
@@ -78,6 +86,7 @@ class NoteService {
         return { message: "Successfully trashed selected notes" };
     }
 
+    // Batch operation: Restores multiple selected notes from Archive or Trash back to the main view
     async bulkRestoreNotes(ids, userId) {
         await Note.updateMany(
             { _id: { $in: ids }, userId }, 

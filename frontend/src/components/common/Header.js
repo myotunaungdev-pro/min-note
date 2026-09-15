@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useSelector } from 'react-redux';
 
+// Top navigation bar for public pages, including theme and language toggles
 const Header = () => {
     const { t } = useTranslation();
     const [isLightMode, setIsLightMode] = useState(false);
@@ -18,6 +19,7 @@ const Header = () => {
         }
     }, []);
 
+    // Toggles the global CSS classes on the body element and saves preference to localStorage
     const toggleTheme = () => {
         setIsLightMode(!isLightMode);
         if (!isLightMode) {

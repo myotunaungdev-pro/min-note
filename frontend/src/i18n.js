@@ -5,6 +5,7 @@ import enTranslation from './locales/en.json';
 import myTranslation from './locales/my.json';
 import thTranslation from './locales/th.json';
 
+// Consolidates all static language JSON files into a single resource map for the i18next instance
 const resources = {
     en: { translation: enTranslation },
     my: { translation: myTranslation },
@@ -19,6 +20,7 @@ const getSavedLanguage = () => {
     }
 };
 
+// Initializes the i18next core plugin with React bindings to enable useTranslation hooks across the app
 i18n
     .use(initReactI18next)
     .init({

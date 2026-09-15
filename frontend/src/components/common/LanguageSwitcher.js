@@ -2,11 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import './LanguageSwitcher.css';
 
+// Dropdown UI component to switch the i18next active language globally
 const LanguageSwitcher = () => {
     const { i18n } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
+    // Attaches a global click listener to automatically close the dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -21,6 +23,7 @@ const LanguageSwitcher = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen]);
 
+    // Dispatches the language change to the i18next instance and persists to local storage
     const changeLang = (lang) => {
         i18n.changeLanguage(lang);
         localStorage.setItem('appLanguage', lang);

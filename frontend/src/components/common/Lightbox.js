@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import './Lightbox.css';
 
+// Reusable modal overlay to display full-size images or custom centered content
 const Lightbox = ({ src, alt, onClose, children }) => {
     useEffect(() => {
         const handleKeyDown = (e) => {

@@ -1,3 +1,4 @@
+// Utility to determine if the application is running in a local development environment
 const isLocalhost = Boolean(
     window.location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.
@@ -12,6 +13,7 @@ const isLocalhost = Boolean(
     )
 );
 
+// Registers the service worker to enable offline capabilities (PWA) when running in production mode
 export function register(config) {
     if (process.env.NODE_ENV === 'production') { // Always register for testing PWA locally
         if ('serviceWorker' in navigator) {

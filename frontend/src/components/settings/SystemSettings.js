@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { setShortcutModalOpen } from '../../App/store/notesSlice';
-import { updateUserProfile } from '../../App/store/authSlice';
+import { setShortcutModalOpen } from '../../store/notesSlice';
+import { updateUserProfile } from '../../store/authSlice';
 import LanguageSwitcher from '../common/LanguageSwitcher';
-import { SOLID_COLORS, BACKGROUND_PATTERNS } from '../../App/notes/themeConstants';
+import { SOLID_COLORS, BACKGROUND_PATTERNS } from '../../components/notes/themeConstants';
 import './Settings.css';
 
+// Application-wide preferences dashboard (Dark mode, default note themes, language, UI layout toggles)
 const SystemSettings = ({ cardStyle, setCardStyle }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -38,6 +39,7 @@ const SystemSettings = ({ cardStyle, setCardStyle }) => {
         localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
     }, [isDarkMode]);
 
+    // Persists the user's default chosen background pattern/color for newly created notes
     const handleThemeChange = async (themeOption) => {
         if (!user) return;
         try {
@@ -47,6 +49,7 @@ const SystemSettings = ({ cardStyle, setCardStyle }) => {
         }
     };
 
+    // Toggles the visibility of the note counter badge inside the sidebar category tabs
     const handleTagCountsChange = async () => {
         if (!user) return;
         try {
