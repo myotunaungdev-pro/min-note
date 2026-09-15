@@ -8,6 +8,7 @@ import axiosInstance from '../../api/axiosConfig';
 import usePageTitle from '../../hooks/usePageTitle';
 import '../../components/settings/Settings.css';
 
+// Admin dashboard for managing manual KPay payments, including slip verification and approval/rejection workflows
 export const getRejectReasonConfig = (type, t) => {
     const reasonKeys = {
         invalid_slip: { key: 'reason1', fallback: 'Invalid or Fake Receipt' },

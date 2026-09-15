@@ -1,5 +1,5 @@
 import Stripe from 'stripe';
-import User from '../model/user.js';
+import User from '../models/user.js';
 import dotenv from 'dotenv';
 import { sendEmail } from '../utils/sendEmail.js';
 import { getPaymentSuccessEmailTemplate } from '../utils/emailTemplates.js';
@@ -8,6 +8,7 @@ dotenv.config();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+// Hardcoded mapping of Stripe Price IDs to internal plan types and currencies
 const stripePriceIds = {
   monthly: {
     USD: "price_1Txkt3FKdcz2yKzLXlknbslP",
@@ -20,10 +21,12 @@ const stripePriceIds = {
 };
 
 class StripeService {
+    // Generates a Stripe hosted checkout page URL for a user looking to upgrade
     async createCheckoutSession(userId, email, planType, currency = 'USD') {
         const finalPriceId = stripePriceIds[planType]?.[currency] || stripePriceIds['monthly']['USD'];
         const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
 
+        // Initialize the Stripe session payload, enforcing recurring subscriptions
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             mode: 'subscription',
@@ -43,6 +46,7 @@ class StripeService {
         return { sessionId: session.id, url: session.url };
     }
 
+    // Generates a self-service Stripe billing portal URL for active subscribers to manage their cards/plans
     async createPortalSession(userId) {
         const user = await User.findById(userId);
         
@@ -62,6 +66,7 @@ class StripeService {
         return { url: portalSession.url };
     }
 
+    // Polling fallback to check if a checkout session was completed successfully (used mainly as a backup to webhooks)
     async verifyCheckoutSession(sessionId) {
         const session = await stripe.checkout.sessions.retrieve(sessionId);
 
@@ -101,10 +106,12 @@ class StripeService {
         }
     }
 
+    // Cryptographically verifies that the incoming HTTP request is genuinely from Stripe
     verifyWebhookSignature(rawBody, sig, webhookSecret) {
         return stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
     }
 
+    // Normalizes the request body ensuring it's a parsed JSON object
     parseRawWebhookBody(rawBody) {
         let body = rawBody;
         if (Buffer.isBuffer(body)) {
@@ -113,7 +120,9 @@ class StripeService {
         return typeof body === 'string' ? JSON.parse(body) : body;
     }
 
+    // Master switchboard that routes verified Stripe webhook events to their respective handler logic
     async handleWebhookEvent(event) {
+        // Triggered when a user successfully completes a new checkout flow
         if (event.type === 'checkout.session.completed') {
             const session = event.data.object;
             const userId = session.client_reference_id;
@@ -136,6 +145,7 @@ class StripeService {
                     }
                 }
 
+                // Idempotency check: prevent duplicate emails or DB writes if Stripe sends the event twice
                 const existingUser = await User.findById(userId);
                 
                 if (existingUser && existingUser.stripeSubscriptionId === session.subscription) {
@@ -143,6 +153,7 @@ class StripeService {
                     return { received: true };
                 }
 
+                // Update the user's tier, sync Stripe metadata, and wipe any previous expiration flags
                 const updatedUser = await User.findByIdAndUpdate(userId, {
                     plan: 'pro',
                     planType: planType,
@@ -173,6 +184,7 @@ class StripeService {
             } else {
                 console.error('❌ No client_reference_id found in session!');
             }
+        // Triggered when a subscription changes state (e.g., user cancels it via the portal, or an admin changes the plan)
         } else if (event.type === 'customer.subscription.updated') {
             const subscription = event.data.object;
             
@@ -203,6 +215,7 @@ class StripeService {
             } else {
                 console.warn(`⚠️ Warning: No user found in DB with stripeSubscriptionId: ${subscription.id}`);
             }
+        // Triggered when a subscription is fully dead (the billing period ended after a cancellation, or they failed to pay)
         } else if (event.type === 'customer.subscription.deleted') {
             const subscription = event.data.object;
             await User.findOneAndUpdate(
@@ -219,6 +232,7 @@ class StripeService {
                     hasSeenProWelcome: false
                 }
             );
+        // Triggered upon successful monthly/yearly recurring renewal charges
         } else if (event.type === 'invoice.paid') {
             const invoice = event.data.object;
             const stripeSubscriptionId = invoice.subscription;
@@ -229,6 +243,8 @@ class StripeService {
                     
                     if (periodEndRaw) {
                         const endDate = new Date(periodEndRaw * 1000);
+                        
+                        // Push out the expiration date and clear any pending payment issue flags
                         await User.findOneAndUpdate(
                             { stripeSubscriptionId: stripeSubscriptionId },
                             { 
@@ -246,12 +262,15 @@ class StripeService {
             } else {
                 console.log(`ℹ️ Ignored invoice.paid for non-subscription invoice ${invoice.id}`);
             }
+        // Triggered when a recurring charge fails (e.g., expired card, insufficient funds)
         } else if (event.type === 'invoice.payment_failed') {
             const invoice = event.data.object;
             const stripeSubscriptionId = invoice.subscription;
             
             if (stripeSubscriptionId) {
                 console.warn(`⚠️ Invoice payment failed for subscription ${stripeSubscriptionId}`);
+                
+                // Flag the user so the frontend can display an urgent "Update Billing" banner
                 await User.findOneAndUpdate(
                     { stripeSubscriptionId: stripeSubscriptionId },
                     { hasPaymentIssue: true }

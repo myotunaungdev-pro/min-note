@@ -4,10 +4,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { forgotPassword, resetPassword } from '../../App/store/authSlice';
+import { forgotPassword, resetPassword } from '../../store/authSlice';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import './Auth.css';
 
+// Component handling the two-step password recovery flow (Request OTP -> Verify & Reset)
 const ForgotPassword = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -21,6 +22,7 @@ const ForgotPassword = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [formErrors, setFormErrors] = useState({ email: '', otp: '', newPassword: '' });
 
+    // Dispatches action to send a 6-digit OTP to the user's email
     const handleRequestOTP = async (e) => {
         e.preventDefault();
 
@@ -38,6 +40,7 @@ const ForgotPassword = () => {
         }
     };
 
+    // Submits the received OTP and the new password to the server for verification and update
     const handleResetPassword = async (e) => {
         e.preventDefault();
         

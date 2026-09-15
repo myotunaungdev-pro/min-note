@@ -4,10 +4,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { signupUser, verifyOTP, fetchCurrentUser } from '../../App/store/authSlice';
+import { signupUser, verifyOTP, fetchCurrentUser } from '../../store/authSlice';
 import LanguageSwitcher from '../common/LanguageSwitcher';
 import './Auth.css';
 
+// Two-step registration component (Submit Details -> Verify Email via OTP)
 const Signup = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ const Signup = () => {
         setFormErrors({ ...formErrors, [e.target.name]: '' });
     };
 
+    // Submits the initial registration payload and triggers the backend to send an OTP
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -56,6 +58,7 @@ const Signup = () => {
         }
     };
 
+    // Confirms the user's email address and finalizing account creation by logging them in
     const handleVerify = async (e) => {
         e.preventDefault();
 

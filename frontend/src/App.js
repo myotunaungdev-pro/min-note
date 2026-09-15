@@ -5,14 +5,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
 
-import NotesApp from './App/notes/NotesApp';
-import LandingPage from './App/landing/LandingPage';
+import NotesApp from './pages/private/Notes/NotesApp';
+import LandingPage from './pages/public/Landing/LandingPage';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
 import ForgotPassword from './components/auth/ForgotPassword';
-import ProtectedRoute from './components/common/ProtectedRoute';
-import PublicRoute from './components/common/PublicRoute';
-import PublicLayout from './components/common/PublicLayout';
+import ProtectedRoute from './Layouts/ProtectedRoute';
+import PublicRoute from './Layouts/PublicRoute';
+import PublicLayout from './Layouts/PublicLayout';
 import Settings from './components/settings/Settings';
 import SystemSettings from './components/settings/SystemSettings';
 import ShortcutModal from './components/common/ShortcutModal';
@@ -43,8 +43,9 @@ import { AnimatePresence } from 'framer-motion';
 import NotFound from './pages/public/NotFound';
 import ScrollToTop from './components/common/ScrollToTop';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCurrentUser } from './App/store/authSlice';
+import { fetchCurrentUser } from './store/authSlice';
 
+// Main application component containing all global providers and routing logic
 function App() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -52,6 +53,8 @@ function App() {
     const user = useSelector((state) => state.auth?.user);
     const [prevPlan, setPrevPlan] = useState(user?.plan);
 
+    // Re-hydrate Redux auth state aggressively when the user returns to the browser tab
+    // This ensures local storage tokens are validated against the server frequently
     useEffect(() => {
         const handleFocus = () => {
             const token = localStorage.getItem('token');
@@ -69,6 +72,7 @@ function App() {
         return () => window.removeEventListener('focus', handleFocus);
     }, [dispatch]);
 
+    // Watch for successful Stripe/KPay upgrades and automatically redirect the user to the success page
     useEffect(() => {
         if (prevPlan && prevPlan !== 'pro' && user?.plan === 'pro') {
             navigate('/payment-success');
@@ -77,6 +81,7 @@ function App() {
     }, [user?.plan, prevPlan, navigate]);
 
 
+    // Manage local UI preferences for the note card appearance (default vs minimalist)
     const [cardStyle, setCardStyle] = useState(() => {
         const savedStyle = localStorage.getItem('app_note_card_style');
         return savedStyle || 'default';
@@ -86,6 +91,7 @@ function App() {
         localStorage.setItem('app_note_card_style', cardStyle);
     }, [cardStyle]);
 
+    // Apply the user's preferred light/dark theme to the document body on initial load
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'light') {

@@ -5,6 +5,7 @@ import { CheckCircle } from 'lucide-react';
 import usePageTitle from '../../hooks/usePageTitle';
 import '../../components/settings/Settings.css';
 
+// Success screen shown immediately after a user submits a KPay payment slip, pending admin approval
 const KPaySuccess = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();

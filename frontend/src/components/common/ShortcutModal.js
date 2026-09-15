@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setShortcutModalOpen } from '../../App/store/notesSlice';
+import { setShortcutModalOpen } from '../../store/notesSlice';
 import { useTranslation } from 'react-i18next';
 import './ShortcutModal.css';
 
+// Global modal that displays the keyboard shortcuts reference sheet
 const ShortcutModal = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
@@ -17,9 +18,11 @@ const ShortcutModal = () => {
                 (e.key === '?' && e.shiftKey) || 
                 (e.key === '/' && (e.ctrlKey || e.metaKey))
             ) {
+                // Determine if the user is currently typing in an input or contenteditable field
                 const activeTag = document.activeElement?.tagName;
                 const isTyping = activeTag === 'INPUT' || activeTag === 'TEXTAREA' || document.activeElement?.isContentEditable;
                 
+                // Only trigger the shortcut modal if they aren't actively typing text
                 if (!isTyping) {
                     e.preventDefault();
                     dispatch(setShortcutModalOpen(!isShortcutModalOpen));

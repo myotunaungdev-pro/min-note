@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+// Wrapper component utilizing framer-motion to animate route transitions smoothly
 const PageTransition = ({ children }) => {
     return (
         <motion.div

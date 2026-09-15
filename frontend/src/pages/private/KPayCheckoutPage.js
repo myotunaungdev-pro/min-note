@@ -7,6 +7,7 @@ import axiosInstance from '../../api/axiosConfig';
 import usePageTitle from '../../hooks/usePageTitle';
 import '../../components/settings/Settings.css';
 
+// Checkout page for manual KBZPay transactions, allowing users to upload their payment slip
 const KPayCheckoutPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();

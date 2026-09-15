@@ -4,6 +4,7 @@ import { Palette, Globe, Tags, ScanText } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import './Features.css';
 
+// Displays a static marketing page highlighting the core features of the Min-Note application
 const Features = () => {
     usePageTitle("Features");
     const { t } = useTranslation();

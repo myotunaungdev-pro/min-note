@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './HelpGuide.css';
 
+// Interactive static page showcasing application features, shortcuts, and quick guides
 const HelpGuide = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -13,7 +14,7 @@ const HelpGuide = () => {
     const sectionRefs = useRef([]);
     const revealRefs = useRef([]);
 
-    // Scroll-spy observer for nav
+    // Scroll-spy observer for nav: Updates active sidebar link based on which section is currently on screen
     useEffect(() => {
         const spyObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -30,7 +31,7 @@ const HelpGuide = () => {
         return () => spyObserver.disconnect();
     }, []);
 
-    // Scroll reveal observer
+    // Scroll reveal observer: Triggers CSS fade-in animations when elements enter the viewport
     useEffect(() => {
         const revealObserver = new IntersectionObserver((entries) => {
             setRevealedIds(prev => {

@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import usePageTitle from '../../hooks/usePageTitle';
-import PricingCards from '../../components/PricingCards';
+import PricingCards from '../../components/billing/PricingCards';
 import { createCheckoutSession } from '../../services/paymentService';
 import '../../components/settings/Settings.css';
 
+// Page for free users to initiate an upgrade to the Pro plan, offering Stripe or local payment (KPay) options
 const Upgrade = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();

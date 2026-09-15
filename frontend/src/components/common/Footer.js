@@ -3,6 +3,7 @@ import { APP_NAME } from '../../utils/constants';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+// Global footer component displayed across all public-facing pages
 const Footer = () => {
     const { t } = useTranslation();
     return (

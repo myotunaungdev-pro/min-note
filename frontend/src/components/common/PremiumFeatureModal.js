@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import './PremiumFeatureModal.css';
 
+// Reusable modal to block free users from accessing premium features, prompting upgrades
 const PremiumFeatureModal = ({ isOpen, onClose, title, description, icon = "bi-stars", buttonText }) => {
     useEffect(() => {
         const handleKeyDown = (e) => {
