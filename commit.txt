@@ -1,7 +1,0 @@
-docs/refactor: Complete MERN codebase documentation and architecture refactoring
-
-- Complete MERN codebase documentation (Steps 1 through 8) covering all backend services/controllers and frontend components, pages, and store slices.
-- Added clean, unnumbered, and contextual inline comments across all frontend and backend files without modifying any existing business logic, ensuring 100% documentation coverage.
-- Architecture refactoring: Extracted layout wrappers (PublicLayout, ProtectedRoute, PublicRoute) from 'components/common/' into a new dedicated 'frontend/src/Layouts/' directory for better modularity.
-- Rigorously fixed and updated all broken relative import paths globally to maintain structural integrity.
-- Successfully verified the structural integrity with a production build check (zero module resolution errors).
